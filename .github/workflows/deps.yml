@@ -4,6 +4,7 @@
 
 name: LuxCore Dependency Builder
 
+# TODO Decide which event triggers job
 on:
   pull_request:
   push:
@@ -24,6 +25,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-13, macos-14]
     env:
+      VERSION: 2.10
       # Reminder: report all variables here to CIBW_ENVIRONMENT_PASS_LINUX
       BUILD_TYPE: Release
       # SANITIZE: true # uncomment to sanitize
@@ -272,45 +274,6 @@ jobs:
             brew install bison flex ispc
           CIBW_BEFORE_BUILD: bash ${{ env.WORKSPACE }}/scripts/install_conan.sh
           CIBW_REPAIR_WHEEL_COMMAND: ''
-          #CIBW_REPAIR_WHEEL_COMMAND_LINUX: |
-            #TBB=/project/full_deploy/host/onetbb/$TBB_VERSION/${BUILD_TYPE}/x86_64/lib
-            #OIDN=/project/full_deploy/host/oidn/$OIDN_VERSION/${BUILD_TYPE}/x86_64/lib
-            #EMBREE3=/project/full_deploy/host/embree3/$EMBREE3_VERSION/${BUILD_TYPE}/x86_64/lib
-            #HWLOC=/project/full_deploy/host/hwloc/2.9.3/${BUILD_TYPE}/x86_64/lib
-            #LEVEL_ZERO=/project/full_deploy/host/level-zero/1.17.39/${BUILD_TYPE}/x86_64/lib
-            #LD_LIBRARY_PATH=$TBB:$HWLOC:$LEVEL_ZERO:$OIDN:$EMBREE3:$LD_LIBRARY_PATH
-            #echo "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
-            #export LD_LIBRARY_PATH
-
-            ### Check build data
-            #unzip {wheel} -d /tmp/wheel
-            #readelf --string-dump .comment /tmp/wheel/pyluxcore/pyluxcore.so
-
-            #auditwheel \
-              #--verbose repair -w {dest_dir} \
-              #--plat manylinux_${{ env.GLIBC_VERSION }}_x86_64 \
-              #--only-plat \
-              #${{ env.BUILD_TYPE == 'Release' && '--strip' || '' }} \
-              #{wheel}
-
-          #CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: |
-            #bash.exe ${{ env.WORKSPACE }}/scripts/repair_wheel_windows.sh '{wheel}' '{dest_dir}' '%VCToolsRedistDir%%Platform%'
-          #CIBW_REPAIR_WHEEL_COMMAND_MACOS: |
-            #cp {wheel} ${{ env.WORKSPACE }}
-            #BASE=${{ env.WORKSPACE }}/full_deploy/host
-            #TBB=$BASE/onetbb/${{ env.TBB_VERSION }}/${BUILD_TYPE}/${{ env.PKG_ARCH }}/lib
-            #OIDN=$BASE/oidn/${{ env.OIDN_VERSION }}/${BUILD_TYPE}/${{ env.PKG_ARCH }}/lib
-            #EMBREE3=$BASE/embree3/${{ env.EMBREE3_VERSION }}/${BUILD_TYPE}/${{ env.PKG_ARCH }}/lib
-            #export DYLD_LIBRARY_PATH=$TBB:$OIDN:$EMBREE3
-            #delocate-listdeps -v {wheel}
-            #delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}
-          #CIBW_TEST_COMMAND_LINUX: pyluxcoretest
-          #CIBW_TEST_COMMAND_WINDOWS: pyluxcoretest
-          #CIBW_TEST_COMMAND_MACOS: |
-            #if [[ ${{ matrix.os }} == 'macos-13' ]]; then
-              ## Only for Intel: ARM runner raises an OpenCL driver issue
-              #pyluxcoretest
-            #fi
           CIBW_CONTAINER_ENGINE: >
             docker;
             create_args:
@@ -329,70 +292,24 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: conan-cache
-          key: deps-${{ matrix.os }}-${{ matrix.python-minor}}-${{ hashFiles('**/conan-cache') }}
+          key: deps-${{ matrix.os }}-${{ hashFiles('**/conan-cache') }}
 
-      #- name: Setup tmate session
-        #uses: mxschmitt/action-tmate@v3
-
+      ## For debugging
       #- name: Setup tmate session (debug)
         #if: ${{ failure() }}
         #uses: mxschmitt/action-tmate@v3
 
       # Upload artifacts
       - uses: actions/upload-artifact@v4
+        id: artifact-upload-step
         with:
-          name: cibw-wheels-${{ matrix.os }}-${{ matrix.python-minor }}
-          path: ./wheelhouse/*.whl
+          name: luxcore-deps-${{ matrix.os }}-${{ env.VERSION }}
+          path: conan-cache
+          compression-level: 0  # Already a zip...
 
 
-  #upload_test:
-    #needs: [build_wheels]
-    #environment:
-      #name: testpypi
-      #url: https://test.pypi.org/p/pyluxcore
-    #permissions:
-      #id-token: write
-      #attestations: write
-      #contents: read
-    #runs-on: ubuntu-latest
-    #if: ${{ github.ref_name }} == 'work'
-    #steps:
-      #- uses: actions/download-artifact@v4
-        #with:
-          #pattern: cibw-*
-          #path: dist
-          #merge-multiple: true
-
-      #- uses: pypa/gh-action-pypi-publish@release/v1
-        #with:
-          #repository-url: https://test.pypi.org/legacy/
-          #verbose: true
-          #verify-metadata: true
-          #skip-existing: true
-
-
-  #upload_prod:
-    #needs: [build_wheels]
-    #environment:
-      #name: pypi
-      #url: https://pypi.org/p/pyluxcore
-    #permissions:
-      #id-token: write
-      #attestations: write
-      #contents: read
-    #runs-on: ubuntu-latest
-    #if: github.event_name == 'release' && github.event.action == 'published'
-    #steps:
-      #- uses: actions/download-artifact@v4
-        #with:
-          #pattern: cibw-*
-          #path: dist
-          #merge-multiple: true
-
-      #- name: Generate artifact attestations
-        #uses: actions/attest-build-provenance@v1.4.3
-        #with:
-          #subject-path: "dist/*"
-
-      #- name: Publish package distributions to PyPI
-        #uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Output artifact ID
+        run: |
+          echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
+          echo 'Artifact URL is ${{ steps.artifact-upload-step.outputs.artifact-url }}'
+          echo 'Artifact SHA-256 is ${{ steps.artifact-upload-step.outputs.artifact-digest }}'
