@@ -20,7 +20,7 @@ jobs:
     name: Build dependencies ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
+      fail-fast: False
       matrix:
         os: [ubuntu-latest, windows-latest, macos-13, macos-14]
     env:
@@ -154,10 +154,6 @@ jobs:
               target = '10.13';
               arch='x86_64';
             }
-            else if ('${{ env.PYTHON_MINOR }}' != '8') {
-              target = '11.0';
-              arch='armv8';
-            }
             else {
               target = '12.0';
               arch='armv8';
@@ -170,8 +166,15 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: conan-cache
-          key: deps-${{ matrix.os }}-${{ matrix.python-minor}}-
-          restore-keys: deps-${{ matrix.os }}-${{ matrix.python-minor}}-
+          key: deps-${{ matrix.os }}-
+          restore-keys: deps-${{ matrix.os }}-
+
+      # See https://cibuildwheel.pypa.io/en/stable/faq/#macos-building-cpython-38-wheels-on-arm64
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+        if: runner.os == 'macOS' && runner.arch == 'ARM64'
+
 
       # Build deps - we rely on cibuildwheel to get the fine settings for build
       - name: Build deps
@@ -180,7 +183,7 @@ jobs:
           CIBW_ALLOW_EMPTY: True
           CIBW_BUILD_FRONTEND: build
           CIBW_BUILD_VERBOSITY: 1
-          CIBW_BUILD: cp38-*
+          CIBW_BUILD: cp39-*
           CIBW_SKIP: "*musllinux*"
           CIBW_ARCHS: auto64
           CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux_${{ env.GLIBC_VERSION }}_x86_64
