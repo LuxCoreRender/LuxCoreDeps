@@ -268,6 +268,7 @@ jobs:
           CIBW_BEFORE_ALL_MACOS: |
             brew install bison flex ispc
           CIBW_BEFORE_BUILD: bash ${{ env.WORKSPACE }}/scripts/install_conan.sh
+          CIBW_REPAIR_WHEEL_COMMAND: ''
           #CIBW_REPAIR_WHEEL_COMMAND_LINUX: |
             #TBB=/project/full_deploy/host/onetbb/$TBB_VERSION/${BUILD_TYPE}/x86_64/lib
             #OIDN=/project/full_deploy/host/oidn/$OIDN_VERSION/${BUILD_TYPE}/x86_64/lib
