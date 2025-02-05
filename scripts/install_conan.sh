@@ -7,6 +7,7 @@ BLENDER_VERSION=4.2.3
 OIDN_VERSION=2.3.1
 OIIO_VERSION=2.5.16.0
 OPENSUBDIV_VERSION=3.6.0
+LUXCORE_VERSION=2.10.0
 
 
 function conan_create_install() {
@@ -78,15 +79,10 @@ cd $WORKSPACE
 conan create $WORKSPACE \
   --profile:all=$CONAN_PROFILE \
   --build=missing
-
-# We use full deployer to get rid of the "strange" paths that Conan uses in
-# its cache and that hamper ccache.
-conan install $WORKSPACE \
+conan install \
+  --requires=luxcoredeps/$LUXCORE_VERSION@luxcorewheels/luxcorewheels \
   --profile:all=$CONAN_PROFILE \
-  --build=missing \
-  --deployer=full_deploy \
-  --deployer-folder=$DEPLOY_PATH \
-  -vverbose
+  --build=missing
 
 echo "::endgroup::"
 
@@ -94,7 +90,8 @@ echo "::group::Saving dependencies in ${cache_dir}"
 conan cache clean "*"  # Clean non essential files
 conan remove -c -vverbose "*/*#!latest"  # Keep only latest version of each package
 # Save only dependencies of current target (otherwise cache gets bloated)
-conan graph info . \
+conan graph info \
+  --requires=luxcoredeps/$LUXCORE_VERSION@luxcorewheels/luxcorewheels \
   --format=json \
   --profile:all=$CONAN_PROFILE \
   > graph.json

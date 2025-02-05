@@ -171,7 +171,7 @@ jobs:
           CIBW_ARCHS: auto64
           CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux_${{ env.GLIBC_VERSION }}_x86_64
           CIBW_ENVIRONMENT: >
-            SKBUILD_CMAKE_ARGS='--preset ${{ env.CONAN_PRESET }};-G Ninja;--log-level=VERBOSE'
+            SKBUILD_CMAKE_ARGS='-G Ninja;--log-level=VERBOSE'
             SKBUILD_CMAKE_BUILD_TYPE='${{ env.BUILD_TYPE }}'
           CIBW_ENVIRONMENT_PASS_LINUX: |
             CC

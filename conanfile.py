@@ -38,10 +38,10 @@ SPDLOG_VERSION = "1.15.0"
 TBB_VERSION = "2021.12.0"
 WINFLEXBISON_VERSION = "2.5.25"
 
-
+# TODO Replace luxcorewheels by luxcore
 class LuxCore(ConanFile):
-    name = "luxcorewheels"
-    version = "2.9alpha1"
+    name = "luxcoredeps"
+    version = "2.10.0"
     user = "luxcorewheels"
     channel = "luxcorewheels"
 
@@ -63,6 +63,7 @@ class LuxCore(ConanFile):
         f"pybind11/{PYBIND11_VERSION}",
     ]
 
+    # TODO Move in profiles
     default_options = {
         "fmt/*:header_only": True,
         "spdlog/*:header_only": True,
