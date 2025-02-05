@@ -10,13 +10,11 @@ from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 from conan.tools.files import get, copy, replace_in_file
 
 
-BLENDER_VERSION = os.environ["BLENDER_VERSION"]
-
 
 
 class BlenderTypesConan(ConanFile):
     name = "blender-types"
-    version = BLENDER_VERSION
+    version = "4.2.3"
     user = "luxcorewheels"
     channel = "luxcorewheels"
     # No settings/options are necessary, this is header only

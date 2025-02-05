@@ -10,12 +10,12 @@ from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps, cmake_layout
 from conan import ConanFile
 from conan.tools.scm import Git
 
-_oidn_version = os.environ["OIDN_VERSION"]
-_tbb_version = os.environ["TBB_VERSION"]
+# Gather here the various dependency versions, for convenience
+TBB_VERSION = "2021.12.0"
 
 class OidnConan(ConanFile):
     name = "oidn"
-    version = _oidn_version
+    version = "2.3.1"
     user = "luxcorewheels"
     channel = "luxcorewheels"
     settings = "os", "arch", "compiler", "build_type"
@@ -51,10 +51,7 @@ class OidnConan(ConanFile):
     }
 
     def requirements(self):
-        # TODO
-        # if self.settings.os == "Linux":
-            # self.requires("level-zero/1.17.39")
-        self.requires(f"onetbb/{_tbb_version}")
+        self.requires(f"onetbb/{TBB_VERSION}")
 
     def source(self):
         git = Git(self)
@@ -62,7 +59,7 @@ class OidnConan(ConanFile):
         print(res)
         git.clone(
             "https://github.com/OpenImageDenoise/oidn.git",
-            args=["--recursive", f"--branch v{_oidn_version}"],
+            args=["--recursive", f"--branch v{self.version}"],
             target=Path(self.source_folder) / "oidn"
         )
 
@@ -119,7 +116,7 @@ class OidnConan(ConanFile):
             if self.settings.os == "Linux":
                 self.cpp_info.libs = [
                     "OpenImageDenoise",
-                    f"libOpenImageDenoise_core.so.{_oidn_version}",
+                    f"libOpenImageDenoise_core.so.{self.version}",
                 ]
             elif self.settings.os == "Windows":
                 self.cpp_info.libs = [
@@ -128,9 +125,9 @@ class OidnConan(ConanFile):
                 ]
             elif self.settings.os == "Macos":
                 self.cpp_info.libs = [
-                    f"OpenImageDenoise.{_oidn_version}",
-                    f"OpenImageDenoise_device_cpu.{_oidn_version}",
-                    f"OpenImageDenoise_core.{_oidn_version}",
+                    f"OpenImageDenoise.{self.version}",
+                    f"OpenImageDenoise_device_cpu.{self.version}",
+                    f"OpenImageDenoise_core.{self.version}",
                 ]
         else:
             # Static

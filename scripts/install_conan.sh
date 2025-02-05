@@ -3,6 +3,11 @@
 # SPDX-License-Identifier: Apache-2.0
 
 CONAN_PROFILE=$WORKSPACE/conan-profiles/conan-profile-${RUNNER_OS}-${RUNNER_ARCH}
+BLENDER_VERSION=4.2.3
+OIDN_VERSION=2.3.1
+OIIO_VERSION=2.5.16.0
+OPENSUBDIV_VERSION=3.6.0
+
 
 function conan_create_install() {
   name=$(echo "$1" | tr '[:upper:]' '[:lower:]')  # Package name in lowercase

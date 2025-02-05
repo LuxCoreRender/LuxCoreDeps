@@ -14,23 +14,30 @@ import io
 import shutil
 from pathlib import Path
 
-_boost_version = os.environ["BOOST_VERSION"]
-_ocio_version = os.environ["OCIO_VERSION"]
-_oiio_version = os.environ["OIIO_VERSION"]
-_oidn_version = os.environ["OIDN_VERSION"]
-_openexr_version = os.environ["OPENEXR_VERSION"]
-_blender_version = os.environ["BLENDER_VERSION"]
-_openvdb_version = os.environ["OPENVDB_VERSION"]
-_tbb_version = os.environ["TBB_VERSION"]
-_spdlog_version = os.environ["SPDLOG_VERSION"]
-_embree3_version = os.environ["EMBREE3_VERSION"]
-_fmt_version = os.environ["FMT_VERSION"]
-_opensubdiv_version = os.environ["OPENSUBDIV_VERSION"]
-_json_version = os.environ["JSON_VERSION"]
-_eigen_version = os.environ["EIGEN_VERSION"]
-_robinhood_version = os.environ["ROBINHOOD_VERSION"]
-_minizip_version = os.environ["MINIZIP_VERSION"]
-_pybind11_version = os.environ["PYBIND11_VERSION"]
+# Gather here the various dependency versions, for convenience
+# (in alphabetic order)
+BLENDER_VERSION = "4.2.3"
+BOOST_VERSION = "1.84.0"
+EIGEN_VERSION = "3.4.0"
+EMBREE3_VERSION = "3.13.5"
+FMT_VERSION = "11.0.2"
+IMATH_VERSION = "3.1.9"
+JSON_VERSION = "3.11.3"
+LIBDEFLATE_VERSION = "1.22"
+LLVM_OPENMP_VERSION = "18.1.8"
+MINIZIP_VERSION = "4.0.3"
+OCIO_VERSION = "2.4.0"
+OIDN_VERSION = "2.3.1"
+OIIO_VERSION = "2.5.16.0"
+OPENEXR_VERSION = "3.3.2"
+OPENSUBDIV_VERSION = "3.6.0"
+OPENVDB_VERSION = "11.0.0"
+PYBIND11_VERSION = "2.13.6"
+ROBINHOOD_VERSION = "3.11.5"
+SPDLOG_VERSION = "1.15.0"
+TBB_VERSION = "2021.12.0"
+WINFLEXBISON_VERSION = "2.5.25"
+
 
 class LuxCore(ConanFile):
     name = "luxcorewheels"
@@ -40,21 +47,20 @@ class LuxCore(ConanFile):
 
 
     requires = [
-        f"opencolorio/{_ocio_version}",
-        f"minizip-ng/{_minizip_version}",
-        f"spdlog/{_spdlog_version}",
-        f"openimageio/{_oiio_version}@luxcorewheels/luxcorewheels",
-        f"boost/{_boost_version}",
-        # f"boost-python/{_boost_version}@luxcorewheels/luxcorewheels",  # TODO
-        f"openvdb/{_openvdb_version}",
-        f"eigen/{_eigen_version}",
-        f"embree3/{_embree3_version}",
-        f"robin-hood-hashing/{_robinhood_version}",
-        f"blender-types/{_blender_version}@luxcorewheels/luxcorewheels",
-        f"oidn/{_oidn_version}@luxcorewheels/luxcorewheels",
-        f"opensubdiv/{_opensubdiv_version}@luxcorewheels/luxcorewheels",
-        f"nlohmann_json/{_json_version}",
-        f"pybind11/{_pybind11_version}",
+        f"opencolorio/{OCIO_VERSION}",
+        f"minizip-ng/{MINIZIP_VERSION}",
+        f"spdlog/{SPDLOG_VERSION}",
+        f"openimageio/{OIIO_VERSION}@luxcorewheels/luxcorewheels",
+        f"boost/{BOOST_VERSION}",
+        f"openvdb/{OPENVDB_VERSION}",
+        f"eigen/{EIGEN_VERSION}",
+        f"embree3/{EMBREE3_VERSION}",
+        f"robin-hood-hashing/{ROBINHOOD_VERSION}",
+        f"blender-types/{BLENDER_VERSION}@luxcorewheels/luxcorewheels",
+        f"oidn/{OIDN_VERSION}@luxcorewheels/luxcorewheels",
+        f"opensubdiv/{OPENSUBDIV_VERSION}@luxcorewheels/luxcorewheels",
+        f"nlohmann_json/{JSON_VERSION}",
+        f"pybind11/{PYBIND11_VERSION}",
     ]
 
     default_options = {
@@ -71,25 +77,25 @@ class LuxCore(ConanFile):
 
     def requirements(self):
         self.requires(
-            f"onetbb/{_tbb_version}",
+            f"onetbb/{TBB_VERSION}",
             override=True,
             libs=True,
             transitive_libs=True,
         )  # For oidn
         self.requires(
-            f"libdeflate/1.22",
+            f"libdeflate/{LIBDEFLATE_VERSION}",
             force=True,
             libs=True,
             transitive_libs=True,
         )
-        self.requires("imath/3.1.9", override=True)
-        self.requires(f"fmt/{_fmt_version}", override=True)
+        self.requires(f"imath/{IMATH_VERSION}", override=True)
+        self.requires(f"fmt/{FMT_VERSION}", override=True)
 
         if self.settings.os == "Macos":
-            self.requires("llvm-openmp/18.1.8")
+            self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}")
 
         if self.settings.os == "Windows":
-            self.tool_requires("winflexbison/2.5.25")
+            self.tool_requires(f"winflexbison/{WINFLEXBISON_VERSION}")
 
     def build_requirements(self):
        self.tool_requires("cmake/*")
@@ -118,13 +124,13 @@ class LuxCore(ConanFile):
         oidn_libdir = Path(oidn_info.libdirs[0])
         tc.variables["LUX_OIDN_DENOISE_LIBS"] = oidn_libdir.as_posix()
         tc.variables["LUX_OIDN_DENOISE_BINS"] = oidn_bindir.as_posix()
-        tc.variables["LUX_OIDN_VERSION"] = _oidn_version
+        tc.variables["LUX_OIDN_VERSION"] = OIDN_VERSION
         if self.settings.os == "Linux":
-            denoise_cpu = oidn_libdir / f"libOpenImageDenoise_device_cpu.so.{_oidn_version}"
+            denoise_cpu = oidn_libdir / f"libOpenImageDenoise_device_cpu.so.{OIDN_VERSION}"
         elif self.settings.os == "Windows":
             denoise_cpu = oidn_bindir / "OpenImageDenoise_device_cpu.dll"
         elif self.settings.os == "Macos":
-            denoise_cpu = oidn_libdir / f"OpenImageDenoise_device_cpu.{_oidn_version}.pylib"
+            denoise_cpu = oidn_libdir / f"OpenImageDenoise_device_cpu.{OIDN_VERSION}.pylib"
         tc.variables["LUX_OIDN_DENOISE_CPU"] = denoise_cpu.as_posix()
 
         if self.settings.os == "Macos" and self.settings.arch == "armv8":

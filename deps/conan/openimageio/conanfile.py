@@ -10,8 +10,9 @@ from pathlib import PurePosixPath
 
 required_conan_version = ">=1.53.0"
 
-BOOST_VERSION = os.environ["BOOST_VERSION"]
-OCIO_VERSION = os.environ["OCIO_VERSION"]
+# Gather here the various dependency versions, for convenience
+BOOST_VERSION = "1.84.0"
+OCIO_VERSION = "2.4.0"
 
 class OpenImageIOConan(ConanFile):
     name = "openimageio"
