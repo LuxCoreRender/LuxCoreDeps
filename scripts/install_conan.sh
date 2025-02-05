@@ -17,7 +17,7 @@ function conan_create_install() {
   conan create $WORKSPACE/deps/conan/$name \
     --profile:all=$CONAN_PROFILE \
     --build=missing
-  conan install --requires=$name/$version@luxcorewheels/luxcorewheels \
+  conan install --requires=$name/$version@luxcore/luxcore \
     --profile:all=$CONAN_PROFILE \
     --build=missing \
     -vnotice
@@ -80,7 +80,7 @@ conan create $WORKSPACE \
   --profile:all=$CONAN_PROFILE \
   --build=missing
 conan install \
-  --requires=luxcoredeps/$LUXCORE_VERSION@luxcorewheels/luxcorewheels \
+  --requires=luxcoredeps/$LUXCORE_VERSION@luxcore/luxcore \
   --profile:all=$CONAN_PROFILE \
   --build=missing
 
@@ -91,7 +91,7 @@ conan cache clean "*"  # Clean non essential files
 conan remove -c -vverbose "*/*#!latest"  # Keep only latest version of each package
 # Save only dependencies of current target (otherwise cache gets bloated)
 conan graph info \
-  --requires=luxcoredeps/$LUXCORE_VERSION@luxcorewheels/luxcorewheels \
+  --requires=luxcoredeps/$LUXCORE_VERSION@luxcore/luxcore \
   --format=json \
   --profile:all=$CONAN_PROFILE \
   > graph.json

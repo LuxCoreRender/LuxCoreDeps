@@ -16,8 +16,8 @@ TBB_VERSION = "2021.12.0"
 class OidnConan(ConanFile):
     name = "oidn"
     version = "2.3.1"
-    user = "luxcorewheels"
-    channel = "luxcorewheels"
+    user = "luxcore"
+    channel = "luxcore"
     settings = "os", "arch", "compiler", "build_type"
     package_type = "library"
 

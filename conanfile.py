@@ -38,27 +38,26 @@ SPDLOG_VERSION = "1.15.0"
 TBB_VERSION = "2021.12.0"
 WINFLEXBISON_VERSION = "2.5.25"
 
-# TODO Replace luxcorewheels by luxcore
 class LuxCore(ConanFile):
     name = "luxcoredeps"
     version = "2.10.0"
-    user = "luxcorewheels"
-    channel = "luxcorewheels"
+    user = "luxcore"
+    channel = "luxcore"
 
 
     requires = [
         f"opencolorio/{OCIO_VERSION}",
         f"minizip-ng/{MINIZIP_VERSION}",
         f"spdlog/{SPDLOG_VERSION}",
-        f"openimageio/{OIIO_VERSION}@luxcorewheels/luxcorewheels",
+        f"openimageio/{OIIO_VERSION}@luxcore/luxcore",
         f"boost/{BOOST_VERSION}",
         f"openvdb/{OPENVDB_VERSION}",
         f"eigen/{EIGEN_VERSION}",
         f"embree3/{EMBREE3_VERSION}",
         f"robin-hood-hashing/{ROBINHOOD_VERSION}",
-        f"blender-types/{BLENDER_VERSION}@luxcorewheels/luxcorewheels",
-        f"oidn/{OIDN_VERSION}@luxcorewheels/luxcorewheels",
-        f"opensubdiv/{OPENSUBDIV_VERSION}@luxcorewheels/luxcorewheels",
+        f"blender-types/{BLENDER_VERSION}@luxcore/luxcore",
+        f"oidn/{OIDN_VERSION}@luxcore/luxcore",
+        f"opensubdiv/{OPENSUBDIV_VERSION}@luxcore/luxcore",
         f"nlohmann_json/{JSON_VERSION}",
         f"pybind11/{PYBIND11_VERSION}",
     ]

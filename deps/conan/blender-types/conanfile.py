@@ -15,8 +15,8 @@ from conan.tools.files import get, copy, replace_in_file
 class BlenderTypesConan(ConanFile):
     name = "blender-types"
     version = "4.2.3"
-    user = "luxcorewheels"
-    channel = "luxcorewheels"
+    user = "luxcore"
+    channel = "luxcore"
     # No settings/options are necessary, this is header only
     no_copy_source = True
     exports_sources = "include/*"  # for blender_types.h
