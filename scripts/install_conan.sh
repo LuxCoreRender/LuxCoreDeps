@@ -2,7 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-CONAN_PROFILE=$WORKSPACE/conan-profiles/conan-profile-${RUNNER_OS}-${RUNNER_ARCH}
+# CONAN_PROFILE=$WORKSPACE/conan-profiles/conan-profile-${RUNNER_OS}-${RUNNER_ARCH}
+CONAN_PROFILE=conan-profile-${RUNNER_OS}-${RUNNER_ARCH}
 BLENDER_VERSION=4.2.3
 OIDN_VERSION=2.3.1
 OIIO_VERSION=2.5.16.0
@@ -27,6 +28,7 @@ function conan_create_install() {
 # Script starts here
 
 set -o pipefail
+
 if [[ $RUNNER_OS == "Linux" ]]; then
   cache_dir=/conan-cache
 else
@@ -48,6 +50,13 @@ fi
 echo "::group::CIBW_BEFORE_BUILD: restore conan cache"
 # Restore conan cache (add -vverbose to debug)
 conan cache restore $cache_dir/conan-cache-save.tgz
+echo "::endgroup::"
+
+# Install profiles
+echo "::group::CIBW_BEFORE_BUILD: profiles"
+conan create $WORKSPACE/conan-profiles \
+    --profile:all=$WORKSPACE/conan-profiles/$CONAN_PROFILE
+conan config install-pkg -vvv luxcoreconf/$LUXCORE_VERSION@luxcore/luxcore
 echo "::endgroup::"
 
 echo "::group::CIBW_BEFORE_BUILD: opensubdiv"
@@ -76,6 +85,7 @@ fi
 
 echo "::group::CIBW_BEFORE_BUILD: LuxCore"
 cd $WORKSPACE
+# TODO Better use 'conan export'?
 conan create $WORKSPACE \
   --profile:all=$CONAN_PROFILE \
   --build=missing
@@ -92,6 +102,7 @@ conan remove -c -vverbose "*/*#!latest"  # Keep only latest version of each pack
 # Save only dependencies of current target (otherwise cache gets bloated)
 conan graph info \
   --requires=luxcoredeps/$LUXCORE_VERSION@luxcore/luxcore \
+  --requires=luxcoreconf/$LUXCORE_VERSION@luxcore/luxcore \
   --format=json \
   --profile:all=$CONAN_PROFILE \
   > graph.json
