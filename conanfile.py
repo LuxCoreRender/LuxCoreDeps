@@ -48,18 +48,13 @@ class LuxCore(ConanFile):
     requires = [
         f"opencolorio/{OCIO_VERSION}",
         f"minizip-ng/{MINIZIP_VERSION}",
-        f"spdlog/{SPDLOG_VERSION}",
         f"openimageio/{OIIO_VERSION}@luxcore/luxcore",
         f"boost/{BOOST_VERSION}",
         f"openvdb/{OPENVDB_VERSION}",
-        f"eigen/{EIGEN_VERSION}",
         f"embree3/{EMBREE3_VERSION}",
-        f"robin-hood-hashing/{ROBINHOOD_VERSION}",
         f"blender-types/{BLENDER_VERSION}@luxcore/luxcore",
         f"oidn/{OIDN_VERSION}@luxcore/luxcore",
         f"opensubdiv/{OPENSUBDIV_VERSION}@luxcore/luxcore",
-        f"nlohmann_json/{JSON_VERSION}",
-        f"pybind11/{PYBIND11_VERSION}",
     ]
 
     # TODO Move in profiles
@@ -89,7 +84,14 @@ class LuxCore(ConanFile):
             transitive_libs=True,
         )
         self.requires(f"imath/{IMATH_VERSION}", override=True)
-        self.requires(f"fmt/{FMT_VERSION}", override=True)
+
+        # Header only - make them transitive
+        self.requires(f"fmt/{FMT_VERSION}", override=True, transitive_headers=True)
+        self.requires(f"robin-hood-hashing/{ROBINHOOD_VERSION}", transitive_headers=True)
+        self.requires(f"eigen/{EIGEN_VERSION}", transitive_headers=True)
+        self.requires(f"nlohmann_json/{JSON_VERSION}", transitive_headers=True)
+        self.requires(f"pybind11/{PYBIND11_VERSION}", transitive_headers=True)
+        self.requires(f"spdlog/{SPDLOG_VERSION}", transitive_headers=True)
 
         if self.settings.os == "Macos":
             self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}")
@@ -176,5 +178,5 @@ class LuxCore(ConanFile):
         elif self.settings.os == "Windows":
             self.cpp_info.libs = [
                 "pyluxcore.pyd",
-                "tbb12.dll",
+                "tbb12.dll",  # TODO
             ]
