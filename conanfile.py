@@ -109,6 +109,7 @@ class LuxCore(ConanFile):
     def generate(self):
         tc = CMakeToolchain(self)
         tc.absolute_paths = True
+        tc.user_presets_path = False  # Disable CMakeUserPresets generation
         tc.preprocessor_definitions["OIIO_STATIC_DEFINE"] = True
         tc.preprocessor_definitions["SPDLOG_FMT_EXTERNAL"] = True
         tc.variables["CMAKE_COMPILE_WARNING_AS_ERROR"] = False
