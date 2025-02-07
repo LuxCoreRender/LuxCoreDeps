@@ -84,6 +84,9 @@ class LuxCore(ConanFile):
         self.requires(f"pybind11/{PYBIND11_VERSION}", transitive_headers=True)
         self.requires(f"spdlog/{SPDLOG_VERSION}", transitive_headers=True)
 
+        if self.settings.os == "Linux":
+            self.requires(f"gtk/system", transitive_headers=True)
+
         if self.settings.os == "Macos":
             self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}")
 
