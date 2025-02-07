@@ -30,6 +30,7 @@ OCIO_VERSION = "2.4.0"
 OIDN_VERSION = "2.3.1"
 OIIO_VERSION = "2.5.16.0"
 OPENEXR_VERSION = "3.3.2"
+OIIO_VERSION = "2.5.18.0"
 OPENSUBDIV_VERSION = "3.6.0"
 OPENVDB_VERSION = "11.0.0"
 PYBIND11_VERSION = "2.13.6"
@@ -46,9 +47,7 @@ class LuxCore(ConanFile):
     channel = "luxcore"
 
     requires = [
-        f"opencolorio/{OCIO_VERSION}",
         f"minizip-ng/{MINIZIP_VERSION}",
-        f"openimageio/{OIIO_VERSION}@luxcore/luxcore",
         f"boost/{BOOST_VERSION}",
         f"openvdb/{OPENVDB_VERSION}",
         f"embree3/{EMBREE3_VERSION}",
@@ -56,6 +55,7 @@ class LuxCore(ConanFile):
         f"oidn/{OIDN_VERSION}@luxcore/luxcore",
         f"opensubdiv/{OPENSUBDIV_VERSION}@luxcore/luxcore",
         f"imath/{IMATH_VERSION}",
+        f"openimageio/{OIIO_VERSION}",
     ]
 
     settings = "os", "compiler", "build_type", "arch"
@@ -73,9 +73,14 @@ class LuxCore(ConanFile):
             libs=True,
             transitive_libs=True,
         )
+        self.requires(
+            f"opencolorio/{OCIO_VERSION}",
+            force=True,
+        )
+        self.requires(f"fmt/{FMT_VERSION}", override=True, transitive_headers=True)
+
 
         # Header only - make them transitive
-        self.requires(f"fmt/{FMT_VERSION}", override=True, transitive_headers=True)
         self.requires(
             f"robin-hood-hashing/{ROBINHOOD_VERSION}", transitive_headers=True
         )

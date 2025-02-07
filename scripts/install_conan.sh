@@ -71,12 +71,6 @@ echo "::group::CIBW_BEFORE_BUILD: Blender types"
 conan_create_install blender-types $BLENDER_VERSION
 echo "::endgroup::"
 
-echo "::group::CIBW_BEFORE_BUILD: OIIO"
-# Private OIIO uses fmt as header-only
-unset CI  # Otherwise OIIO passes -Werror to compiler (MacOS)!
-conan_create_install openimageio $OIIO_VERSION
-echo "::endgroup::"
-
 if [[ $RUNNER_OS == "Windows" ]]; then
   DEPLOY_PATH=$(cygpath "C:\\Users\\runneradmin")
 else
