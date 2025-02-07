@@ -171,7 +171,9 @@ class LuxCore(ConanFile):
         save(self, os.path.join(self.package_folder, "dummy.txt"), "Hello World")
 
     def layout(self):
+        self.folders.root = ""
         self.folders.generators = "cmake"
+        self.folders.build = "build"
 
     def package_info(self):
 
