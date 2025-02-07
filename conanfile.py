@@ -38,12 +38,12 @@ SPDLOG_VERSION = "1.15.0"
 TBB_VERSION = "2021.12.0"
 WINFLEXBISON_VERSION = "2.5.25"
 
+
 class LuxCore(ConanFile):
     name = "luxcoredeps"
     version = "2.10.0"
     user = "luxcore"
     channel = "luxcore"
-
 
     requires = [
         f"opencolorio/{OCIO_VERSION}",
@@ -55,20 +55,10 @@ class LuxCore(ConanFile):
         f"blender-types/{BLENDER_VERSION}@luxcore/luxcore",
         f"oidn/{OIDN_VERSION}@luxcore/luxcore",
         f"opensubdiv/{OPENSUBDIV_VERSION}@luxcore/luxcore",
+        f"imath/{IMATH_VERSION}",
     ]
 
-    # TODO Move in profiles
-    default_options = {
-        "fmt/*:header_only": True,
-        "spdlog/*:header_only": True,
-        "openimageio/*:with_ffmpeg": False,
-        "openimageio/*:with_libheif": False,
-        "embree3/*:neon": True,
-    }
-
     settings = "os", "compiler", "build_type", "arch"
-
-    # Note: LuxCoreRender is sourced by Github action (see Checkout LuxCoreRender)
 
     def requirements(self):
         self.requires(
@@ -83,11 +73,12 @@ class LuxCore(ConanFile):
             libs=True,
             transitive_libs=True,
         )
-        self.requires(f"imath/{IMATH_VERSION}", override=True)
 
         # Header only - make them transitive
         self.requires(f"fmt/{FMT_VERSION}", override=True, transitive_headers=True)
-        self.requires(f"robin-hood-hashing/{ROBINHOOD_VERSION}", transitive_headers=True)
+        self.requires(
+            f"robin-hood-hashing/{ROBINHOOD_VERSION}", transitive_headers=True
+        )
         self.requires(f"eigen/{EIGEN_VERSION}", transitive_headers=True)
         self.requires(f"nlohmann_json/{JSON_VERSION}", transitive_headers=True)
         self.requires(f"pybind11/{PYBIND11_VERSION}", transitive_headers=True)
@@ -100,11 +91,11 @@ class LuxCore(ConanFile):
             self.tool_requires(f"winflexbison/{WINFLEXBISON_VERSION}")
 
     def build_requirements(self):
-       self.tool_requires("cmake/*")
-       self.tool_requires("meson/*")
-       self.tool_requires("ninja/*")
-       self.tool_requires("pkgconf/*")
-       self.tool_requires("yasm/*")
+        self.tool_requires("cmake/*")
+        self.tool_requires("meson/*")
+        self.tool_requires("ninja/*")
+        self.tool_requires("pkgconf/*")
+        self.tool_requires("yasm/*")
 
     def generate(self):
         tc = CMakeToolchain(self)
@@ -129,11 +120,15 @@ class LuxCore(ConanFile):
         tc.variables["LUX_OIDN_DENOISE_BINS"] = oidn_bindir.as_posix()
         tc.variables["LUX_OIDN_VERSION"] = OIDN_VERSION
         if self.settings.os == "Linux":
-            denoise_cpu = oidn_libdir / f"libOpenImageDenoise_device_cpu.so.{OIDN_VERSION}"
+            denoise_cpu = (
+                oidn_libdir / f"libOpenImageDenoise_device_cpu.so.{OIDN_VERSION}"
+            )
         elif self.settings.os == "Windows":
             denoise_cpu = oidn_bindir / "OpenImageDenoise_device_cpu.dll"
         elif self.settings.os == "Macos":
-            denoise_cpu = oidn_libdir / f"OpenImageDenoise_device_cpu.{OIDN_VERSION}.pylib"
+            denoise_cpu = (
+                oidn_libdir / f"OpenImageDenoise_device_cpu.{OIDN_VERSION}.pylib"
+            )
         tc.variables["LUX_OIDN_DENOISE_CPU"] = denoise_cpu.as_posix()
 
         if self.settings.os == "Macos" and self.settings.arch == "armv8":
@@ -144,17 +139,16 @@ class LuxCore(ConanFile):
 
             bisonbrewpath = io.StringIO()
             self.run("brew --prefix bison", stdout=bisonbrewpath)
-            bison_root = os.path.join(bisonbrewpath.getvalue().rstrip(),"bin")
+            bison_root = os.path.join(bisonbrewpath.getvalue().rstrip(), "bin")
             buildenv.environment().define("BISON_ROOT", bison_root)
 
             flexbrewpath = io.StringIO()
             self.run("brew --prefix flex", stdout=flexbrewpath)
-            flex_root = os.path.join(flexbrewpath.getvalue().rstrip(),"bin")
+            flex_root = os.path.join(flexbrewpath.getvalue().rstrip(), "bin")
             buildenv.environment().define("FLEX_ROOT", flex_root)
 
             buildenv.generate()
             tc.presets_build_environment = buildenv.environment()
-
 
         tc.generate()
 

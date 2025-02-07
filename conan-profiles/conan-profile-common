@@ -30,7 +30,12 @@ embree3/*:with_tbb=True
 embree3/*:sse2=True
 embree3/*:sse42=True
 embree3/*:avx=True
+embree3/*:neon=True
 opensubdiv/*:with_omp=True
+fmt/*:header_only=True
+spdlog/*:header_only=True
+openimageio/*:with_ffmpeg=False
+openimageio/*:with_libheif=False
 
 
 # boost/*:without_atomic=True
