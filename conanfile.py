@@ -77,6 +77,10 @@ class LuxCore(ConanFile):
             f"opencolorio/{OCIO_VERSION}",
             force=True,
         )
+        self.requires(
+            f"openexr/{OPENEXR_VERSION}",
+            force=True,
+        )
         self.requires(f"fmt/{FMT_VERSION}", override=True, transitive_headers=True)
 
 
