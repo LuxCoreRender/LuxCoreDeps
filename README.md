@@ -27,10 +27,11 @@ Dependency build is also triggered by `push` and `pull request` events.
 
 ## Exposing dependencies to LuxCore
 
-Dependencies are made available to LuxCore via LuxCoreDeps _releases_.
+Dependencies are made available to LuxCore via LuxCoreDeps **releases**:
+https://github.com/LuxCoreRender/LuxCoreDeps/releases
 
 To expose a new set of dependency, create a new release in LuxCoreDeps and
-upload dependency sets to this release.
+upload dependency sets in the assets of the release.
 
 On the other side, from 2.10, LuxCore is equipped with scripts that enable it
 to download and install the dependency sets thus created.
