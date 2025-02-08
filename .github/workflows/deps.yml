@@ -4,17 +4,10 @@
 
 name: LuxCore Dependency Builder
 
-# TODO Decide which event triggers job
 on:
   pull_request:
   push:
-    branches:
-      - work
-      - for_v2.10
   workflow_dispatch:
-  release:
-    types:
-      - published
 
 jobs:
   build_deps:
@@ -160,6 +153,7 @@ jobs:
 
 
       # Build deps - we rely on cibuildwheel to get the fine settings for build
+      # To do so, we build a dummy wheel
       - name: Build deps
         uses: pypa/cibuildwheel@v2.22.0
         env:
@@ -269,7 +263,6 @@ jobs:
           name: luxcore-deps-${{ matrix.os }}
           path: conan-cache
           compression-level: 0  # Already a zip...
-
 
       - name: Output artifact ID
         run: |
