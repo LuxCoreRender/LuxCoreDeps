@@ -1,3 +1,5 @@
+**WARNING: THIS IS ON-GOING DEVELOPMENT - NOT SUITABLE FOR PRODUCTION**
+
 # LuxCore Dependencies Provider
 
 LuxCoreDeps provides the dependencies needed to build LuxCore, starting with
