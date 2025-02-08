@@ -51,5 +51,7 @@ etc.) as the one intended for the wheels.
 Dependency build can be debugged locally using `nektos/act`
 (https://github.com/nektos/act).
 
+`debug.sh` contains a working example of `act` invokation under Linux.
+
 ## License
 This code is released under Apache 2.0 license.
