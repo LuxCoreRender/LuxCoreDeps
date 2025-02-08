@@ -3,8 +3,9 @@
 LuxCoreDeps provides the dependencies needed to build LuxCore, starting with
 version 2.10.
 
-LuxCoreDeps is based on the Conan dependency manager and Github runners. It
-builds dependency sets for the following 4 platforms:
+LuxCoreDeps is based on Conan dependency manager (https://conan.io/) and Github
+Actions (https://github.com/features/actions). It builds dependency sets for
+the following 4 platforms:
 - Linux
 - Windows
 - MacOS Intel
