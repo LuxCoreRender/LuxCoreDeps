@@ -15,5 +15,7 @@ tools.build:cflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX"]
 embree3/*:tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2"]
 
 [options]
+# MSVC does not support avx2 nor avx512
 openvdb/*:simd=AVX
-# NB: MSVC does not support avx2 nor avx512
+# Avoid link collisions between spdlog::fmt and OpenImageIO::fmt
+spdlog/*:use_std_fmt=True

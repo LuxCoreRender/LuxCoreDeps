@@ -30,7 +30,6 @@ embree3/*:avx=True
 embree3/*:neon=True
 opensubdiv/*:with_omp=True
 fmt/*:header_only=False
-spdlog/*:header_only=True
 openimageio/*:with_ffmpeg=False
 openimageio/*:with_libheif=False
 
