@@ -127,7 +127,7 @@ jobs:
         with:
           script: |
             if ('${{ runner.arch }}' == 'X64') {
-              target = '10.13';
+              target = '10.15';
               arch='x86_64';
             }
             else {
