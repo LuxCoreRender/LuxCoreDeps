@@ -105,7 +105,6 @@ class LuxCore(ConanFile):
     def build_requirements(self):
         self.tool_requires("cmake/*")
         self.tool_requires("meson/*")
-        self.tool_requires("ninja/*")
         self.tool_requires("pkgconf/*")
         self.tool_requires("yasm/*")
 

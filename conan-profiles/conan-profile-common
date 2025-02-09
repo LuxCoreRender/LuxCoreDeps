@@ -1,17 +1,15 @@
 [settings]
-build_type={{ os.getenv("BUILD_TYPE") }}
+build_type={{ os.getenv("BUILD_TYPE", "Release") }}
 
 # For tools, we'll always use release version
 # (directly downloaded from cache)
 b2/*:build_type=Release
 cmake/*:build_type=Release
 meson/*:build_type=Release
-ninja/*:build_type=Release
 pkgconf/*:build_type=Release
 yasm/*:build_type=Release
 
 [conf]
-tools.cmake.cmaketoolchain:generator=Ninja
 tools.build:verbosity=verbose
 tools.system.package_manager:mode=install
 tools.deployer:symlinks=True
@@ -19,7 +17,6 @@ tools.deployer:symlinks=True
 [platform_tool_requires]
 cmake/*
 meson/*
-ninja/*
 pkgconf/*
 yasm/*
 
