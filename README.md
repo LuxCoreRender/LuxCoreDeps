@@ -1,4 +1,6 @@
-# LuxCore Dependencies Provider
+**WARNING: THIS IS ON-GOING DEVELOPMENT - NOT SUITABLE FOR PRODUCTION**
+
+# LuxCore Dependency Provider
 
 LuxCoreDeps provides the dependencies needed to build LuxCore, starting with
 version 2.10.
@@ -25,10 +27,11 @@ Dependency build is also triggered by `push` and `pull request` events.
 
 ## Exposing dependencies to LuxCore
 
-Dependencies are made available to LuxCore via LuxCoreDeps _releases_.
+Dependencies are made available to LuxCore via LuxCoreDeps **releases**:
+https://github.com/LuxCoreRender/LuxCoreDeps/releases
 
 To expose a new set of dependency, create a new release in LuxCoreDeps and
-upload dependency sets to this release.
+upload dependency sets in the assets of the release.
 
 On the other side, from 2.10, LuxCore is equipped with scripts that enable it
 to download and install the dependency sets thus created.
@@ -50,6 +53,8 @@ etc.) as the one intended for the wheels.
 ### Debugging
 Dependency build can be debugged locally using `nektos/act`
 (https://github.com/nektos/act).
+
+`debug.sh` contains a working example of `act` invokation under Linux.
 
 ## License
 This code is released under Apache 2.0 license.
