@@ -164,9 +164,6 @@ class LuxCore(ConanFile):
 
         cd = CMakeDeps(self)
 
-        # Alternative filenames
-        cd.set_property("c-blosc", "cmake_file_name", "Blosc")
-
         cd.generate()
 
     def package(self):
