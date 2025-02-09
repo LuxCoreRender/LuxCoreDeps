@@ -5,7 +5,6 @@
 name: LuxCore Dependency Builder
 
 on:
-  pull_request:
   push:
   workflow_dispatch:
 
