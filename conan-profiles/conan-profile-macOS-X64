@@ -2,7 +2,7 @@ include(conan-profile-common)
 
 [settings]
 os=Macos
-os.version=10.13
+os.version=10.15
 arch=x86_64
 compiler=apple-clang
 compiler.version=14.0

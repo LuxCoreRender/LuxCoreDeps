@@ -23,7 +23,7 @@ Dependencies are built from sources, via Conan recipes.
 To trigger dependency build, use `workflow_dispatch` event:
 https://github.com/LuxCoreRender/LuxCoreDeps/actions/workflows/deps.yml
 
-Dependency build is also triggered by `push` and `pull request` events.
+Dependency build is also triggered by `push` events.
 
 ## Exposing dependencies to LuxCore
 
