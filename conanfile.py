@@ -117,7 +117,6 @@ class LuxCore(ConanFile):
         tc = CMakeToolchain(self)
         tc.absolute_paths = True
         tc.preprocessor_definitions["OIIO_STATIC_DEFINE"] = True
-        tc.preprocessor_definitions["SPDLOG_FMT_EXTERNAL"] = True
         tc.variables["CMAKE_COMPILE_WARNING_AS_ERROR"] = False
 
         # OIDN denoiser executable
