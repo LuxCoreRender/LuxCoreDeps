@@ -84,8 +84,6 @@ class LuxCore(ConanFile):
         self.requires(
             f"fmt/{FMT_VERSION}",
             override=True,
-            transitive_headers=True,
-            transitive_libs=True
         )
 
 
