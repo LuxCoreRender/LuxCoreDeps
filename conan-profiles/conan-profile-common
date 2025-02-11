@@ -29,10 +29,9 @@ embree3/*:sse42=True
 embree3/*:avx=True
 embree3/*:neon=True
 opensubdiv/*:with_omp=True
-fmt/*:header_only=True
+fmt/*:header_only=False
 openimageio/*:with_ffmpeg=False
 openimageio/*:with_libheif=False
-spdlog/*:header_only=True
 
 
 # boost/*:without_atomic=True
