@@ -20,7 +20,7 @@ BLENDER_VERSION = "4.2.3"
 BOOST_VERSION = "1.84.0"
 EIGEN_VERSION = "3.4.0"
 EMBREE3_VERSION = "3.13.5"
-FMT_VERSION = "11.0.2"
+FMT_VERSION = "11.1.3"
 IMATH_VERSION = "3.1.9"
 JSON_VERSION = "3.11.3"
 LIBDEFLATE_VERSION = "1.22"
@@ -82,7 +82,7 @@ class LuxCore(ConanFile):
             force=True,
         )
         self.requires(
-            f"fmt/{FMT_VERSION}",
+            f"fmt/{FMT_VERSION}@luxcore/luxcore",
             override=True,
         )
 
