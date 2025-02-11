@@ -26,7 +26,6 @@ jobs:
       GLIBC_VERSION: 2_28
       GH_TOKEN: ${{ github.token }}
       BOOST_INSTALL_LAYOUT: system
-      #SPDLOG_FMT_EXTERNAL: on
 
 
     steps:
@@ -179,7 +178,6 @@ jobs:
             CMAKE_CXX_COMPILER_LAUNCHER
             CMAKE_C_COMPILER_LAUNCHER
             BOOST_INSTALL_LAYOUT
-            SPDLOG_FMT_EXTERNAL
             CXX_VERSION
           CIBW_BEFORE_ALL_LINUX: |
             dnf install -y epel-release

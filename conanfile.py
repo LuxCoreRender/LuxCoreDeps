@@ -162,6 +162,8 @@ class LuxCore(ConanFile):
             buildenv.generate()
             tc.presets_build_environment = buildenv.environment()
 
+        tc.cache_variables["SPDLOG_FMT_EXTERNAL_HO"] = True
+
         tc.generate()
 
         cd = CMakeDeps(self)
