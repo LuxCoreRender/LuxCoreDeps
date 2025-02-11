@@ -83,7 +83,7 @@ class LuxCore(ConanFile):
         )
         self.requires(
             f"fmt/{FMT_VERSION}",
-            force=True,
+            override=True,
         )
 
 
@@ -164,11 +164,9 @@ class LuxCore(ConanFile):
 
         tc.generate()
 
-        deps = CMakeDeps(self)
-        
-        deps.set_property("fmt::fmt-header-only", "cmake_target_aliases", ["fmt::fmt"])
+        cd = CMakeDeps(self)
 
-        deps.generate()
+        cd.generate()
 
     def package(self):
         # Just to ensure package is not empty
