@@ -9,6 +9,7 @@ OIDN_VERSION=2.3.1
 OIIO_VERSION=2.5.16.0
 OPENSUBDIV_VERSION=3.6.0
 LUXCORE_VERSION=2.10.0
+FMT_VERSION=11.1.3
 
 
 function conan_create_install() {
@@ -57,6 +58,11 @@ echo "::group::CIBW_BEFORE_BUILD: profiles"
 conan create $WORKSPACE/conan-profiles \
     --profile:all=$WORKSPACE/conan-profiles/$CONAN_PROFILE
 conan config install-pkg -vvv luxcoreconf/$LUXCORE_VERSION@luxcore/luxcore
+echo "::endgroup::"
+
+# Install local packages
+echo "::group::CIBW_BEFORE_BUILD: fmt"
+conan_create_install fmt $FMT_VERSION
 echo "::endgroup::"
 
 echo "::group::CIBW_BEFORE_BUILD: opensubdiv"

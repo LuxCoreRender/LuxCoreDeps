@@ -13,6 +13,7 @@ yasm/*:build_type=Release
 tools.build:verbosity=verbose
 tools.system.package_manager:mode=install
 tools.deployer:symlinks=True
+tools.build:skip_test=True
 
 [platform_tool_requires]
 cmake/*
@@ -29,8 +30,8 @@ embree3/*:sse42=True
 embree3/*:avx=True
 embree3/*:neon=True
 opensubdiv/*:with_omp=True
-fmt/*:header_only=False
-fmt/*:shared=True
+fmt/*:header_only=True
+spdlog/*:header_only=True
 openimageio/*:with_ffmpeg=False
 openimageio/*:with_libheif=False
 
