@@ -1,6 +1,6 @@
 import os
 from conan import ConanFile
-from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps
+from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps, cmake_layout
 from conan.tools.files import get, copy
 
 
@@ -41,14 +41,28 @@ class NativefiledialogConan(ConanFile):
         deps = CMakeDeps(self)
         deps.generate()
 
+    def layout(self):
+        cmake_layout(self, src_folder="src")
+
     def package(self):
-        libname = "nfd_d" if self.settings.build_type == "Debug" else "nfd"
-        if self.settings.compiler == "msvc":
-            copy(self, "*%s.lib" % libname, dst="lib", src=self._source_subfolder, keep_path=False)
-        else:
-            copy(self, "*%s.a" % libname, dst="lib", src=self._source_subfolder, keep_path=False)
-        copy(self, "*nfd.h", dst="include", src=self._source_subfolder, keep_path=False)
-        copy(self, "LICENSE", dst="licenses", src=self._source_subfolder)
+        copy(
+            self,
+            "LICENSE.txt",
+            src=self.source_folder,
+            dst=os.path.join(self.package_folder, "licenses")
+        )
+        cmake = CMake(self)
+        cmake.install()
+
+
+        # copy(self, "LICENSE", dst="licenses", src=self._source_subfolder)
+
+        # libname = "nfd_d" if self.settings.build_type == "Debug" else "nfd"
+        # if self.settings.compiler == "msvc":
+            # copy(self, "*%s.lib" % libname, dst="lib", src=self._source_subfolder, keep_path=False)
+        # else:
+            # copy(self, "*%s.a" % libname, dst="lib", src=self._source_subfolder, keep_path=False)
+        # copy(self, "*nfd.h", dst="include", src=self._source_subfolder, keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = ["nfd_d" if self.settings.build_type == "Debug" else "nfd"]
