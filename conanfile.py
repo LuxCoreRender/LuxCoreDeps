@@ -21,11 +21,14 @@ BOOST_VERSION = "1.84.0"
 EIGEN_VERSION = "3.4.0"
 EMBREE3_VERSION = "3.13.5"
 FMT_VERSION = "11.0.2"
+GLFW_VERSION = "3.4"
 IMATH_VERSION = "3.1.9"
+IMGUI_VERSION = "1.91.5"
 JSON_VERSION = "3.11.3"
 LIBDEFLATE_VERSION = "1.22"
 LLVM_OPENMP_VERSION = "18.1.8"
 MINIZIP_VERSION = "4.0.3"
+NFD_VERSION = "1.2.1"
 OCIO_VERSION = "2.4.0"
 OIDN_VERSION = "2.3.1"
 OIIO_VERSION = "2.5.16.0"
@@ -56,6 +59,9 @@ class LuxCore(ConanFile):
         f"opensubdiv/{OPENSUBDIV_VERSION}@luxcore/luxcore",
         f"imath/{IMATH_VERSION}",
         f"openimageio/{OIIO_VERSION}",
+        f"nativefiledialog/{NFD_VERSION}@luxcore/luxcore",
+        f"imgui/{IMGUI_VERSION}",
+        f"glfw/{GLFW_VERSION}",
     ]
 
     settings = "os", "compiler", "build_type", "arch"
@@ -83,7 +89,8 @@ class LuxCore(ConanFile):
         )
         self.requires(
             f"fmt/{FMT_VERSION}@luxcore/luxcore",
-            override=True,
+            force=True,
+            transitive_headers=True,
         )
 
 
@@ -96,9 +103,6 @@ class LuxCore(ConanFile):
         self.requires(f"pybind11/{PYBIND11_VERSION}", transitive_headers=True)
         self.requires(f"spdlog/{SPDLOG_VERSION}", transitive_headers=True)
 
-        if self.settings.os == "Linux":
-            self.requires(f"gtk/system", transitive_headers=True)
-
         if self.settings.os == "Macos":
             self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}")
 
@@ -106,10 +110,10 @@ class LuxCore(ConanFile):
             self.tool_requires(f"winflexbison/{WINFLEXBISON_VERSION}")
 
     def build_requirements(self):
-        self.tool_requires("cmake/*")
-        self.tool_requires("meson/*")
-        self.tool_requires("pkgconf/*")
-        self.tool_requires("yasm/*")
+        self.tool_requires("cmake/[*]")
+        self.tool_requires("meson/[*]")
+        self.tool_requires("pkgconf/[*]")
+        self.tool_requires("yasm/[*]")
 
     def generate(self):
         tc = CMakeToolchain(self)

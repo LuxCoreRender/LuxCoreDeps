@@ -10,6 +10,7 @@ OIIO_VERSION=2.5.16.0
 OPENSUBDIV_VERSION=3.6.0
 LUXCORE_VERSION=2.10.0
 FMT_VERSION=11.0.2
+NFD_VERSION=1.2.1
 
 
 function conan_create_install() {
@@ -61,6 +62,10 @@ conan config install-pkg -vvv luxcoreconf/$LUXCORE_VERSION@luxcore/luxcore
 echo "::endgroup::"
 
 # Install local packages
+echo "::group::CIBW_BEFORE_BUILD: nativefiledialog"
+conan_create_install nativefiledialog $NFD_VERSION
+echo "::endgroup::"
+
 echo "::group::CIBW_BEFORE_BUILD: fmt"
 conan_create_install fmt $FMT_VERSION
 echo "::endgroup::"
