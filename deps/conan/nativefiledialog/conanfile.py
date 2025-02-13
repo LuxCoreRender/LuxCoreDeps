@@ -15,10 +15,6 @@ class NativefiledialogConan(ConanFile):
     topics = ("conan", "dialog", "gui")
     settings = "os", "compiler", "build_type", "arch"
 
-    requires = [
-        "gtk/system",
-    ]
-
     @property
     def _source_subfolder(self):
         return "source_subfolder"
@@ -26,6 +22,9 @@ class NativefiledialogConan(ConanFile):
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)
 
+    def requirements(self):
+        if self.settings.os == "Linux":
+            self.requires("gtk/system")
 
     def build(self):
         cmake = CMake(self)

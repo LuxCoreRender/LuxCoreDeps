@@ -22,7 +22,6 @@ EIGEN_VERSION = "3.4.0"
 EMBREE3_VERSION = "3.13.5"
 FMT_VERSION = "11.0.2"
 GLFW_VERSION = "3.4"
-GTK_VERSION = "system"
 IMATH_VERSION = "3.1.9"
 IMGUI_VERSION = "1.91.5"
 JSON_VERSION = "3.11.3"
@@ -103,10 +102,6 @@ class LuxCore(ConanFile):
         self.requires(f"nlohmann_json/{JSON_VERSION}", transitive_headers=True)
         self.requires(f"pybind11/{PYBIND11_VERSION}", transitive_headers=True)
         self.requires(f"spdlog/{SPDLOG_VERSION}", transitive_headers=True)
-
-        # TODO
-        # if self.settings.os == "Linux":
-            # self.requires(f"gtk/{GTK_VERSION}", transitive_headers=True)
 
         if self.settings.os == "Macos":
             self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}")
