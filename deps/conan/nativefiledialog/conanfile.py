@@ -14,17 +14,29 @@ class NativefiledialogConan(ConanFile):
     description = "A tiny, neat C library that portably invokes native file open and save dialogs."
     topics = ("conan", "dialog", "gui")
     settings = "os", "compiler", "build_type", "arch"
+    options = {
+        "shared": [True, False],
+        "fPIC": [True, False],
+    }
+    default_options = {
+        "shared": False,
+        "fPIC": True,
+    }
 
-    @property
-    def _source_subfolder(self):
-        return "source_subfolder"
-
-    def source(self):
-        get(self, **self.conan_data["sources"][self.version], strip_root=True)
+    def config_options(self):
+        if self.settings.os == "Windows":
+            del self.options.fPIC
 
     def requirements(self):
         if self.settings.os == "Linux":
             self.requires("gtk/system")
+
+    def source(self):
+        get(self, **self.conan_data["sources"][self.version], strip_root=True)
+
+    def configure(self):
+        if self.options.shared:
+            self.options.rm_safe("fPIC")
 
     def build(self):
         cmake = CMake(self)
@@ -54,15 +66,6 @@ class NativefiledialogConan(ConanFile):
         cmake = CMake(self)
         cmake.install()
 
-
-        # copy(self, "LICENSE", dst="licenses", src=self._source_subfolder)
-
-        # libname = "nfd_d" if self.settings.build_type == "Debug" else "nfd"
-        # if self.settings.compiler == "msvc":
-            # copy(self, "*%s.lib" % libname, dst="lib", src=self._source_subfolder, keep_path=False)
-        # else:
-            # copy(self, "*%s.a" % libname, dst="lib", src=self._source_subfolder, keep_path=False)
-        # copy(self, "*nfd.h", dst="include", src=self._source_subfolder, keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = ["nfd_d" if self.settings.build_type == "Debug" else "nfd"]
