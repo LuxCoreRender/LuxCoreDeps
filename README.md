@@ -21,7 +21,7 @@ On consumer side (LuxCore), the cache is downloaded and restored (`conan
 cache restore`), making all the dependencies available for LuxCore build.
 
 ```mermaid
-flowchart LR
+flowchart TB
   Publish --> Download
 
   subgraph "`**LuxCoreDeps**`"
@@ -59,7 +59,7 @@ https://github.com/LuxCoreRender/LuxCoreDeps/actions/workflows/deps.yml
 
 Dependency build is also triggered by `push` events.
 
-## Exposing dependencies to LuxCore
+## Publishing dependencies to LuxCore
 
 _(For admin only - requires special rights on repo)_
 
