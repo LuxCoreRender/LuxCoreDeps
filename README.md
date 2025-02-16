@@ -13,9 +13,10 @@ the following 4 platforms:
 
 ## How does it work?
 
-LuxCoreDeps builds a Conan cache with all the dependencies (binaries and
-headers) required to build LuxCore. Once built, the cache is saved (`conan
-cache save`) and published in a Github release.
+LuxCoreDeps populates a Conan cache, building & installing all the
+dependencies (binaries and headers) required to build LuxCore.
+Once populated, the cache is saved (`conancache save`) and published
+in a Github release.
 
 On consumer side (LuxCore), the cache is downloaded and restored (`conan
 cache restore`), making all the dependencies available for LuxCore build.
