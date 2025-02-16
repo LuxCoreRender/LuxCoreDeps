@@ -1,4 +1,4 @@
-# LuxCoreDeps - the LuxCore Dependency Provider
+# LuxCoreDeps - The LuxCore Dependency Provider
 
 **LuxCoreDeps provides the dependencies needed to build LuxCore, starting with
 version 2.10.**
