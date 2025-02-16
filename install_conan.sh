@@ -17,7 +17,7 @@ function conan_create_install() {
   name=$(echo "$1" | tr '[:upper:]' '[:lower:]')  # Package name in lowercase
   version=$2
 
-  conan create $WORKSPACE/deps/conan/$name \
+  conan create $WORKSPACE/local-conan-recipes/$name \
     --profile:all=$CONAN_PROFILE \
     --build=missing
   conan install --requires=$name/$version@luxcore/luxcore \
