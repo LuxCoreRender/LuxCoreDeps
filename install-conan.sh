@@ -2,28 +2,17 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# CONAN_PROFILE=$WORKSPACE/conan-profiles/conan-profile-${RUNNER_OS}-${RUNNER_ARCH}
 CONAN_PROFILE=conan-profile-${RUNNER_OS}-${RUNNER_ARCH}
-BLENDER_VERSION=4.2.3
-OIDN_VERSION=2.3.1
-OIIO_VERSION=2.5.16.0
-OPENSUBDIV_VERSION=3.6.0
-LUXCORE_VERSION=2.10.0
-FMT_VERSION=11.0.2
-NFD_VERSION=1.2.1
+LUXCORE_VERSION="2.10.0"
 
-
-function conan_create_install() {
+function conan_local_install() {
   name=$(echo "$1" | tr '[:upper:]' '[:lower:]')  # Package name in lowercase
-  version=$2
 
-  conan create $WORKSPACE/local-conan-recipes/$name \
-    --profile:all=$CONAN_PROFILE \
-    --build=missing
-  conan install --requires=$name/$version@luxcore/luxcore \
+  conan install \
     --profile:all=$CONAN_PROFILE \
     --build=missing \
-    -vnotice
+    -vnotice \
+    $WORKSPACE/local-conan-recipes/$name
 }
 
 
@@ -63,23 +52,23 @@ echo "::endgroup::"
 
 # Install local packages
 echo "::group::CIBW_BEFORE_BUILD: nativefiledialog"
-conan_create_install nativefiledialog $NFD_VERSION
+conan_local_install nativefiledialog
 echo "::endgroup::"
 
 echo "::group::CIBW_BEFORE_BUILD: fmt"
-conan_create_install fmt $FMT_VERSION
+conan_local_install fmt
 echo "::endgroup::"
 
 echo "::group::CIBW_BEFORE_BUILD: opensubdiv"
-conan_create_install opensubdiv $OPENSUBDIV_VERSION
+conan_local_install opensubdiv
 echo "::endgroup::"
 
 echo "::group::CIBW_BEFORE_BUILD: OIDN"
-conan_create_install oidn $OIDN_VERSION
+conan_local_install oidn
 echo "::endgroup::"
 
 echo "::group::CIBW_BEFORE_BUILD: Blender types"
-conan_create_install blender-types $BLENDER_VERSION
+conan_local_install blender-types
 echo "::endgroup::"
 
 if [[ $RUNNER_OS == "Windows" ]]; then
@@ -90,7 +79,6 @@ fi
 
 echo "::group::CIBW_BEFORE_BUILD: LuxCore"
 cd $WORKSPACE
-# TODO Better use 'conan export'?
 conan create $WORKSPACE \
   --profile:all=$CONAN_PROFILE \
   --build=missing
