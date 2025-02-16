@@ -23,19 +23,20 @@ cache restore`), making all the dependencies available for LuxCore build.
 
 ```mermaid
 flowchart TB
-  Publish --> Download
 
-  subgraph "`**LuxCoreDeps**`"
+  subgraph Deps ["`**LuxCoreDeps**`"]
   direction TB
   GetDeps(Get Dependency Recipes) --> BuildDeps(Build Dependencies)
   --> Save(Save Cache) --> Publish("Publish Cache (Release)");
   end
 
-  subgraph "`**LuxCore**`"
+  subgraph Core ["`**LuxCore**`"]
   direction TB
   Download(Download Cache) --> Restore(Restore Cache)
   --> BuildLux(Build LuxCore);
   end
+
+  Deps --> Core
 ```
 
 
