@@ -8,6 +8,11 @@ LUXCORE_VERSION="2.10.0"
 function conan_local_install() {
   name=$(echo "$1" | tr '[:upper:]' '[:lower:]')  # Package name in lowercase
 
+  conan create \
+    --profile:all=$CONAN_PROFILE \
+    --build=missing \
+    -vnotice \
+    $WORKSPACE/local-conan-recipes/$name
   conan install \
     --profile:all=$CONAN_PROFILE \
     --build=missing \

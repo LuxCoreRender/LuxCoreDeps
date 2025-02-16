@@ -301,7 +301,7 @@ jobs:
     steps:
       - run: |
           echo "Creating release '${{ inputs.release-version }}'"
-
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           pattern: luxcore-deps-*
@@ -320,7 +320,8 @@ jobs:
         with:
           #TODO
           #artifacts: "luxcore-deps-macos-13.zip,luxcore-deps-macos-14.zip,luxcore-deps-ubuntu-latest.zip,luxcore-deps-windows-latest.zip"
-          artifacts: ${{ github.workspace }}/dist/*"
+          #artifacts: ${{ github.workspace }}/dist/*"
+          artifacts: "*"
           tag: ${{ inputs.release-tag }}
           allowUpdates: ${{ inputs.allow-updates }}
           prerelease: ${{ inputs.prerelease }}
