@@ -54,7 +54,6 @@ class LuxCore(ConanFile):
         f"boost/{BOOST_VERSION}",
         f"openvdb/{OPENVDB_VERSION}",
         f"embree3/{EMBREE3_VERSION}",
-        f"blender-types/{BLENDER_VERSION}@luxcore/luxcore",
         f"oidn/{OIDN_VERSION}@luxcore/luxcore",
         f"opensubdiv/{OPENSUBDIV_VERSION}@luxcore/luxcore",
         f"imath/{IMATH_VERSION}",
@@ -102,6 +101,10 @@ class LuxCore(ConanFile):
         self.requires(f"nlohmann_json/{JSON_VERSION}", transitive_headers=True)
         self.requires(f"pybind11/{PYBIND11_VERSION}", transitive_headers=True)
         self.requires(f"spdlog/{SPDLOG_VERSION}", transitive_headers=True)
+        self.requires(
+            f"blender-types/{BLENDER_VERSION}@luxcore/luxcore",
+            transitive_headers=True,
+        )
 
         if self.settings.os == "Macos":
             self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}")

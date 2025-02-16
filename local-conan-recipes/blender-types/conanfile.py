@@ -12,6 +12,7 @@ from conan.tools.files import get, copy, replace_in_file
 
 
 
+
 class BlenderTypesConan(ConanFile):
     name = "blender-types"
     version = "4.2.3"
@@ -20,6 +21,9 @@ class BlenderTypesConan(ConanFile):
     # No settings/options are necessary, this is header only
     no_copy_source = True
     exports_sources = "include/*"  # for blender_types.h
+    generators = "CMakeToolchain", "CMakeDeps"
+    settings = "os", "arch", "compiler", "build_type"
+    package_type = "header-library"
 
     def source(self):
         get(
@@ -48,68 +52,18 @@ class BlenderTypesConan(ConanFile):
             assert copied
             print(f"Copied: {copied}")
 
+    def layout(self):
+        cmake_layout(self)
+
     def package(self):
-        # includes = (
-            # (("include", ), "blender_types.h"),
-            # (("source", "blender", "imbuf"), "IMB_imbuf_types.hh"),
-            # (("source", "blender", "makesdna"), "DNA_vec_types.h"),
-            # (("source", "blender", "blenlib"), "BLI_sys_types.h"),
-            # (("source", "blender", "imbuf"), "IMB_imbuf_enums.h"),
-            # (("source", "blender", "blenlib"), "BLI_utildefines.h"),
-            # (("source", "blender", "blenlib"), "BLI_compiler_compat.h"),
-            # (("source", "blender", "blenlib"), "BLI_utildefines_variadic.h"),
-            # (("source", "blender", "blenlib"), "BLI_assert.h"),
-            # (("source", "blender", "blenlib"), "BLI_compiler_typecheck.h"),
-
-            # (("source", "blender", "render"), "RE_pipeline.h"),
-            # (("source", "blender", "makesdna"), "DNA_ID.h"),
-            # (("source", "blender", "makesdna"), "DNA_ID_enums.h"),
-            # (("source", "blender", "makesdna"), "DNA_defs.h"),
-            # (("source", "blender", "makesdna"), "DNA_listBase.h"),
-            # (("source", "blender", "blenlib"), "BLI_implicit_sharing.h"),
-
-            # (("source", "blender", "python", "mathutils"), "mathutils.h"),
-            # (("source", "blender", "python", "mathutils"), "mathutils_Color.h"),
-            # (("source", "blender", "python", "mathutils"), "mathutils_Euler.h"),
-            # (("source", "blender", "python", "mathutils"), "mathutils_Matrix.h"),
-            # (("source", "blender", "python", "mathutils"), "mathutils_Quaternion.h"),
-            # (("source", "blender", "python", "mathutils"), "mathutils_Vector.h"),
-            # (("source", "blender", "blenlib"), "BLI_array.hh"),
-            # (("source", "blender", "blenlib"), "BLI_compiler_attrs.h"),
-            # (("source", "blender", "blenlib"), "BLI_vector.hh"),
-
-            # (("source", "blender", "makesdna"), "DNA_meshdata_types.h"),
-        # )
-
-
 
         # blender_types.h
         self._copy_includes("include")
-        # copied = copy(
-            # self,
-            # "blender_types.h",
-            # src=os.path.join(self.source_folder, "include"),
-            # dst=destination,
-            # keep_path=False,
-        # )
-        # assert copied
-        # print(f"Copied: {copied}")
 
         # Blender includes
         self._copy_includes("source", "blender")
         self._copy_includes("intern", "guardedalloc")
 
-        # for folder, include in includes:
-            # source = os.path.join(self.source_folder, *folder)
-            # copied = copy(
-                # self,
-                # include,
-                # src=source,
-                # dst=destination,
-                # keep_path=False,
-            # )
-            # assert copied
-            # print(f"Copied: {copied}")
 
         destination = os.path.join(self.package_folder, "include")
         replace_in_file(
@@ -132,4 +86,7 @@ class BlenderTypesConan(ConanFile):
         self.cpp_info.libdirs = []
         self.cpp_info.set_property("cmake_file_name", "blender-types")
         self.cpp_info.set_property("cmake_target_name", "blender-types")
-        self.cpp_info.set_property("pkg_config_name",  "blender-types")
+        self.cpp_info.set_property("pkg_config_name", "blender-types")
+
+    def package_id(self):
+        self.info.clear()  # Header-only
