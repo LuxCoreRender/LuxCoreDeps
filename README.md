@@ -61,7 +61,7 @@ Dependency build is also triggered by `push` events.
 
 ## Exposing dependencies to LuxCore
 
-_(For admin only - requires special rights on repo)_
+_(For admin only - requires appropriate rights on repo)_
 
 Dependencies are made available to LuxCore via LuxCoreDeps **releases**:
 https://github.com/LuxCoreRender/LuxCoreDeps/releases
@@ -69,6 +69,14 @@ https://github.com/LuxCoreRender/LuxCoreDeps/releases
 
 To expose a new set of dependency, create a new release in LuxCoreDeps and
 upload dependency sets in the assets of the release.
+
+## Adding dependencies
+
+_(For admin only - requires appropriate rights on repo)_
+
+Dependencies can be added in `conanfile.py` file, in the repository root.
+
+Please refer to the Conan documentation for instructions.
 
 
 ## Caveats & Tips
