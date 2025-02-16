@@ -8,6 +8,14 @@ name: LuxCore Dependency Builder
 on:
   push:
   workflow_dispatch:
+    inputs:
+      release-version:
+        description: "Release version"
+        required: True
+        type: string
+      release-title:
+        description: "Release title"
+        required: False
 
 jobs:
   build_deps:
@@ -267,3 +275,10 @@ jobs:
           echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
           echo 'Artifact URL is ${{ steps.artifact-upload-step.outputs.artifact-url }}'
           echo 'Artifact SHA-256 is ${{ steps.artifact-upload-step.outputs.artifact-digest }}'
+
+  create-release:
+    if: github.event.type == "WorkflowDispatch"
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "${{ inputs.release-version }}"
