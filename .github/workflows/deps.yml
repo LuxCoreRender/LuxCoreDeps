@@ -305,19 +305,22 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           pattern: luxcore-deps-*
-          path: dist
-          merge-multiple: true
+          path: ${{ github.workspace }}/dist
+          merge-multiple: false
+
+      - name: Display structure of downloaded files
+        run: ls -Rl ${{ github.workspace }}/dist
 
       - name: Generate artifact attestations
         uses: actions/attest-build-provenance@v1.4.3
         with:
-          subject-path: "dist/*"
+          subject-path: ${{ github.workspace }}/dist/*
 
       - uses: ncipollo/release-action@v1
         with:
           #TODO
           #artifacts: "luxcore-deps-macos-13.zip,luxcore-deps-macos-14.zip,luxcore-deps-ubuntu-latest.zip,luxcore-deps-windows-latest.zip"
-          artifacts: "dist/luxcore-deps-*"
+          artifacts: ${{ github.workspace }}/dist/*"
           tag: ${{ inputs.release-tag }}
           allowUpdates: ${{ inputs.allow-updates }}
           prerelease: ${{ inputs.prerelease }}
