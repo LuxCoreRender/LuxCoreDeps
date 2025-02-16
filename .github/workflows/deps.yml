@@ -226,7 +226,7 @@ jobs:
 
           CIBW_BEFORE_ALL_MACOS: |
             brew install bison flex ispc
-          CIBW_BEFORE_BUILD: bash ${{ env.WORKSPACE }}/scripts/install_conan.sh
+          CIBW_BEFORE_BUILD: bash ${{ env.WORKSPACE }}/install_conan.sh
           CIBW_REPAIR_WHEEL_COMMAND: ''
           CIBW_CONTAINER_ENGINE: >
             docker;
