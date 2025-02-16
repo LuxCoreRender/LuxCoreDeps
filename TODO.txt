@@ -1,7 +1,5 @@
+Refactor Wheel maker
 Remove all test building (there are still packages that build tests...)
-Complete conanfile.py:
-- declare layout
-- declare package_info
 Post PR to modify openimageio (fmt as private dep in CMake)
 Write a tester (Github Actions)
 Write doc:
