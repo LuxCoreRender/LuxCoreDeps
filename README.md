@@ -11,7 +11,7 @@ the following 4 platforms:
 - MacOS Intel
 - MacOS Arm
 
-## How does it work
+## How does it work?
 
 LuxCoreDeps builds a Conan cache with all the dependencies (binaries and
 headers) required to build LuxCore. Once built, the cache is saved (`conan
