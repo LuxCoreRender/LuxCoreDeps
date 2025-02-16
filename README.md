@@ -22,7 +22,7 @@ On consumer side (LuxCore), the cache is downloaded and restored (`conan
 cache restore`), making all the dependencies available for LuxCore build.
 
 ```mermaid
-flowchart TB
+flowchart LR
 
   subgraph Deps ["`**LuxCoreDeps**`"]
   direction TB
