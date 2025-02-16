@@ -14,7 +14,7 @@ zipfolder=/tmp/luxcore/1/cibw-wheels-ubuntu-latest-${python_minor}
 
 act workflow_dispatch \
   --action-offline-mode \
-  --job build_deps \
+  --job build-deps \
   -s GITHUB_TOKEN="$(gh auth token)" \
   --matrix os:ubuntu-latest \
   --artifact-server-path /tmp/pyluxcore \
