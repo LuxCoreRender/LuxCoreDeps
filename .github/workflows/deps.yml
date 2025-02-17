@@ -328,7 +328,7 @@ jobs:
           for d in */ ; do
               d2=${d%/}
               echo "zip ${d2}"
-              zip ../artifacts/${d2}.zip ${d2}/*
+              zip -j ../artifacts/${d2}.zip ${d2}/*
           done
 
       - id: make-release
