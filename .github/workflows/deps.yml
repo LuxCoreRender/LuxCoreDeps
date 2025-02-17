@@ -316,12 +316,21 @@ jobs:
         with:
           subject-path: ${{ github.workspace }}/dist/*
 
+      - name: Re-zip artifacts
+        working-directory: ${{ github.workspace }}/dist
+        run: |
+          mkdir ../artifacts
+          for d in */ ; do
+              echo "zip ${d%word}"
+              zip ../artifacts/${d%/}.zip ${d}/*
+          done
+
       - uses: ncipollo/release-action@v1
         with:
           #TODO
           #artifacts: "luxcore-deps-macos-13.zip,luxcore-deps-macos-14.zip,luxcore-deps-ubuntu-latest.zip,luxcore-deps-windows-latest.zip"
           #artifacts: ${{ github.workspace }}/dist/*"
-          artifacts: "*"
+          artifacts: artifacts/*
           tag: ${{ inputs.release-tag }}
           allowUpdates: ${{ inputs.allow-updates }}
           prerelease: ${{ inputs.prerelease }}
