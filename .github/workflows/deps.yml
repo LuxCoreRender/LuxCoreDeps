@@ -14,6 +14,11 @@ on:
         required: True
         default: Test
         type: string
+      release-name:
+        description: "Release name"
+        required: False
+        default: Test
+        type: string
       release-title:
         description: "Release title"
         required: False
@@ -321,17 +326,24 @@ jobs:
         run: |
           mkdir ../artifacts
           for d in */ ; do
-              echo "zip ${d%word}"
-              zip ../artifacts/${d%/}.zip ${d}/*
+              d2=${d%/}
+              echo "zip ${d2}"
+              zip ../artifacts/${d2}.zip ${d2}/*
           done
 
-      - uses: ncipollo/release-action@v1
+      - id: make-release
+        uses: ncipollo/release-action@v1
         with:
-          #TODO
-          #artifacts: "luxcore-deps-macos-13.zip,luxcore-deps-macos-14.zip,luxcore-deps-ubuntu-latest.zip,luxcore-deps-windows-latest.zip"
-          #artifacts: ${{ github.workspace }}/dist/*"
-          artifacts: artifacts/*
+          name: ${{ inputs.release-name }}
           tag: ${{ inputs.release-tag }}
+          artifacts: artifacts/*
+          removeArtifacts: true
           allowUpdates: ${{ inputs.allow-updates }}
           prerelease: ${{ inputs.prerelease }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          updateOnlyUnreleased: true
+
+      - run: |
+          echo "### Release""" >> $GITHUB_STEP_SUMMARY
+          echo ${{ steps.make-release.outputs.html_url }} >> $GITHUB_STEP_SUMMARY
+
