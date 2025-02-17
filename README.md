@@ -1,4 +1,6 @@
-# LuxCoreDeps - the LuxCore Dependency Provider
+# LuxCoreDeps - The LuxCore Dependency Provider
+
+## About
 
 **LuxCoreDeps provides the dependencies needed to build LuxCore, starting with
 version 2.10.**
@@ -11,30 +13,32 @@ the following 4 platforms:
 - MacOS Intel
 - MacOS Arm
 
-## How does it work
+## How does it work?
 
-LuxCoreDeps builds a Conan cache with all the dependencies (binaries and
-headers) required to build LuxCore. Once built, the cache is saved (`conan
-cache save`) and published in a Github release.
+LuxCoreDeps populates a Conan cache, building & installing all the
+dependencies (binaries and headers) required to build LuxCore.
+Once populated, the cache is saved (`conancache save`) and published
+in a Github release.
 
 On consumer side (LuxCore), the cache is downloaded and restored (`conan
 cache restore`), making all the dependencies available for LuxCore build.
 
 ```mermaid
 flowchart LR
-  Publish --> Download
 
-  subgraph "`**LuxCoreDeps**`"
+  subgraph Deps ["`**LuxCoreDeps**`"]
   direction TB
   GetDeps(Get Dependency Recipes) --> BuildDeps(Build Dependencies)
   --> Save(Save Cache) --> Publish("Publish Cache (Release)");
   end
 
-  subgraph "`**LuxCore**`"
+  subgraph Core ["`**LuxCore**`"]
   direction TB
   Download(Download Cache) --> Restore(Restore Cache)
   --> BuildLux(Build LuxCore);
   end
+
+  Deps --> Core
 ```
 
 
@@ -59,7 +63,7 @@ https://github.com/LuxCoreRender/LuxCoreDeps/actions/workflows/deps.yml
 
 Dependency build is also triggered by `push` events.
 
-## Exposing dependencies to LuxCore
+## Publishing dependencies to LuxCore
 
 _(For admin only - requires appropriate rights on repo)_
 
