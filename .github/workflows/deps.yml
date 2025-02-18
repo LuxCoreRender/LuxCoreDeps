@@ -332,7 +332,8 @@ jobs:
           done
 
       - id: make-release
-        uses: ncipollo/release-action@v1
+        # Use full length commit SHA, otherwise CodeQL complains...
+        uses: ncipollo/release-action@cdcc88a9acf3ca41c16c37bb7d21b9ad48560d87
         with:
           name: ${{ inputs.release-name }}
           tag: ${{ inputs.release-tag }}
