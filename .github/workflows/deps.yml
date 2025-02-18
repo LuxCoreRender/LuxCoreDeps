@@ -38,6 +38,7 @@ on:
 jobs:
   build-deps:
     name: Build dependencies ${{ matrix.os }}
+    permissions: read-all
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: True
