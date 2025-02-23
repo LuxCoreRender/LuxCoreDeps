@@ -15,33 +15,36 @@ the following 4 platforms:
 
 ## How does it work?
 
+### On provider side (LuxCoreDeps)
 LuxCoreDeps populates a Conan cache, by building & installing all the
 dependencies (binaries, headers, profiles, metadata...) required to build
 LuxCore.
 Once populated, the cache is bundled (`conan cache save`) and published
 in a Github release.
 
-On consumer side (LuxCore), the cache is downloaded from the release and
+### On consumer side (LuxCore)
+In LuxCore, the provided cache is downloaded from the release and
 restored locally (`conan cache restore`), thus making all the dependencies
 available for LuxCore build.
-Cache download and restoration are wrapped in `make deps` statement.
+In LuxCore, cache download and restoration are wrapped in a `make deps`
+statement.
 
 ```mermaid
 flowchart LR
 
   subgraph Deps ["`**LuxCoreDeps**`"]
   direction TB
-  GetDeps("Get dependencies<br />Conan recipes")
-  --> BuildDeps(Build Dependencies<br /> in Conan cache)
+  GetDeps("Get Dependency<br />Conan Recipes")
+  --> BuildDeps(Build Dependencies<br /> in a Conan Cache)
   --> Save(Save Conan Cache)
-  --> Publish("Publish Cache<br />(Release)");
+  --> Publish("Publish Conan Cache<br />(Release)");
   end
 
   subgraph Core ["`**LuxCore**`"]
   direction TB
-  Download("Download Conan Cache<br />(from Release)")
+  Download("Download Conan Cache<br />(from LuxCoreDeps Release)")
   --> Restore(Restore Conan Cache)
-  --> BuildLux(Build LuxCore);
+  --> BuildLux(Build LuxCore<br />against Conan Cache);
   end
 
   Deps --> Core
@@ -77,13 +80,15 @@ Please note that, for debugging purpose, dependency build is also triggered by
 `push` events; however, in that case, no release is created.
 
 
-## Adding Dependencies to LuxCore
+## Adding Dependencies to LuxCoreDeps
 
 _(For admin only - requires appropriate rights on repository)_
 
-Dependencies can be added in `conanfile.py` file, in the repository root.
+Dependencies can be added to LuxCoreDeps by upgrading the `conanfile.py` file,
+located in the repository root.
 
-Please refer to the Conan documentation for instructions.
+Please refer to the Conan documentation for syntax of `conanfile.py` and instructions
+how to modify such a file.
 
 
 ## Caveats & Tips
@@ -95,10 +100,13 @@ Other interesting files may be:
 - `conan-profiles`: folder with Conan profiles
 
 ### Compilation environment
-For Python wheels to work properly, it is essential that dependencies be built
+For Python wheels to be built properly, it is essential that dependencies be built
 by `CIBUILDWHEEL`, with the same environment (compiler version, docker image,
 etc.) as the one intended for the wheels.
-Note that it requires to build a fake wheel.
+Please note that it requires to build a fake wheel in LuxCoreDeps.
+
+### Local recipes
+Most of Conan recipes used by LuxCoreDeps are to be found in Conan central repository (Conan center)
 
 ### Debugging
 Dependency build can be debugged locally using `nektos/act`
