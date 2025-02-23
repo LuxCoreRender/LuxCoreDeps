@@ -4,15 +4,10 @@
 
 from conan import ConanFile
 
-from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
-from conan.tools.system.package_manager import Brew, Yum
-from conan.tools.env import VirtualBuildEnv
-from conan.tools.files import get, copy, rmdir, rename, rm, save
+from conan.tools.cmake import CMakeDeps, CMakeToolchain
+from conan.tools.files import save
 
 import os
-import io
-import shutil
-from pathlib import Path
 
 # Gather here the various dependency versions, for convenience
 # (in alphabetic order)
@@ -105,6 +100,7 @@ class LuxCoreDeps(ConanFile):
             transitive_headers=True,
         )
 
+        # Macos OpenMP
         if self.settings.os == "Macos":
             self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}")
 
@@ -128,24 +124,8 @@ class LuxCoreDeps(ConanFile):
         tc.generate()
 
         cd = CMakeDeps(self)
-
         cd.generate()
 
     def package(self):
         # Just to ensure package is not empty
         save(self, os.path.join(self.package_folder, "dummy.txt"), "Hello World")
-
-    def layout(self):
-        self.folders.root = ""
-        self.folders.generators = "cmake"
-        self.folders.build = "build"
-
-    def package_info(self):
-
-        if self.settings.os == "Linux":
-            self.cpp_info.libs = ["pyluxcore"]
-        elif self.settings.os == "Windows":
-            self.cpp_info.libs = [
-                "pyluxcore.pyd",
-                "tbb12.dll",  # TODO
-            ]
