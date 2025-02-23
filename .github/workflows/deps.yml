@@ -58,7 +58,7 @@ jobs:
 
     steps:
 
-      - name: Configure git for long paths
+      - name: Configure git for long paths (Windows)
         shell: bash
         if: runner.os == 'Windows'
         run: git config --system core.longpaths true
@@ -77,7 +77,7 @@ jobs:
           esac
           echo "WORKSPACE=${_workspace}" >> "$GITHUB_ENV"
 
-      - name: Set conan preset
+      - name: Set Conan preset
         uses: actions/github-script@v7
         with:
           script: |
@@ -106,13 +106,7 @@ jobs:
                 core.exportVariable(key, value);
             }
 
-      - name: Update apt (Linux)
-        if: runner.os == 'Linux'
-        shell: bash
-        run: |
-          sudo apt-get update -y
-
-      - name: ccache
+      - name: Install ccache (All)
         # Use full length commit SHA, otherwise CodeQL complains...
         uses: hendrikmuhs/ccache-action@a1209f81afb8c005c13b4296c32e363431bffea5  # 1.2.17
         with:
@@ -123,19 +117,19 @@ jobs:
           max-size: 5G
           verbose: 1
 
-      - name: Install ISPC
+      - name: Install ISPC (Windows/MacOS)
         # Use full length commit SHA, otherwise CodeQL complains...
         if: runner.os == 'macOS' || runner.os == 'Windows'
         uses: ispc/install-ispc-action@e3887e6f22350b0f2263e3dbe6f1fc3eff331050  # HEAD in main
         with:
           version: 1.25.3
 
-      - name: Prepare msvc
+      - name: Prepare msvc (Windows)
         if: runner.os == 'Windows'
         # Use full length commit SHA, otherwise CodeQL complains...
         uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756  # 1.13.0
 
-      - name: Prepare Linux
+      - name: Prepare Linux shortcuts (Linux)
         if: runner.os == 'Linux'
         shell: bash
         run: |
@@ -150,7 +144,7 @@ jobs:
 
           echo "ASAN_PATH=${_T}/usr/lib/gcc/x86_64-redhat-linux/${_V}/libasan.so" >> $GITHUB_ENV
 
-      - name: Set MacOS deployment target
+      - name: Set MacOS deployment target (MacOS)
         if: runner.os == 'macOS'
         uses: actions/github-script@v7
         with:
@@ -166,20 +160,13 @@ jobs:
             core.exportVariable('MACOSX_DEPLOYMENT_TARGET', target);
             core.exportVariable('PKG_ARCH', arch);
 
-      - name: Retrieve cached dependencies
+      - name: Retrieve cached dependencies (All)
         id: retrieve-cache-deps
         uses: actions/cache/restore@v4
         with:
           path: conan-cache
           key: deps-${{ matrix.os }}-
           restore-keys: deps-${{ matrix.os }}-
-
-      # See https://cibuildwheel.pypa.io/en/stable/faq/#macos-building-cpython-38-wheels-on-arm64
-      - uses: actions/setup-python@v5
-        with:
-          python-version: 3.9
-        if: runner.os == 'macOS' && runner.arch == 'ARM64'
-
 
       # Build deps - we rely on cibuildwheel to get the fine settings for build
       # To do so, we build a dummy wheel
@@ -196,7 +183,7 @@ jobs:
           CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux_${{ env.GLIBC_VERSION }}_x86_64
           CIBW_ENVIRONMENT: >
             SKBUILD_CMAKE_ARGS='-G Ninja;--log-level=VERBOSE'
-            SKBUILD_CMAKE_BUILD_TYPE='${{ env.BUILD_TYPE }}'
+            SKBUILD_CMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
           CIBW_ENVIRONMENT_PASS_LINUX: |
             CC
             CXX
@@ -204,12 +191,9 @@ jobs:
             GCC_VERSION
             SANITIZE
             ASAN_PATH
-            RUNNER_OS
-            RUNNER_ARCH
             WORKSPACE
             CMAKE_CXX_COMPILER_LAUNCHER
             CMAKE_C_COMPILER_LAUNCHER
-            BOOST_INSTALL_LAYOUT
             CXX_VERSION
           CIBW_BEFORE_ALL_LINUX: |
             dnf install -y epel-release
@@ -227,6 +211,7 @@ jobs:
             curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | sudo bash
             dnf install -y git-lfs
 
+            # Install libasan (optional)
             if [[ -z ${SANITIZE+x} ]]; then
               echo "No sanitizing";
             else
@@ -256,8 +241,7 @@ jobs:
             #subscription-manager repos --enable "codeready-builder-for-rhel-8-$(uname -m)-rpms"
             #dnf install -y xorg-x11-drv-nvidia-470xx-cuda-libs
 
-          CIBW_BEFORE_ALL_MACOS: |
-            brew install ispc
+          CIBW_BEFORE_ALL_MACOS: brew install ispc
           CIBW_BEFORE_BUILD: bash ${{ env.WORKSPACE }}/install-conan.sh
           CIBW_REPAIR_WHEEL_COMMAND: ''
           CIBW_CONTAINER_ENGINE: >
