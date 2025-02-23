@@ -12,3 +12,4 @@ Remove Python requirements (there are packages that require Python, should not e
 OIIO: don't build executables (oiiotools)
 Write a publisher (release builder, Github Actions)
 Address warnings
+Reduce embedded deps

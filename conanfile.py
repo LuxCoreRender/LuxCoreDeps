@@ -4,15 +4,10 @@
 
 from conan import ConanFile
 
-from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
-from conan.tools.system.package_manager import Brew, Yum
-from conan.tools.env import VirtualBuildEnv
-from conan.tools.files import get, copy, rmdir, rename, rm, save
+from conan.tools.cmake import CMakeDeps, CMakeToolchain
+from conan.tools.files import save
 
 import os
-import io
-import shutil
-from pathlib import Path
 
 # Gather here the various dependency versions, for convenience
 # (in alphabetic order)
@@ -40,10 +35,9 @@ PYBIND11_VERSION = "2.13.6"
 ROBINHOOD_VERSION = "3.11.5"
 SPDLOG_VERSION = "1.15.0"
 TBB_VERSION = "2021.12.0"
-WINFLEXBISON_VERSION = "2.5.25"
 
 
-class LuxCore(ConanFile):
+class LuxCoreDeps(ConanFile):
     name = "luxcoredeps"
     version = "2.10.0"
     user = "luxcore"
@@ -106,92 +100,32 @@ class LuxCore(ConanFile):
             transitive_headers=True,
         )
 
+        # Macos OpenMP
         if self.settings.os == "Macos":
             self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}")
-
-        if self.settings.os == "Windows":
-            self.tool_requires(f"winflexbison/{WINFLEXBISON_VERSION}")
 
     def build_requirements(self):
         self.tool_requires("cmake/[*]")
         self.tool_requires("meson/[*]")
         self.tool_requires("pkgconf/[*]")
         self.tool_requires("yasm/[*]")
+        if self.settings.os == "Windows":
+            self.tool_requires("winflexbison/[*]")
+        else:
+            self.tool_requires("bison/[*]")
+            self.tool_requires("flex/[*]")
 
     def generate(self):
         tc = CMakeToolchain(self)
-        tc.absolute_paths = True
-        tc.preprocessor_definitions["OIIO_STATIC_DEFINE"] = True
-        tc.variables["CMAKE_COMPILE_WARNING_AS_ERROR"] = False
-
-        # OIDN denoiser executable
-        oidn_info = self.dependencies["oidn"].cpp_info
-        oidn_bindir = Path(oidn_info.bindirs[0])
-        if self.settings.os == "Windows":
-            denoise_path = oidn_bindir / "oidnDenoise.exe"
-        else:
-            denoise_path = oidn_bindir / "oidnDenoise"
-        tc.variables["LUX_OIDN_DENOISE_PATH"] = denoise_path.as_posix()
-
-        # OIDN denoiser cpu (for Linux)
-        oidn_libdir = Path(oidn_info.libdirs[0])
-        tc.variables["LUX_OIDN_DENOISE_LIBS"] = oidn_libdir.as_posix()
-        tc.variables["LUX_OIDN_DENOISE_BINS"] = oidn_bindir.as_posix()
-        tc.variables["LUX_OIDN_VERSION"] = OIDN_VERSION
-        if self.settings.os == "Linux":
-            denoise_cpu = (
-                oidn_libdir / f"libOpenImageDenoise_device_cpu.so.{OIDN_VERSION}"
-            )
-        elif self.settings.os == "Windows":
-            denoise_cpu = oidn_bindir / "OpenImageDenoise_device_cpu.dll"
-        elif self.settings.os == "Macos":
-            denoise_cpu = (
-                oidn_libdir / f"OpenImageDenoise_device_cpu.{OIDN_VERSION}.pylib"
-            )
-        tc.variables["LUX_OIDN_DENOISE_CPU"] = denoise_cpu.as_posix()
 
         if self.settings.os == "Macos" and self.settings.arch == "armv8":
             tc.cache_variables["CMAKE_OSX_ARCHITECTURES"] = "arm64"
 
-        if self.settings.os == "Macos":
-            buildenv = VirtualBuildEnv(self)
-
-            bisonbrewpath = io.StringIO()
-            self.run("brew --prefix bison", stdout=bisonbrewpath)
-            bison_root = os.path.join(bisonbrewpath.getvalue().rstrip(), "bin")
-            buildenv.environment().define("BISON_ROOT", bison_root)
-
-            flexbrewpath = io.StringIO()
-            self.run("brew --prefix flex", stdout=flexbrewpath)
-            flex_root = os.path.join(flexbrewpath.getvalue().rstrip(), "bin")
-            buildenv.environment().define("FLEX_ROOT", flex_root)
-
-            buildenv.generate()
-            tc.presets_build_environment = buildenv.environment()
-
-        tc.cache_variables["SPDLOG_FMT_EXTERNAL_HO"] = True
-
         tc.generate()
 
         cd = CMakeDeps(self)
-
         cd.generate()
 
     def package(self):
         # Just to ensure package is not empty
         save(self, os.path.join(self.package_folder, "dummy.txt"), "Hello World")
-
-    def layout(self):
-        self.folders.root = ""
-        self.folders.generators = "cmake"
-        self.folders.build = "build"
-
-    def package_info(self):
-
-        if self.settings.os == "Linux":
-            self.cpp_info.libs = ["pyluxcore"]
-        elif self.settings.os == "Windows":
-            self.cpp_info.libs = [
-                "pyluxcore.pyd",
-                "tbb12.dll",  # TODO
-            ]
