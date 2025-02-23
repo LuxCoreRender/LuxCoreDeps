@@ -109,14 +109,16 @@ class LuxCore(ConanFile):
         if self.settings.os == "Macos":
             self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}")
 
-        if self.settings.os == "Windows":
-            self.tool_requires(f"winflexbison/{WINFLEXBISON_VERSION}")
-
     def build_requirements(self):
         self.tool_requires("cmake/[*]")
         self.tool_requires("meson/[*]")
         self.tool_requires("pkgconf/[*]")
         self.tool_requires("yasm/[*]")
+        if self.settings.os == "Windows":
+            self.tool_requires("winflexbison/[*]")
+        else:
+            self.tool_requires("bison/[*]")
+            self.tool_requires("flex/[*]")
 
     def generate(self):
         tc = CMakeToolchain(self)
@@ -152,22 +154,6 @@ class LuxCore(ConanFile):
 
         if self.settings.os == "Macos" and self.settings.arch == "armv8":
             tc.cache_variables["CMAKE_OSX_ARCHITECTURES"] = "arm64"
-
-        if self.settings.os == "Macos":
-            buildenv = VirtualBuildEnv(self)
-
-            bisonbrewpath = io.StringIO()
-            self.run("brew --prefix bison", stdout=bisonbrewpath)
-            bison_root = os.path.join(bisonbrewpath.getvalue().rstrip(), "bin")
-            buildenv.environment().define("BISON_ROOT", bison_root)
-
-            flexbrewpath = io.StringIO()
-            self.run("brew --prefix flex", stdout=flexbrewpath)
-            flex_root = os.path.join(flexbrewpath.getvalue().rstrip(), "bin")
-            buildenv.environment().define("FLEX_ROOT", flex_root)
-
-            buildenv.generate()
-            tc.presets_build_environment = buildenv.environment()
 
         tc.cache_variables["SPDLOG_FMT_EXTERNAL_HO"] = True
 
