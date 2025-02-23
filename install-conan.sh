@@ -82,7 +82,7 @@ else
   DEPLOY_PATH=$WORKSPACE
 fi
 
-echo "::group::CIBW_BEFORE_BUILD: LuxCore"
+echo "::group::CIBW_BEFORE_BUILD: LuxCore Deps"
 cd $WORKSPACE
 conan create $WORKSPACE \
   --profile:all=$CONAN_PROFILE \

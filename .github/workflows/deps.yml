@@ -201,6 +201,8 @@ jobs:
             CMAKE_CXX_COMPILER_LAUNCHER
             CMAKE_C_COMPILER_LAUNCHER
             CXX_VERSION
+            RUNNER_OS
+            RUNNER_ARCH
           CIBW_BEFORE_ALL_LINUX: |
             dnf install -y epel-release
             dnf install -y almalinux-release-devel
