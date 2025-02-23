@@ -104,16 +104,20 @@ class LuxCoreDeps(ConanFile):
         if self.settings.os == "Macos":
             self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}")
 
+        # Bison/flex
+        # This a build requirement for LuxCore, therefore this must be a full requirement
+        # for LuxCoreDeps (otherwise it won't get saved in cache)
+        if self.settings.os == "Windows":
+            self.requires("winflexbison/[*]")
+        else:
+            self.requires("bison/[*]")
+            self.requires("flex/[*]")
+
     def build_requirements(self):
         self.tool_requires("cmake/[*]")
         self.tool_requires("meson/[*]")
         self.tool_requires("pkgconf/[*]")
         self.tool_requires("yasm/[*]")
-        if self.settings.os == "Windows":
-            self.tool_requires("winflexbison/[*]")
-        else:
-            self.tool_requires("bison/[*]")
-            self.tool_requires("flex/[*]")
 
     def generate(self):
         tc = CMakeToolchain(self)
