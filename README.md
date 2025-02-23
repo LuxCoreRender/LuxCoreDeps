@@ -77,11 +77,12 @@ Please note that, for debugging purpose, dependency build is also triggered by
 `push` events; however, in that case, no release is created.
 
 
-## Adding Dependencies to LuxCore
+## Adding Dependencies to LuxCoreDeps
 
 _(For admin only - requires appropriate rights on repository)_
 
-Dependencies can be added in `conanfile.py` file, in the repository root.
+Dependencies can be added to LuxCoreDeps by upgrading the `conanfile.py` file,
+located in the repository root.
 
 Please refer to the Conan documentation for instructions.
 
@@ -95,10 +96,10 @@ Other interesting files may be:
 - `conan-profiles`: folder with Conan profiles
 
 ### Compilation environment
-For Python wheels to work properly, it is essential that dependencies be built
+For Python wheels to be built properly, it is essential that dependencies be built
 by `CIBUILDWHEEL`, with the same environment (compiler version, docker image,
 etc.) as the one intended for the wheels.
-Note that it requires to build a fake wheel.
+Please note that it requires to build a fake wheel in LuxCoreDeps.
 
 ### Debugging
 Dependency build can be debugged locally using `nektos/act`
