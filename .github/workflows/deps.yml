@@ -214,7 +214,7 @@ jobs:
           CIBW_BEFORE_ALL_LINUX: |
             dnf install -y epel-release
             dnf install -y almalinux-release-devel
-            dnf install -y ninja-build bison flex wget ccache
+            dnf install -y ninja-build ccache
             dnf install -y perl-IPC-Cmd perl-Digest-SHA
 
             if [[ ${{ env.GLIBC_VERSION }} != 2_28 ]]; then
@@ -257,7 +257,7 @@ jobs:
             #dnf install -y xorg-x11-drv-nvidia-470xx-cuda-libs
 
           CIBW_BEFORE_ALL_MACOS: |
-            brew install bison flex ispc
+            brew install ispc
           CIBW_BEFORE_BUILD: bash ${{ env.WORKSPACE }}/install-conan.sh
           CIBW_REPAIR_WHEEL_COMMAND: ''
           CIBW_CONTAINER_ENGINE: >
