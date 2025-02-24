@@ -109,6 +109,9 @@ class LuxCoreDeps(ConanFile):
         # for LuxCoreDeps (otherwise it won't get saved in cache)
         if self.settings.os == "Windows":
             self.requires("winflexbison/[*]")
+        else:
+            self.requires("bison/[*]")
+            self.requires("flex/[*]")
 
     def build_requirements(self):
         self.tool_requires("cmake/[*]")
