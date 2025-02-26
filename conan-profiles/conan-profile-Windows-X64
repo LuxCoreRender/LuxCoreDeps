@@ -4,12 +4,11 @@ include(conan-profile-common)
 os=Windows
 arch=x86_64
 compiler=msvc
-compiler.version=193
+compiler.version=194
 compiler.cppstd={{ os.getenv("CXX_VERSION") }}
 compiler.runtime=dynamic
 
 [conf]
-tools.env.virtualenv:powershell=False
 tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX"]
 tools.build:cflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX"]
 embree3/*:tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2"]
