@@ -4,7 +4,7 @@ include(conan-profile-common)
 os=Windows
 arch=x86_64
 compiler=msvc
-compiler.version=194
+compiler.version=193
 compiler.cppstd={{ os.getenv("CXX_VERSION") }}
 compiler.runtime=dynamic
 
