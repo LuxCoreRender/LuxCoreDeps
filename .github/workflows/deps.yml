@@ -6,7 +6,6 @@
 name: LuxCore Dependency Builder
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       release-tag:
