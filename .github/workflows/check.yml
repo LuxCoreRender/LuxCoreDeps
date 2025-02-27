@@ -47,7 +47,7 @@ jobs:
         run: pip install conan
 
       - name: Update apt
-        if: runner.os = 'Linux'
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update -y
 
