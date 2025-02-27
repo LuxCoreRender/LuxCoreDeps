@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: [call-build-deps]
     strategy:
-      fail-fast: True
+      fail-fast: False
       matrix:
         os: [ubuntu-latest, windows-latest, macos-13, macos-14]
     steps:
@@ -45,6 +45,11 @@ jobs:
 
       - name: Install Conan
         run: pip install conan
+
+      - name: Update apt
+        if: runner.os = 'Linux'
+        run: |
+          sudo apt-get update -y
 
       - name: Prepare deps
         shell: bash
