@@ -46,23 +46,11 @@ jobs:
       - name: Install Conan
         run: pip install conan
 
-        # TODO Better use make deps...
-      - name: Restore cache
-        run: conan cache restore ${{ github.workspace }}/dist/luxcore-deps-${{ matrix.os }}/conan-cache-save.tgz
-
-      - name: Restore configurations
-        run: conan config install-pkg luxcoreconf/2.10.0@luxcore/luxcore
-
-      - name: Install LuxCore
+      - name: Prepare deps
+        shell: bash
         run: |
-          conan install \
-            --build=missing \
-            --profile:all={get_profile_name()} \
-            --deployer=full_deploy \
-            --deployer-folder=build \
-            --output-folder=build/cmake \
-            --conf:all=tools.cmake.cmaketoolchain:generator=Ninja \
-            .
+          _path=${{ github.workspace }}/dist/luxcore-deps-${{ matrix.os }}
+          python cmake/make_deps.py -l ${_path}/conan-cache-save.tgz -v
 
       - name: Build LuxCore
         run: make
