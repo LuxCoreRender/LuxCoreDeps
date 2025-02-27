@@ -7,18 +7,62 @@
 # Check that dependencies are suitable for future use
 
 
-name: LuxCore Dependency Check
+name: LuxCore Dependency Checker
 
 on:
+  workflow_dispatch:
   push:
 
 jobs:
+  call-build-deps:
+    uses: ./.github/workflows/build.yml
+
   check-deps:
     name: Check dependencies
     runs-on: ${{ matrix.os }}
+    needs: [call-build-deps]
     strategy:
       fail-fast: True
       matrix:
         os: [ubuntu-latest, windows-latest, macos-13, macos-14]
     steps:
-      
+      - name: Checkout LuxCore repository
+        uses: actions/checkout@v4
+        with:
+          repository: 'LuxCoreRender/LuxCore'
+          ref: 'for_v2.10'
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: luxcore-deps-${{ matrix.os }}
+          path: ${{ github.workspace }}/dist
+          merge-multiple: false
+
+      - name: Display structure of downloaded files
+        shell: bash
+        run: ls -R $GITHUB_WORKSPACE/dist
+
+      - name: Install Conan
+        run: pip install conan
+
+        # TODO Better use make deps...
+      - name: Restore cache
+        run: conan cache restore ${{ github.workspace }}/dist/luxcore-deps-${{ matrix.os }}/conan-cache-save.tgz
+
+      - name: Restore configurations
+        run: conan config install-pkg luxcoreconf/2.10.0@luxcore/luxcore
+
+      - name: Install LuxCore
+        run: |
+          conan install \
+            --build=missing \
+            --profile:all={get_profile_name()} \
+            --deployer=full_deploy \
+            --deployer-folder=build \
+            --output-folder=build/cmake \
+            --conf:all=tools.cmake.cmaketoolchain:generator=Ninja \
+            .
+
+      - name: Build LuxCore
+        run: make
