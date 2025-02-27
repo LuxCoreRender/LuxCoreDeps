@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2025 Howetuft
+#
+#
+# SPDX-License-Identifier: Apache-2.0
+
+
+# Check that dependencies are suitable for future use
+
+
+name: LuxCore Dependency Check
+
+on:
+  push:
+
+jobs:
+  check-deps:
+    name: Check dependencies
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: True
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
+    steps:
+      
