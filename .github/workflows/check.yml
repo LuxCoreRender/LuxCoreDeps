@@ -64,10 +64,7 @@ jobs:
       - name: Set Conan parameters
         shell: bash
         run: |
-            _build_type=$(echo "${{ env.BUILD_TYPE }}" | tr '[:upper:]' '[:lower:]')
-            _conan_home="${{ env.WORKSPACE }}/.conan2"
-            echo "CONAN_PRESET=conan-${_build_type}" >> $GITHUB_ENV
-            echo "CONAN_HOME=${_conan_home}" >> $GITHUB_ENV
+            echo "CONAN_HOME=${{ github.workspace }}/.conan2" >> $GITHUB_ENV
 
       - name: Prepare deps
         shell: bash
