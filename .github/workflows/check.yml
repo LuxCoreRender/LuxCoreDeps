@@ -73,5 +73,10 @@ jobs:
           echo "Path to downloaded cache: ${_path}"
           python cmake/make_deps.py -l "${_path}" -v
 
-      - name: Build LuxCore
+      - name: Build LuxCore (*nix)
+        if: runner.os != 'Windows'
+        run: make
+
+      - name: Build LuxCore (Window)
+        if: runner.os == 'Windows'
         run: make
