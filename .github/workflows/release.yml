@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-name: LuxCore Dependency Releaser
+name: LuxCore Dependency Builder
 
 on:
   workflow_dispatch:
