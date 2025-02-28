@@ -65,7 +65,7 @@ jobs:
         shell: bash
         run: |
           _path=${{ github.workspace }}/dist/luxcore-deps-${{ matrix.os }}
-          if [[ ${{ runner.os == "Windows" ]]; then
+          if [[ ${{ runner.os }} == "Windows" ]]; then
             _path=$(cygpath -u $_path)
           fi
           echo "Path to downloaded cache: $_path"
