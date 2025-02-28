@@ -25,6 +25,8 @@ jobs:
       fail-fast: False
       matrix:
         os: [ubuntu-latest, windows-latest, macos-13, macos-14]
+    env:
+      SCCACHE_GHA_ENABLED: "true"
     steps:
       - name: Checkout LuxCore repository
         uses: actions/checkout@v4
@@ -50,6 +52,14 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update -y
+
+      - name: Install sccache-cache
+        uses: mozilla-actions/sccache-action@v0.0.7
+
+      - name: Set sccache
+        run: |
+          echo "CMAKE_C_COMPILER_LAUNCHER=sccache" >> $GITHUB_ENV
+          echo "CMAKE_CXX_COMPILER_LAUNCHER=sccache" >> $GITHUB_ENV
 
       - name: Prepare deps
         shell: bash
