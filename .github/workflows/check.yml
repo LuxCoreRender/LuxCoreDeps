@@ -80,5 +80,5 @@ jobs:
 
       - name: Build LuxCore (Window)
         if: runner.os == 'Windows'
-        shell: pwsh
-        run: make.bat
+        shell: cmd
+        run: make
