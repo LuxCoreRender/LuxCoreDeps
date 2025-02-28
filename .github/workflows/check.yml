@@ -72,7 +72,11 @@ jobs:
           _path='${{ github.workspace }}/dist/luxcore-deps-${{ matrix.os }}/conan-cache-save.tgz'
           echo "Path to downloaded cache: ${_path}"
           python cmake/make_deps.py -l "${_path}" -v
-
+      
+      - name: Display OIDN contents
+        shell: bash
+        run: ls -R $LUX_OIDN_DENOISE_LIBS
+      
       - name: Build LuxCore (*nix)
         if: runner.os != 'Windows'
         shell: bash
