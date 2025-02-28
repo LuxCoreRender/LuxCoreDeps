@@ -24,6 +24,7 @@ LIBDEFLATE_VERSION = "1.22"
 LLVM_OPENMP_VERSION = "18.1.8"
 MINIZIP_VERSION = "4.0.3"
 NFD_VERSION = "1.2.1"
+NINJA_VERSION = "1.12.1"
 OCIO_VERSION = "2.4.0"
 OIDN_VERSION = "2.3.1"
 OIIO_VERSION = "2.5.16.0"
@@ -112,6 +113,9 @@ class LuxCoreDeps(ConanFile):
         else:
             self.requires("bison/[*]")
             self.requires("flex/[*]")
+
+        # Ninja
+        self.requires(f"ninja/{NINJA_VERSION}", build=False, run=True, visible=True)
 
     def build_requirements(self):
         self.tool_requires("cmake/[*]")
