@@ -75,8 +75,10 @@ jobs:
 
       - name: Build LuxCore (*nix)
         if: runner.os != 'Windows'
+        shell: bash
         run: make
 
       - name: Build LuxCore (Window)
         if: runner.os == 'Windows'
-        run: make
+        shell: pwsh
+        run: make.bat
