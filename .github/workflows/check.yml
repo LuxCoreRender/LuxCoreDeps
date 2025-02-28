@@ -26,7 +26,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-13, macos-14]
     env:
-      SCCACHE_GHA_ENABLED: "true"
+      SCCACHE_GHA_ENABLED: on
     steps:
       - name: Checkout LuxCore repository
         uses: actions/checkout@v4
@@ -56,10 +56,14 @@ jobs:
       - name: Install sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.7
 
-      - name: Set sccache
-        run: |
-          echo "CMAKE_C_COMPILER_LAUNCHER=sccache" >> $GITHUB_ENV
-          echo "CMAKE_CXX_COMPILER_LAUNCHER=sccache" >> $GITHUB_ENV
+      - name: Configure sccache
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.exportVariable('CMAKE_C_COMPILER_LAUNCHER', 'sccache');
+            core.exportVariable('CMAKE_CXX_COMPILER_LAUNCHER', 'sccache');
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
      
       - name: Set Conan parameters
         shell: bash
