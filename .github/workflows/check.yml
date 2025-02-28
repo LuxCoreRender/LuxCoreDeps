@@ -64,12 +64,9 @@ jobs:
       - name: Prepare deps
         shell: bash
         run: |
-          _path=${{ github.workspace }}/dist/luxcore-deps-${{ matrix.os }}
-          if [[ ${{ runner.os }} == "Windows" ]]; then
-            _path=$(cygpath -u $_path)
-          fi
-          echo "Path to downloaded cache: $_path"
-          python cmake/make_deps.py -l ${_path}/conan-cache-save.tgz -v
+          _path='${{ github.workspace }}/dist/luxcore-deps-${{ matrix.os }}/conan-cache-save.tgz'
+          echo 'Path to downloaded cache: ${_path}'
+          python cmake/make_deps.py -l '${_path}' -v
 
       - name: Build LuxCore
         run: make
