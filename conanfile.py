@@ -23,7 +23,6 @@ JSON_VERSION = "3.11.3"
 LIBDEFLATE_VERSION = "1.22"
 LLVM_OPENMP_VERSION = "18.1.8"
 MINIZIP_VERSION = "4.0.3"
-NFD_VERSION = "1.2.1"
 NINJA_VERSION = "1.12.1"
 OCIO_VERSION = "2.4.0"
 OIDN_VERSION = "2.3.1"
@@ -53,7 +52,6 @@ class LuxCoreDeps(ConanFile):
         f"opensubdiv/{OPENSUBDIV_VERSION}@luxcore/luxcore",
         f"imath/{IMATH_VERSION}",
         f"openimageio/{OIIO_VERSION}",
-        f"nativefiledialog/{NFD_VERSION}@luxcore/luxcore",
         f"imgui/{IMGUI_VERSION}",
         f"glfw/{GLFW_VERSION}",
     ]
@@ -98,6 +96,10 @@ class LuxCoreDeps(ConanFile):
         self.requires(f"spdlog/{SPDLOG_VERSION}", transitive_headers=True)
         self.requires(
             f"blender-types/{BLENDER_VERSION}@luxcore/luxcore",
+            transitive_headers=True,
+        )
+        self.requires(
+            "imgui-filebrowser/0.1@luxcore/luxcore",
             transitive_headers=True,
         )
 

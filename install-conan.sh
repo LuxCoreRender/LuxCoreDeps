@@ -56,8 +56,8 @@ conan config install-pkg -vvv luxcoreconf/$LUXCORE_VERSION@luxcore/luxcore
 echo "::endgroup::"
 
 # Install local packages
-echo "::group::CIBW_BEFORE_BUILD: nativefiledialog"
-conan_local_install nativefiledialog
+echo "::group::CIBW_BEFORE_BUILD: imgui-filebrowser"
+conan_local_install imgui-filebrowser
 echo "::endgroup::"
 
 echo "::group::CIBW_BEFORE_BUILD: fmt"
