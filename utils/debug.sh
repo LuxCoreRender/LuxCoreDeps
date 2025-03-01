@@ -9,6 +9,7 @@
 # You need 'act' to be installed in your system
 
 #export CIBW_DEBUG_KEEP_CONTAINER=TRUE
+cd ..
 
 zipfolder=/tmp/luxcore/1/cibw-wheels-ubuntu-latest-${python_minor}
 
