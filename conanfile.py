@@ -54,6 +54,7 @@ class LuxCoreDeps(ConanFile):
         f"openimageio/{OIIO_VERSION}",
         f"imgui/{IMGUI_VERSION}",
         f"glfw/{GLFW_VERSION}",
+        "nativefiledialog/1.2.1@luxcore/luxcore",  # TODO
     ]
 
     settings = "os", "compiler", "build_type", "arch"
