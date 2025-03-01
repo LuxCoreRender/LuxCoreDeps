@@ -51,6 +51,10 @@ jobs:
           esac
           echo "WORKSPACE=${_workspace}" >> "$GITHUB_ENV"
 
+      - name: Update apt cache
+        run: |
+          sudo apt-get update -y
+
       - name: Set Conan preset
         uses: actions/github-script@v7
         with:
