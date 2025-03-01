@@ -44,7 +44,7 @@ class ImguiFileDialogConan(ConanFile):
                 "find_package(imgui)\n"
                 "target_link_libraries(ImGuiFileDialog PRIVATE imgui::imgui)\n"
                 "install(TARGETS ImGuiFileDialog)\n"
-                "install(FILES ImGuiFileDialog.h DESTINATION include)\n"
+                "install(FILES ImGuiFileDialog.h ImGuiFileDialogConfig.h DESTINATION include)\n"
             ),
             append=True,
         )  # Append
