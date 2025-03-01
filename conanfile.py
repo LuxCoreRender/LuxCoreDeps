@@ -18,7 +18,7 @@ EMBREE3_VERSION = "3.13.5"
 FMT_VERSION = "11.0.2"
 GLFW_VERSION = "3.4"
 IMATH_VERSION = "3.1.9"
-IMGUI_VERSION = "1.91.5"
+IMGUI_VERSION = "1.91.8"
 JSON_VERSION = "3.11.3"
 LIBDEFLATE_VERSION = "1.22"
 LLVM_OPENMP_VERSION = "18.1.8"
@@ -55,6 +55,7 @@ class LuxCoreDeps(ConanFile):
         f"imgui/{IMGUI_VERSION}",
         f"glfw/{GLFW_VERSION}",
         "nativefiledialog/1.2.1@luxcore/luxcore",  # TODO
+        f"imguifiledialog/0.6.7@luxcore/luxcore",
     ]
 
     settings = "os", "compiler", "build_type", "arch"

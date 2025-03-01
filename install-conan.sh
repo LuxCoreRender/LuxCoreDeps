@@ -56,8 +56,8 @@ conan config install-pkg -vvv luxcoreconf/$LUXCORE_VERSION@luxcore/luxcore
 echo "::endgroup::"
 
 # Install local packages
-echo "::group::CIBW_BEFORE_BUILD: imgui-filebrowser"
-conan_local_install imgui-filebrowser
+echo "::group::CIBW_BEFORE_BUILD: imguifiledialog"
+conan_local_install imguifiledialog
 echo "::endgroup::"
 
 # TODO To be removed when replacement by imgui-filebrowser is done
