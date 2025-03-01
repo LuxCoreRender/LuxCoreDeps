@@ -60,6 +60,11 @@ echo "::group::CIBW_BEFORE_BUILD: imgui-filebrowser"
 conan_local_install imgui-filebrowser
 echo "::endgroup::"
 
+# TODO To be removed when replacement by imgui-filebrowser is done
+echo "::group::CIBW_BEFORE_BUILD: nativefiledialog"
+conan_local_install nativefiledialog
+echo "::endgroup::"
+
 echo "::group::CIBW_BEFORE_BUILD: fmt"
 conan_local_install fmt
 echo "::endgroup::"
