@@ -1,15 +1,7 @@
-Refactor Wheel maker
 Remove all test building (there are still packages that build tests...)
 Post PR to modify openimageio (fmt as private dep in CMake)
-Write a tester (Github Actions)
-Write doc:
-- general functioning
-- how to upgrade packages
-- how to add packages
-- how to publish deps (release)
-Find a way to centralize deps versions
 Remove Python requirements (there are packages that require Python, should not exist)
 OIIO: don't build executables (oiiotools)
-Write a publisher (release builder, Github Actions)
 Address warnings
 Reduce embedded deps
+Replace nativefiledialog by imgui equivalent
