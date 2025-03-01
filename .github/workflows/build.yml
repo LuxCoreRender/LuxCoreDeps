@@ -52,6 +52,7 @@ jobs:
           echo "WORKSPACE=${_workspace}" >> "$GITHUB_ENV"
 
       - name: Update apt cache
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update -y
 
