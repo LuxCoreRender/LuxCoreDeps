@@ -43,13 +43,14 @@ class ImguiFileDialogConan(ConanFile):
             content=(
                 "find_package(imgui)\n"
                 "target_link_libraries(ImGuiFileDialog PRIVATE imgui::imgui)\n"
+                "install(TARGETS ImGuiFileDialog)\n"
             ),
             append=True,
         )  # Append
 
 
     def layout(self):
-        cmake_layout(self,)
+        cmake_layout(self, src_folder="src")
 
     def generate(self):
         tc = CMakeToolchain(self)
@@ -65,13 +66,9 @@ class ImguiFileDialogConan(ConanFile):
         cmake.build()
 
     def package(self):
+        copy(self, "LICENSE.txt", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
         cmake = CMake(self)
         cmake.install()
-        copy(self, "LICENSE.txt", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
-        rmdir(self, os.path.join(self.package_folder, "lib", "cmake"))
-        rmdir(self, os.path.join(self.package_folder, "lib", "pkgconfig"))
-        rmdir(self, os.path.join(self.package_folder, "share"))
-        rm(self, "*.pdb", os.path.join(self.package_folder, "bin"))
 
     def package_info(self):
         self.cpp_info.libs = ["ImGuiFileDialog"]
