@@ -19,6 +19,7 @@ FMT_VERSION = "11.0.2"
 GLFW_VERSION = "3.4"
 IMATH_VERSION = "3.1.9"
 IMGUI_VERSION = "1.91.8"
+IMGUIFILEDIALOG_VERSION = "0.6.7"
 JSON_VERSION = "3.11.3"
 LIBDEFLATE_VERSION = "1.22"
 LLVM_OPENMP_VERSION = "18.1.8"
@@ -54,8 +55,7 @@ class LuxCoreDeps(ConanFile):
         f"openimageio/{OIIO_VERSION}",
         f"imgui/{IMGUI_VERSION}",
         f"glfw/{GLFW_VERSION}",
-        "nativefiledialog/1.2.1@luxcore/luxcore",  # TODO
-        f"imguifiledialog/0.6.7@luxcore/luxcore",
+        f"imguifiledialog/{IMGUIFILEDIALOG_VERSION}@luxcore/luxcore",
     ]
 
     settings = "os", "compiler", "build_type", "arch"
@@ -87,7 +87,6 @@ class LuxCoreDeps(ConanFile):
             transitive_headers=True,
         )
 
-
         # Header only - make them transitive
         self.requires(
             f"robin-hood-hashing/{ROBINHOOD_VERSION}", transitive_headers=True
@@ -98,10 +97,6 @@ class LuxCoreDeps(ConanFile):
         self.requires(f"spdlog/{SPDLOG_VERSION}", transitive_headers=True)
         self.requires(
             f"blender-types/{BLENDER_VERSION}@luxcore/luxcore",
-            transitive_headers=True,
-        )
-        self.requires(
-            "imgui-filebrowser/0.1@luxcore/luxcore",
             transitive_headers=True,
         )
 
