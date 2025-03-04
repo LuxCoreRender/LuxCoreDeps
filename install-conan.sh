@@ -56,6 +56,10 @@ conan config install-pkg -vvv luxcoreconf/$LUXCORE_VERSION@luxcore/luxcore
 echo "::endgroup::"
 
 # Install local packages
+echo "::group::CIBW_BEFORE_BUILD: nvrtc"
+conan_local_install nvrtc
+echo "::endgroup::"
+
 echo "::group::CIBW_BEFORE_BUILD: imguifiledialog"
 conan_local_install imguifiledialog
 echo "::endgroup::"

@@ -28,6 +28,7 @@ jobs:
       GLIBC_VERSION: 2_28
       GH_TOKEN: ${{ github.token }}
       BOOST_INSTALL_LAYOUT: system
+      CONAN_LOG_LEVEL: ${{ vars.conan_log_level }}  # To be set by caller (act)
 
 
     steps:
@@ -177,6 +178,7 @@ jobs:
             CXX_VERSION
             RUNNER_OS
             RUNNER_ARCH
+            CONAN_LOG_LEVEL
           CIBW_BEFORE_ALL_LINUX: |
             dnf install -y epel-release
             dnf install -y almalinux-release-devel
@@ -216,12 +218,12 @@ jobs:
             dnf install -y intel-oneapi-ispc
             source /opt/intel/oneapi/ispc/latest/env/vars.sh
 
-            # TODO
+            ## TODO
             ## Install Cuda
-            #dnf install -y --nogpgcheck https://dl.fedoraproject.org/pub/epel/epel-release-latest-$(rpm -E %rhel).noarch.rpm
-            #dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-$(rpm -E %rhel).noarch.rpm
-            #subscription-manager repos --enable "codeready-builder-for-rhel-8-$(uname -m)-rpms"
-            #dnf install -y xorg-x11-drv-nvidia-470xx-cuda-libs
+            #dnf config-manager -y --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64/cuda-rhel8.repo
+            #dnf clean all
+            #dnf -y install cuda-nvrtc-12-8
+            #dnf repoquery -l cuda-nvrtc-12-8
 
           CIBW_BEFORE_ALL_MACOS: brew install ispc
           CIBW_BEFORE_BUILD: bash ${{ env.WORKSPACE }}/install-conan.sh

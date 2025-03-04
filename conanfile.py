@@ -25,6 +25,7 @@ LIBDEFLATE_VERSION = "1.22"
 LLVM_OPENMP_VERSION = "18.1.8"
 MINIZIP_VERSION = "4.0.3"
 NINJA_VERSION = "1.12.1"
+NVRTC_VERSION = "12.8.61"
 OCIO_VERSION = "2.4.0"
 OIDN_VERSION = "2.3.1"
 OIIO_VERSION = "2.5.16.0"
@@ -103,6 +104,10 @@ class LuxCoreDeps(ConanFile):
         # Macos OpenMP
         if self.settings.os == "Macos":
             self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}")
+
+        # nvrtc
+        if self.settings.os in ("Linux", "Windows"):
+            self.requires(f"nvrtc/{NVRTC_VERSION}@luxcore/luxcore")
 
         # Bison/flex
         # This a build requirement for LuxCore, therefore this must be a full requirement

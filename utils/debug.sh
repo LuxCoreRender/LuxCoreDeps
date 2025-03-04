@@ -14,6 +14,7 @@ cd ..
 zipfolder=/tmp/luxcore/1/cibw-wheels-ubuntu-latest-${python_minor}
 
 act workflow_dispatch \
+  --var conan_log_level=debug \
   --action-offline-mode \
   --job build-deps \
   -s GITHUB_TOKEN="$(gh auth token)" \

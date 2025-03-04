@@ -4,4 +4,4 @@ Remove Python requirements (there are packages that require Python, should not e
 OIIO: don't build executables (oiiotools)
 Address warnings
 Reduce embedded deps
-Replace nativefiledialog by imgui equivalent
+Include licenses
