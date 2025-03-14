@@ -106,7 +106,8 @@ etc.) as the one intended for the wheels.
 Please note that it requires to build a fake wheel in LuxCoreDeps.
 
 ### Local recipes
-Most of Conan recipes used by LuxCoreDeps are to be found in Conan central repository (Conan center)
+Most of Conan recipes used by LuxCoreDeps are to be found in Conan central repository (Conan center).
+However, a few ones did not exist on-the-shelf and were created as local recipes: see `local-conan-recipes` folder.
 
 ### Debugging
 Dependency build can be debugged locally using `nektos/act`
