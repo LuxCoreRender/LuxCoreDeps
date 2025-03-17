@@ -8,28 +8,12 @@ name: LuxCore Dependency Releaser
 on:
   workflow_dispatch:
     inputs:
-      release-tag:
-        description: "Tag for the release"
+      release-version:
+        description: "Release version (major.minor.patch[-pre])"
         required: True
-        default: Test
-        type: string
-      release-name:
-        description: "Release name"
-        required: False
-        default: Test
-        type: string
-      release-title:
-        description: "Release title"
-        required: False
-        default: Test
         type: string
       allow-updates:
         description: "Update existing release (if any)"
-        required: True
-        type: boolean
-        default: True
-      prerelease:
-        description: "Prerelease"
         required: True
         type: boolean
         default: True
@@ -40,6 +24,31 @@ on:
         default: False
 
 jobs:
+  check-version:
+    name: 'Check version compliance'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check version compliance
+        shell: python
+        run: |
+          import sys
+          import re
+          version = "${{ inputs.release-version }}"
+          semver_regex = r"^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+          res = re.fullmatch(semver_regex, version)
+          if res:
+            print("::notice::Version number OK ('{version}')")
+          else:
+            message = [
+              f"::error::INVALID RELEASE VERSION NUMBER '{version}'",
+              "Version must comply to Semantic Versioning standard:",
+              "\n\tmajor.minor.patch[-pre]\n",
+              "See https://semver.org for more information",
+              "or leave the field blank for default value\n"
+            ]
+            print("\n".join(message))
+            sys.exit(1)
+
   call-build-deps:
     uses: ./.github/workflows/build.yml
 
@@ -84,14 +93,15 @@ jobs:
         # Use full length commit SHA, otherwise CodeQL complains...
         uses: ncipollo/release-action@cdcc88a9acf3ca41c16c37bb7d21b9ad48560d87
         with:
-          name: ${{ inputs.release-name }}
-          tag: ${{ inputs.release-tag }}
+          name: "LuxCore Dependencies v${{ inputs.release-version }}"
+          tag: "v${{ inputs.release-version }}"
           artifacts: artifacts/*
           removeArtifacts: true
           allowUpdates: ${{ inputs.allow-updates }}
           prerelease: ${{ inputs.prerelease }}
           token: ${{ secrets.GITHUB_TOKEN }}
           updateOnlyUnreleased: true
+          draft: true
 
       - run: |
           echo "### Release""" >> $GITHUB_STEP_SUMMARY
