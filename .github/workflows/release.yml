@@ -51,6 +51,7 @@ jobs:
 
   call-build-deps:
     uses: ./.github/workflows/build.yml
+    needs: [check-version]
 
   create-release:
     name: 'Create release'
