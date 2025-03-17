@@ -72,7 +72,8 @@ Once built, dependencies are made available to LuxCore via LuxCoreDeps
 **releases**: https://github.com/LuxCoreRender/LuxCoreDeps/releases
 
 
-To trigger dependency build & publish, use `workflow_dispatch` event:
+To trigger dependency build & publish, use **LuxCore Dependency Releaser** action,
+with`workflow_dispatch` event:
 https://github.com/LuxCoreRender/LuxCoreDeps/actions/workflows/deps.yml. This
 action will build the dependency package and publish it in a release.
 
