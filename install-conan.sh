@@ -58,8 +58,8 @@ echo "::endgroup::"
 # Install profiles
 echo "::group::CIBW_BEFORE_BUILD: profiles"
 conan create $WORKSPACE/conan-profiles \
-    --profile:all=$WORKSPACE/conan-profiles/$CONAN_PROFILE
-echo "LUXDEPS_VERSION=$LUXDEPS_VERSION"
+    --profile:all=$WORKSPACE/conan-profiles/$CONAN_PROFILE \
+    --version=$LUXDEPS_VERSION
 conan config install-pkg -vvv luxcoreconf/$LUXDEPS_VERSION@luxcore/luxcore
 echo "::endgroup::"
 
@@ -98,6 +98,7 @@ echo "::group::CIBW_BEFORE_BUILD: LuxCore Deps"
 cd $WORKSPACE
 conan create $WORKSPACE \
   --profile:all=$CONAN_PROFILE \
+  --version=$LUXDEPS_VERSION \
   --build=missing
 conan install \
   --requires=luxcoredeps/$LUXDEPS_VERSION@luxcore/luxcore \

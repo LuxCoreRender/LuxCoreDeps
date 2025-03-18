@@ -13,8 +13,7 @@ from conan.tools.files import copy
 
 class Conf(ConanFile):
     name = "luxcoreconf"
-    # Version should be set by releaser
-    version = os.getenv("LUXDEPS_VERSION", "test") or "test"
+    # Version should be set by `conan install`
     user = "luxcore"
     channel = "luxcore"
     package_type = "configuration"

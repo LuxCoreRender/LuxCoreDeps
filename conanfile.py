@@ -42,8 +42,7 @@ TBB_VERSION = "2021.12.0"
 
 class LuxCoreDeps(ConanFile):
     name = "luxcoredeps"
-    # Version should be set by releaser
-    version = os.getenv("LUXDEPS_VERSION", "test") or "test"
+    # Version should be set by `conan install`
     user = "luxcore"
     channel = "luxcore"
 
