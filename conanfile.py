@@ -39,9 +39,11 @@ SPDLOG_VERSION = "1.15.0"
 TBB_VERSION = "2021.12.0"
 
 
+
 class LuxCoreDeps(ConanFile):
     name = "luxcoredeps"
-    version = "2.10.0"
+    # Version should be set by releaser
+    version = os.getenv("LUXDEPS_VERSION", "test") or "test"
     user = "luxcore"
     channel = "luxcore"
 

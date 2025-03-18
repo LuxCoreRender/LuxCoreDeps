@@ -16,6 +16,8 @@ on:
 jobs:
   call-build-deps:
     uses: ./.github/workflows/build.yml
+    with:
+      luxdeps-version: "check"
 
   check-deps:
     name: Check dependencies

@@ -7,7 +7,12 @@
 
 name: LuxCore Dependency Builder
 
-on: workflow_call
+on:
+  workflow_call:
+    inputs:
+      luxdeps-version:  # To be set by caller (checker, releaser...)
+        required: true
+        type: string
 
 jobs:
   build-deps:
@@ -19,7 +24,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-13, macos-14]
     env:
-      VERSION: '2.10'
+      #VERSION: '2.10'
       # Reminder: report all variables here to CIBW_ENVIRONMENT_PASS_LINUX
       BUILD_TYPE: Release
       # SANITIZE: true # uncomment to sanitize
@@ -29,9 +34,18 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       BOOST_INSTALL_LAYOUT: system
       CONAN_LOG_LEVEL: ${{ vars.conan_log_level }}  # To be set by caller (act)
+      # LUXDEPS_VERSION: to be set by caller, to be used by conanfile.py
+      LUXDEPS_VERSION: ${{ inputs.luxdeps-version }}
 
 
     steps:
+
+      - name: Check LUXDEPS_VERSION
+        uses: nick-fields/assert-action@v2
+        with:
+          expected: ''
+          actual: ${{ env.LUXDEPS_VERSION }}
+          comparison: notEqual
 
       - name: Configure git for long paths (Windows)
         shell: bash
@@ -179,6 +193,7 @@ jobs:
             RUNNER_OS
             RUNNER_ARCH
             CONAN_LOG_LEVEL
+            LUXDEPS_VERSION
           CIBW_BEFORE_ALL_LINUX: |
             dnf install -y epel-release
             dnf install -y almalinux-release-devel

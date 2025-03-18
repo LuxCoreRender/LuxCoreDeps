@@ -50,8 +50,11 @@ jobs:
             sys.exit(1)
 
   call-build-deps:
+    name: "Build dependencies"
     uses: ./.github/workflows/build.yml
     needs: [check-version]
+    with:
+      luxdeps-version: ${{ inputs.release-version }}
 
   create-release:
     name: 'Create release'

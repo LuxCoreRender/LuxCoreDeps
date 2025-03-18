@@ -2,8 +2,15 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+# Caveat!
+# LUXDEPS_VERSION, RUNNER_OS, RUNNER_ARCH must be set by caller
+#
+die() { rc=$?; (( $# )) && printf '::error::%s\n' "$*" >&2; exit $(( rc == 0 ? 1 : rc )); }
+test -n "$LUXDEPS_VERSION" || die "LUXDEPS_VERSION not set"
+test -n "$RUNNER_OS" || die "RUNNER_OS not set"
+test -n "$RUNNER_ARCH" || die "RUNNER_ARCH not set"
+
 CONAN_PROFILE=conan-profile-${RUNNER_OS}-${RUNNER_ARCH}
-LUXCORE_VERSION="2.10.0"
 
 function conan_local_install() {
   name=$(echo "$1" | tr '[:upper:]' '[:lower:]')  # Package name in lowercase
@@ -52,7 +59,8 @@ echo "::endgroup::"
 echo "::group::CIBW_BEFORE_BUILD: profiles"
 conan create $WORKSPACE/conan-profiles \
     --profile:all=$WORKSPACE/conan-profiles/$CONAN_PROFILE
-conan config install-pkg -vvv luxcoreconf/$LUXCORE_VERSION@luxcore/luxcore
+echo "LUXDEPS_VERSION=$LUXDEPS_VERSION"
+conan config install-pkg -vvv luxcoreconf/$LUXDEPS_VERSION@luxcore/luxcore
 echo "::endgroup::"
 
 # Install local packages
@@ -92,7 +100,7 @@ conan create $WORKSPACE \
   --profile:all=$CONAN_PROFILE \
   --build=missing
 conan install \
-  --requires=luxcoredeps/$LUXCORE_VERSION@luxcore/luxcore \
+  --requires=luxcoredeps/$LUXDEPS_VERSION@luxcore/luxcore \
   --profile:all=$CONAN_PROFILE \
   --no-remote \
   --build=missing
@@ -104,8 +112,8 @@ conan cache clean "*"  # Clean non essential files
 conan remove -c -vverbose "*/*#!latest"  # Keep only latest version of each package
 # Save only dependencies of current target (otherwise cache gets bloated)
 conan graph info \
-  --requires=luxcoredeps/$LUXCORE_VERSION@luxcore/luxcore \
-  --requires=luxcoreconf/$LUXCORE_VERSION@luxcore/luxcore \
+  --requires=luxcoredeps/$LUXDEPS_VERSION@luxcore/luxcore \
+  --requires=luxcoreconf/$LUXDEPS_VERSION@luxcore/luxcore \
   --format=json \
   --profile:all=$CONAN_PROFILE \
   > graph.json

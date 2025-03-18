@@ -9,13 +9,14 @@
 # You need 'act' to be installed in your system
 
 #export CIBW_DEBUG_KEEP_CONTAINER=TRUE
-cd ..
 
 zipfolder=/tmp/luxcore/1/cibw-wheels-ubuntu-latest-${python_minor}
 
-act workflow_dispatch \
+act workflow_call \
   --var conan_log_level=debug \
+  --input luxdeps-version=test \
   --action-offline-mode \
+  --workflows ./.github/workflows/build.yml \
   --job build-deps \
   -s GITHUB_TOKEN="$(gh auth token)" \
   --matrix os:ubuntu-latest \
