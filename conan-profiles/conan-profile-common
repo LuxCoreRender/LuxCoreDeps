@@ -14,7 +14,6 @@ tools.build:verbosity=verbose
 tools.system.package_manager:mode=install
 tools.deployer:symlinks=True
 tools.build:skip_test=True
-tools.cmake.cmaketoolchain:extra_variables={ "LUXCOREDEPS_VERSION": "{{ os.getenv('LUXDEPS_VERSION') }}" }
 
 [platform_tool_requires]
 cmake/*
