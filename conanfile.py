@@ -134,6 +134,7 @@ class LuxCoreDeps(ConanFile):
         if self.settings.os == "Macos" and self.settings.arch == "armv8":
             tc.cache_variables["CMAKE_OSX_ARCHITECTURES"] = "arm64"
 
+        tc.cache_variables["LUXCOREDEPS_VERSION"] = self.version
         tc.generate()
 
         cd = CMakeDeps(self)
