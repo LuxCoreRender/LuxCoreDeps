@@ -114,10 +114,10 @@ class LuxCoreDeps(ConanFile):
         # This a build requirement for LuxCore, therefore this must be a full requirement
         # for LuxCoreDeps (otherwise it won't get saved in cache)
         if self.settings.os == "Windows":
-            self.requires("winflexbison/[*]")
+            self.requires("winflexbison/[*]", build=False, run=True, visible=True)
         else:
-            self.requires("bison/[*]")
-            self.requires("flex/[*]")
+            self.requires("bison/[*]", build=False, run=True, visible=True)
+            self.requires("flex/[*]", build=False, run=True, visible=True)
 
         # Ninja
         self.requires(f"ninja/{NINJA_VERSION}", build=False, run=True, visible=True)
