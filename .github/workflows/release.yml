@@ -23,7 +23,8 @@ on:
         type: boolean
         default: False
 
-permissions: read-all
+permissions:
+  contents: read
   id-token: write
   attestations: write
 
