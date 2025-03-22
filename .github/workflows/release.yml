@@ -57,8 +57,7 @@ jobs:
     name: "Build dependencies"
     uses: ./.github/workflows/build.yml
     needs: [check-version]
-    permissions:
-      all: read
+    permissions: read-all
     with:
       luxdeps-version: ${{ inputs.release-version }}
 
