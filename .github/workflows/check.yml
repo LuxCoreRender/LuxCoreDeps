@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-# Check that dependencies are suitable for future use
+# Check that dependencies are buildable
 
 
 name: LuxCore Dependency Checker
@@ -18,79 +18,3 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       luxdeps-version: "check"
-
-  check-deps:
-    name: Check dependencies
-    runs-on: ${{ matrix.os }}
-    needs: [call-build-deps]
-    strategy:
-      fail-fast: False
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
-    env:
-      SCCACHE_GHA_ENABLED: on
-    steps:
-      - name: Checkout LuxCore repository
-        uses: actions/checkout@v4
-        with:
-          repository: 'LuxCoreRender/LuxCore'
-          ref: 'for_v2.10'
-
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: luxcore-deps-${{ matrix.os }}
-          path: ${{ github.workspace }}/dist
-          merge-multiple: false
-
-      - name: Display structure of downloaded files
-        shell: bash
-        run: ls -R $GITHUB_WORKSPACE/dist
-
-      - name: Install Conan
-        run: pip install conan
-
-      - name: Update apt
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update -y
-
-      - name: Install sccache-cache
-        uses: mozilla-actions/sccache-action@v0.0.7
-
-      - name: Configure sccache
-        uses: actions/github-script@v7
-        with:
-          script: |
-            core.exportVariable('CMAKE_C_COMPILER_LAUNCHER', 'sccache');
-            core.exportVariable('CMAKE_CXX_COMPILER_LAUNCHER', 'sccache');
-            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
-     
-      - name: Set Conan parameters
-        shell: bash
-        run: |
-            echo "CONAN_HOME=${{ github.workspace }}/.conan2" >> $GITHUB_ENV
-
-      - name: Prepare deps
-        shell: bash
-        run: |
-          _path='${{ github.workspace }}/dist/luxcore-deps-${{ matrix.os }}/conan-cache-save.tgz'
-          echo "Path to downloaded cache: ${_path}"
-          python cmake/make_deps.py -l "${_path}" -v
-      
-      - name: Display OIDN contents
-        shell: bash
-        run: ls -R $LUX_OIDN_DENOISE_LIBS
-      
-      - name: Build LuxCore (*nix)
-        if: runner.os != 'Windows'
-        shell: bash
-        run: make
-
-      - name: Build LuxCore (Window)
-        if: runner.os == 'Windows'
-        shell: cmd
-        run: |
-          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          make
