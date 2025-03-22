@@ -91,9 +91,9 @@ jobs:
           done
 
       - name: Generate artifact attestations
-        uses: actions/attest@v2
+        uses: actions/attest-build-provenance@v2
         with:
-          subject-path: ${{ github.workspace }}/artifacts/luxcore-deps-*
+          subject-path: '${{ github.workspace }}/artifacts/luxcore-deps-*'
 
       - id: make-release
         # Use full length commit SHA, otherwise CodeQL complains...
