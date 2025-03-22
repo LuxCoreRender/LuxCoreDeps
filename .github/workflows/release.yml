@@ -27,6 +27,8 @@ jobs:
   check-version:
     name: 'Check version compliance'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Check version compliance
         shell: python
@@ -53,6 +55,8 @@ jobs:
     name: "Build dependencies"
     uses: ./.github/workflows/build.yml
     needs: [check-version]
+    permissions:
+      contents: read
     with:
       luxdeps-version: ${{ inputs.release-version }}
 
