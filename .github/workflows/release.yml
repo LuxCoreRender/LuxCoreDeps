@@ -22,8 +22,10 @@ on:
         required: True
         type: boolean
         default: False
-    permissions:
-      contents: read
+
+permissions: read-all
+  id-token: write
+  attestations: write
 
 jobs:
   check-version:
