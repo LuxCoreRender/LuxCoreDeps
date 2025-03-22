@@ -75,14 +75,6 @@ jobs:
           path: ${{ github.workspace }}/dist
           merge-multiple: false
 
-      - name: Display structure of downloaded files
-        run: ls -Rl ${{ github.workspace }}/dist
-
-      - name: Generate artifact attestations
-        uses: actions/attest-build-provenance@v1.4.3
-        with:
-          subject-path: ${{ github.workspace }}/dist/*
-
       - name: Re-zip artifacts
         working-directory: ${{ github.workspace }}/dist
         run: |
@@ -92,6 +84,11 @@ jobs:
               echo "zip ${d2}"
               zip -j ../artifacts/${d2}.zip ${d2}/*
           done
+
+      - name: Generate artifact attestations
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: ${{ github.workspace }}/artifacts/*
 
       - id: make-release
         # Use full length commit SHA, otherwise CodeQL complains...
@@ -110,4 +107,3 @@ jobs:
       - run: |
           echo "### Release""" >> $GITHUB_STEP_SUMMARY
           echo ${{ steps.make-release.outputs.html_url }} >> $GITHUB_STEP_SUMMARY
-
