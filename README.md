@@ -68,38 +68,41 @@ sources provides the following benefits:
 LuxCoreDeps is exclusively intended to be run in continuous integration by
 Github Actions. The main execution script is `.github/workflows/deps.yml`.
 
-Once built, dependencies are made available to LuxCore via LuxCoreDeps
-**releases**: https://github.com/LuxCoreRender/LuxCoreDeps/releases
-
-
 To trigger dependency build & publish, use **LuxCore Dependency Releaser** action,
 with `Run workflow` button:
 https://github.com/LuxCoreRender/LuxCoreDeps/actions/workflows/release.yml. This
-action will build the dependency package and publish it in a release.
+action will build the dependency package and publish it in a release. Please follow
+semantic versioning when doing so.
 
-Please note that, for debugging purpose, dependency build is also triggered by
+Once built, dependencies are made available to LuxCore via LuxCoreDeps
+**releases**: https://github.com/LuxCoreRender/LuxCoreDeps/releases
+
+Note that, for debugging purpose, dependency build is also triggered by
 `push` events; however, in that case, no release is created.
 
-Please use Semantic Versioning (https://semver.org).
 
-## Adding Dependencies to LuxCoreDeps
+
+## Adding or Upgrading Dependencies in LuxCoreDeps
 
 _(For admin only - requires appropriate rights on repository)_
 
-Dependencies can be added to LuxCoreDeps by upgrading the `conanfile.py` file,
-located in the repository root.
+Dependencies can be added or upgraded in LuxCoreDeps by upgrading the `conanfile.py`
+file, located in the repository root.
 
 Please refer to the Conan documentation for syntax of `conanfile.py` and instructions
 how to modify such a file.
 
 
-## Caveats & Tips
+## Tips & Caveats
 
-### LuxCoreDeps Entry points
+### Where to start - LuxCoreDeps entry points
 The main entry point is `.github/workflows/deps.yml`.
 Other interesting files may be:
 - `conanfile.py`: Conan script to build dependencies
 - `conan-profiles`: folder with Conan profiles
+
+### Versioning rules
+LuxCoreDeps follows Semantic Versioning (https://semver.org).
 
 ### Compilation environment
 For Python wheels to be built properly, it is essential that dependencies be built
@@ -115,8 +118,7 @@ However, a few ones did not exist on-the-shelf and were created as local recipes
 Dependency build can be debugged locally using `nektos/act`
 (https://github.com/nektos/act).
 
-In LuxCoreDeps repository, `debug.sh` contains a working example of `act`
-invokation under Linux.
+`utils/debug.sh` contains a working example of `act`invokation under Linux.
 
 ## License
 This code is released under Apache 2.0 license.
