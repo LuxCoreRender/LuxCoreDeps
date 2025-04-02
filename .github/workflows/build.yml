@@ -179,6 +179,7 @@ jobs:
           CIBW_ENVIRONMENT: >
             SKBUILD_CMAKE_ARGS='-G Ninja;--log-level=VERBOSE'
             SKBUILD_CMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+            CMAKE_POLICY_VERSION_MINIMUM='3.28'
           CIBW_ENVIRONMENT_PASS_LINUX: |
             CC
             CXX
