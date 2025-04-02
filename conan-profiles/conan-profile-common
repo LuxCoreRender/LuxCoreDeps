@@ -9,6 +9,9 @@ meson/*:build_type=Release
 pkgconf/*:build_type=Release
 yasm/*:build_type=Release
 ninja/*:build_type=Release
+bison/*:build_type=Release
+flex/*:build_type=Release
+winflexbison/*:build_type=Release
 
 [conf]
 tools.build:verbosity=verbose
