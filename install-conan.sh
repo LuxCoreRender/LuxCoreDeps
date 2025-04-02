@@ -58,15 +58,17 @@ echo "::endgroup::"
 # Install profiles
 echo "::group::CIBW_BEFORE_BUILD: profiles"
 conan create $WORKSPACE/conan-profiles \
-    --profile:all=$WORKSPACE/conan-profiles/$CONAN_PROFILE \
-    --version=$LUXDEPS_VERSION
+  --profile:all=$WORKSPACE/conan-profiles/$CONAN_PROFILE \
+  --version=$LUXDEPS_VERSION
 conan config install-pkg -vvv luxcoreconf/$LUXDEPS_VERSION@luxcore/luxcore
 echo "::endgroup::"
 
 # Install local packages
-echo "::group::CIBW_BEFORE_BUILD: nvrtc"
-conan_local_install nvrtc
-echo "::endgroup::"
+if [[ $RUNNER_OS == "Linux" || $RUNNER_OS == "Windows" ]]; then
+  echo "::group::CIBW_BEFORE_BUILD: nvrtc"
+  conan_local_install nvrtc
+  echo "::endgroup::"
+fi
 
 echo "::group::CIBW_BEFORE_BUILD: imguifiledialog"
 conan_local_install imguifiledialog
