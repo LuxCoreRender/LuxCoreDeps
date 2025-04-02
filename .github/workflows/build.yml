@@ -13,6 +13,11 @@ on:
       luxdeps-version:  # To be set by caller (checker, releaser...)
         required: true
         type: string
+      rebuild-all:
+        description: "Rebuild all"
+        required: True
+        type: boolean
+        default: False
 
 jobs:
   build-deps:
@@ -168,6 +173,7 @@ jobs:
 
       # Build deps - we rely on cibuildwheel to get the fine settings for build
       # To do so, we build a dummy wheel
+      #
       - name: Build deps
         # Use full length commit SHA, otherwise CodeQL complains...
         uses: pypa/cibuildwheel@ee63bf16da6cddfb925f542f2c7b59ad50e93969  # v2.22.0
@@ -179,10 +185,13 @@ jobs:
           CIBW_SKIP: "*musllinux*"
           CIBW_ARCHS: auto64
           CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux_${{ env.GLIBC_VERSION }}_x86_64
+          # Nota: we need CMAKE_POLICY_VERSION_MINIMUM, but keep it as low as
+          # possible
           CIBW_ENVIRONMENT: >
             SKBUILD_CMAKE_ARGS='-G Ninja;--log-level=VERBOSE'
             SKBUILD_CMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
-            CMAKE_POLICY_VERSION_MINIMUM='3.28'
+            VERBOSE=1
+            CMAKE_POLICY_VERSION_MINIMUM=3.5
           CIBW_ENVIRONMENT_PASS_LINUX: |
             ASM
             CC

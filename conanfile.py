@@ -26,10 +26,10 @@ LLVM_OPENMP_VERSION = "18.1.8"
 MINIZIP_VERSION = "4.0.3"
 NINJA_VERSION = "1.12.1"
 NVRTC_VERSION = "12.8.61"
-OCIO_VERSION = "2.4.0"
+OCIO_VERSION = "2.4.2"
 OIDN_VERSION = "2.3.1"
 OIIO_VERSION = "2.5.16.0"
-OPENEXR_VERSION = "3.3.2"
+OPENEXR_VERSION = "3.3.3"
 OIIO_VERSION = "2.5.18.0"
 OPENSUBDIV_VERSION = "3.6.0"
 OPENVDB_VERSION = "11.0.0"
@@ -37,6 +37,7 @@ PYBIND11_VERSION = "2.13.6"
 ROBINHOOD_VERSION = "3.11.5"
 SPDLOG_VERSION = "1.15.0"
 TBB_VERSION = "2021.12.0"
+ZSTD_VERSION = "1.5.7"
 
 
 
@@ -72,6 +73,12 @@ class LuxCoreDeps(ConanFile):
         self.requires(
             f"libdeflate/{LIBDEFLATE_VERSION}",
             force=True,
+            libs=True,
+            transitive_libs=True,
+        )
+        self.requires(
+            f"zstd/{ZSTD_VERSION}",
+            override=True,
             libs=True,
             transitive_libs=True,
         )

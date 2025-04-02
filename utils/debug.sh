@@ -15,6 +15,7 @@ zipfolder=/tmp/luxcore/1/cibw-wheels-ubuntu-latest-${python_minor}
 act workflow_call \
   --var conan_log_level=debug \
   --input luxdeps-version=test \
+  --input rebuild-all=true \
   --action-offline-mode \
   --workflows ./.github/workflows/build.yml \
   --job build-deps \
