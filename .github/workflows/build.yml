@@ -130,10 +130,13 @@ jobs:
           _V=${{ env.GCC_VERSION }}
           _T=/opt/rh/gcc-toolset-${_V}/root
 
+          # Reminder: every env variable declared here must be listed
+          # in CIBW_ENVIRONMENT_PASS_LINUX
           echo "TOOLSET_ROOT=${_T}" >> $GITHUB_ENV
           echo "CXX=${_T}/usr/bin/g++" >> $GITHUB_ENV
           echo "CC=${_T}/usr/bin/gcc" >> $GITHUB_ENV
           echo "AR=${_T}/usr/bin/ar" >> $GITHUB_ENV
+          echo "ASM=${_T}/usr/bin/gcc" >> $GITHUB_ENV
           echo "RANLIB=${_T}/usr/bin/ranlib" >> $GITHUB_ENV
 
           echo "ASAN_PATH=${_T}/usr/lib/gcc/x86_64-redhat-linux/${_V}/libasan.so" >> $GITHUB_ENV
@@ -181,6 +184,7 @@ jobs:
             SKBUILD_CMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
             CMAKE_POLICY_VERSION_MINIMUM='3.28'
           CIBW_ENVIRONMENT_PASS_LINUX: |
+            ASM
             CC
             CXX
             BUILD_TYPE
