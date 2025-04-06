@@ -5,9 +5,8 @@
 **LuxCoreDeps provides the dependencies required to build LuxCore, starting with
 version 2.10.**
 
-LuxCoreDeps is based on Conan dependency manager (https://conan.io/) and Github
-Actions (https://github.com/features/actions). It builds dependency sets for
-the following 4 platforms:
+LuxCoreDeps is based on Conan dependency manager (https://conan.io/). It builds dependency
+sets for the following 4 platforms:
 - Linux
 - Windows
 - MacOS x86_64
@@ -17,8 +16,9 @@ the following 4 platforms:
 
 ### On provider side (LuxCoreDeps)
 LuxCoreDeps populates a Conan cache, by building & installing all the
-dependencies (binaries, headers, profiles, metadata...) required to build
-LuxCore.
+dependencies required to build LuxCore.
+Dependencies encompass binaries, headers, build profiles, metadata...
+
 Once populated, the cache is bundled (`conan cache save`) and published
 in a Github release.
 
@@ -26,8 +26,8 @@ in a Github release.
 In LuxCore, the provided cache is downloaded from the release and
 restored locally (`conan cache restore`), thus making all the dependencies
 available for LuxCore build.
-In LuxCore, cache download and restoration are wrapped in a `make deps`
-statement.
+In LuxCore, cache download and restoration are wrapped in a convenient
+`make deps` statement.
 
 ```mermaid
 flowchart LR
