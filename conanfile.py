@@ -96,7 +96,7 @@ class LuxCoreDeps(ConanFile):
             transitive_headers=True,
         )
 
-        # Header only - make them transitive
+        # Header only deps - make them transitive
         self.requires(
             f"robin-hood-hashing/{ROBINHOOD_VERSION}", transitive_headers=True
         )
@@ -117,19 +117,25 @@ class LuxCoreDeps(ConanFile):
         if self.settings.os in ("Linux", "Windows"):
             self.requires(f"nvrtc/{NVRTC_VERSION}@luxcore/luxcore")
 
-        # Bison/flex
-        # This a build requirement for LuxCore, therefore this must be a full requirement
-        # for LuxCoreDeps (otherwise it won't get saved in cache)
+        # LuxCore build requirements
+        # As they are build requirements for LuxCore, they must be full
+        # requirements for LuxCoreDeps (otherwise it won't get saved in cache)
+
+        # Bison/flex (Luxcore build requirement)
         if self.settings.os == "Windows":
             self.requires("winflexbison/[*]", build=False, run=True, visible=True)
         else:
             self.requires("bison/[*]", build=False, run=True, visible=True)
             self.requires("flex/[*]", build=False, run=True, visible=True)
 
-        # Ninja
-        self.requires(f"ninja/{NINJA_VERSION}", build=False, run=True, visible=True)
+        # Ninja (Luxcore build requirement)
+        self.requires(f"ninja/[*]", build=False, run=True, visible=True)
+
+        # Doxygen (Luxcore build requirement)
+        self.requires(f"doxygen/[*]", build=False, run=True, visible=True)
 
     def build_requirements(self):
+        # LuxCoreDeps build requirements
         self.tool_requires("cmake/[*]")
         self.tool_requires("meson/[*]")
         self.tool_requires("pkgconf/[*]")
