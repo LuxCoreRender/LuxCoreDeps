@@ -96,7 +96,7 @@ how to modify such a file.
 ## Tips & Caveats
 
 ### Where to start - LuxCoreDeps entry points
-The main entry point is `.github/workflows/deps.yml`.
+The main entry point is `.github/workflows/build.yml`.
 Other interesting files may be:
 - `conanfile.py`: Conan script to build dependencies
 - `conan-profiles`: folder with Conan profiles
@@ -106,9 +106,9 @@ LuxCoreDeps follows Semantic Versioning (https://semver.org).
 
 ### Compilation environment
 For Python wheels to be built properly, it is essential that dependencies be built
-by `CIBUILDWHEEL`, with the same environment (compiler version, docker image,
+by `CIBUILDWHEEL`, with the same environment (compiler version, manylinux container,
 etc.) as the one intended for the wheels.
-Please note that it requires to build a fake wheel in LuxCoreDeps.
+Please note that our implementation consists in building a fake wheel in LuxCoreDeps.
 
 ### Local recipes
 Most of Conan recipes used by LuxCoreDeps are to be found in Conan central repository (Conan center).
