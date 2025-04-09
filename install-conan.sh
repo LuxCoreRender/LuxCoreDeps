@@ -30,7 +30,7 @@ function conan_local_install() {
 
 # Script starts here
 
-set -o pipefail
+set -euxo pipefail
 
 if [[ $RUNNER_OS == "Linux" ]]; then
   cache_dir=/conan-cache
