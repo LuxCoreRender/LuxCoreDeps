@@ -12,6 +12,7 @@ ninja/*:build_type=Release
 bison/*:build_type=Release
 flex/*:build_type=Release
 winflexbison/*:build_type=Release
+doxygen/*:build_type=Release
 
 [conf]
 tools.build:verbosity=verbose
