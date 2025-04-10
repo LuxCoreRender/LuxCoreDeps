@@ -57,6 +57,7 @@ if [[ -e $cachefile ]]; then
   conan cache restore $cachefile
 else
   echo "::warning::No cache file $cachefile"
+fi
 echo "::endgroup::"
 
 # Install profiles
