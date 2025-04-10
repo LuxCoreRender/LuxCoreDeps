@@ -41,6 +41,7 @@ jobs:
       CONAN_LOG_LEVEL: ${{ vars.conan_log_level }}  # To be set by caller (act)
       # LUXDEPS_VERSION: to be set by caller, to be used by conanfile.py
       LUXDEPS_VERSION: ${{ inputs.luxdeps-version }}
+      REBUILD_ALL: ${{ inputs.rebuild-all }}
 
 
     steps:
