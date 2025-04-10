@@ -52,7 +52,11 @@ fi
 
 echo "::group::CIBW_BEFORE_BUILD: restore conan cache"
 # Restore conan cache (add -vverbose to debug)
-conan cache restore $cache_dir/conan-cache-save.tgz
+cachefile=$cache_dir/conan-cache-save.tgz
+if [[ -e $cachefile ]]; then
+  conan cache restore $cachefile
+else
+  echo "::warning::No cache file $cachefile"
 echo "::endgroup::"
 
 # Install profiles
