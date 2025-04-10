@@ -163,7 +163,7 @@ jobs:
             core.exportVariable('PKG_ARCH', arch);
 
       - name: Retrieve cached dependencies (All)
-        if: inputs.rebuild-all == False
+        if: ${{ ! inputs.rebuild-all }}
         id: retrieve-cache-deps
         uses: actions/cache/restore@v4
         with:
