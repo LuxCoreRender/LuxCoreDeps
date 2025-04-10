@@ -63,6 +63,7 @@ jobs:
     permissions: read-all
     with:
       luxdeps-version: ${{ inputs.release-version }}
+      rebuild-all: ${{ inputs.rebuild-all }}
 
   create-release:
     name: 'Create release'
