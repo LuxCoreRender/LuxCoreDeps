@@ -106,12 +106,14 @@ cd $WORKSPACE
 conan create $WORKSPACE \
   --profile:all=$CONAN_PROFILE \
   --version=$LUXDEPS_VERSION \
-  --build=missing
+  --build=missing \
+  --build=b2/*
 conan install \
   --requires=luxcoredeps/$LUXDEPS_VERSION@luxcore/luxcore \
   --profile:all=$CONAN_PROFILE \
   --no-remote \
-  --build=missing
+  --build=missing \
+  --build=b2/*
 
 echo "::endgroup::"
 
