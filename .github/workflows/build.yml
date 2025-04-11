@@ -169,7 +169,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: conan-cache
-          key: deps-${{ matrix.os }}-
+          key: deps-${{ matrix.os }}-${{ github.run_id }}
           restore-keys: deps-${{ matrix.os }}-
 
       # Build deps - we rely on cibuildwheel to get the fine settings for build
@@ -276,7 +276,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: conan-cache
-          key: deps-${{ matrix.os }}-${{ hashFiles('**/conan-cache') }}
+          key: deps-${{ matrix.os }}-${{ github.run_id }}
 
       ## For debugging
       #- name: Setup tmate session (debug)
