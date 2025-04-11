@@ -19,6 +19,11 @@ tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX"]
 tools.build:cflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX"]
 embree3/*:tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2"]
 
+# libiconv/*:tools.microsoft.bash:path=C:\msys64\usr\bin\bash.exe
+# libiconv/*:tools.microsoft.bash:subsystem=msys2
+libiconv/*:tools.build:cxxflags=!
+libiconv/*:tools.build:cflags=!
+
 [options]
 # MSVC does not support avx2 nor avx512
 openvdb/*:simd=AVX
