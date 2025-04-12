@@ -112,8 +112,8 @@ jobs:
         with:
           create-symlink: false
           variant: ${{ env.cache-variant }}
-          key: cpl-${{ matrix.os }}-${{ matrix.python-minor}}
-          restore-keys: cpl-${{ matrix.os }}-${{ matrix.python-minor}}-
+          key: ${{ matrix.os }}-${{ github.run_id }}  # Action will prepend 'ccache-'
+          restore-keys: ${{ matrix.os }}-
           max-size: 5G
           verbose: 1
 
