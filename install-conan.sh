@@ -18,11 +18,13 @@ function conan_local_install() {
   conan create \
     --profile:all=$CONAN_PROFILE \
     --build=missing \
+    --remote=mycenter \
     -vnotice \
     $WORKSPACE/local-conan-recipes/$name
   conan install \
     --profile:all=$CONAN_PROFILE \
     --build=missing \
+    --remote=mycenter \
     -vnotice \
     $WORKSPACE/local-conan-recipes/$name
 }
@@ -41,6 +43,15 @@ fi
 echo "::group::CIBW_BEFORE_BUILD: pip"
 pip install conan
 pip install ninja
+echo "::endgroup::"
+
+# https://docs.conan.io/2/devops/devops_local_recipes_index.html
+# Add the mycenter remote pointing to the local folder
+# This allows to decide which packages are built from sources (remote=mycenter)
+# and which ones use precompiled binaries (remote=conancenter)
+echo "::group::CIBW_BEFORE_BUILD: local recipes index repository"
+git clone https://github.com/conan-io/conan-center-index
+conan remote add mycenter ./conan-center-index
 echo "::endgroup::"
 
 if [[ "$RUNNER_OS" == "Linux" ]]; then
@@ -101,22 +112,27 @@ else
   DEPLOY_PATH=$WORKSPACE
 fi
 
-echo "::group::CIBW_BEFORE_BUILD: LuxCore Deps"
+echo "::group::CIBW_BEFORE_BUILD: Install tool requirements"
+# We allow to use precompiled binaries
+build_deps=(b2 cmake m4 meson pkgconf yasm)
+for d in "${build_deps[@]}"; do
+  conan install \
+    --tool-requires=${d}/[*] \
+    --profile:all=$CONAN_PROFILE \
+    --build=missing \
+    --remote=conancenter \
+    --build=b2/*
+done
+echo "::endgroup::"
+
+echo "::group::CIBW_BEFORE_BUILD: Create LuxCore Deps"
 cd $WORKSPACE
+# Create package (without using conancenter precompiled binaries)
 conan create $WORKSPACE \
   --profile:all=$CONAN_PROFILE \
   --version=$LUXDEPS_VERSION \
-  --build=missing \
-  --build=b2/* \
-  --build=libiconv/*
-conan install \
-  --requires=luxcoredeps/$LUXDEPS_VERSION@luxcore/luxcore \
-  --profile:all=$CONAN_PROFILE \
-  --no-remote \
-  --build=missing \
-  --build=b2/* \
-  --build=libiconv/*
-
+  --remote=mycenter \
+  --build=missing
 echo "::endgroup::"
 
 echo "::group::Saving dependencies in ${cache_dir}"
