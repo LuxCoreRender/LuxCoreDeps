@@ -144,6 +144,7 @@ class OpenSubdivConan(ConanFile):
         tc.variables["NO_GLTESTS"] = True
         tc.variables["NO_MACOS_FRAMEWORK"] = True
         tc.cache_variables["CMAKE_VERBOSE_MAKEFILE"] = True
+        tc.cache_variables["OPENMP_FOUND"] = True  # Force OpenMP
         tc.generate()
 
         deps = CMakeDeps(self)
