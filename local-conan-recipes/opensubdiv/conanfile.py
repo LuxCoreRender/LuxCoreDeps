@@ -158,7 +158,7 @@ class OpenSubdivConan(ConanFile):
                 self,
                 os.path.join(self.source_folder, "opensubdiv", "osd", "CMakeLists.txt"),
                 "target_link_libraries(osd_cpu_obj",
-                "target_link_libraries(osd_cpu_obj llvm-openmp::llvm-openmp"
+                "target_link_libraries(osd_cpu_obj OpenMP::OpenMP",
             )
         # No warnings as errors
         replace_in_file(self, os.path.join(self.source_folder, "CMakeLists.txt"), "/WX", "")

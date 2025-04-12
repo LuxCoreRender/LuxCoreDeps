@@ -255,7 +255,10 @@ jobs:
             #dnf -y install cuda-nvrtc-12-8
             #dnf repoquery -l cuda-nvrtc-12-8
 
-          CIBW_BEFORE_ALL_MACOS: brew install ispc
+          CIBW_BEFORE_ALL_MACOS: |
+            brew install ispc
+            brew install llvm
+            export PATH="/usr/local/opt/llvm/bin:$PATH"
 
           CIBW_BEFORE_BUILD: bash ${{ env.WORKSPACE }}/install-conan.sh
 
