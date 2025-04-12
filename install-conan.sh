@@ -32,7 +32,7 @@ function conan_local_install() {
 
 set -euxo pipefail
 
-if [[ $RUNNER_OS == "Linux" ]]; then
+if [[ "$RUNNER_OS" == "Linux" ]]; then
   cache_dir=/conan-cache
 else
   cache_dir=$WORKSPACE/conan-cache
@@ -43,7 +43,7 @@ pip install conan
 pip install ninja
 echo "::endgroup::"
 
-if [[ $RUNNER_OS == "Linux" ]]; then
+if [[ "$RUNNER_OS" == "Linux" ]]; then
   # ispc
   echo "::group::CIBW_BEFORE_BUILD: ispc"
   source /opt/intel/oneapi/ispc/latest/env/vars.sh
@@ -69,7 +69,7 @@ conan config install-pkg -vvv luxcoreconf/$LUXDEPS_VERSION@luxcore/luxcore
 echo "::endgroup::"
 
 # Install local packages
-if [[ $RUNNER_OS == "Linux" || $RUNNER_OS == "Windows" ]]; then
+if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "Windows" ]]; then
   echo "::group::CIBW_BEFORE_BUILD: nvrtc"
   conan_local_install nvrtc
   echo "::endgroup::"
