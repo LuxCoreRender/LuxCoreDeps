@@ -115,6 +115,9 @@ fi
 echo "::group::CIBW_BEFORE_BUILD: Install tool requirements"
 # We allow to use precompiled binaries
 build_deps=(b2 cmake m4 meson pkgconf yasm)
+if [[ $RUNNER_OS == "Windows" ]]; then
+  build_deps+=(msys2)
+fi
 for d in "${build_deps[@]}"; do
   conan install \
     --tool-requires=${d}/[*] \
