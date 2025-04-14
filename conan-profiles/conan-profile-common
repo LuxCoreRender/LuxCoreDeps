@@ -25,6 +25,7 @@ cmake/*
 meson/*
 pkgconf/*
 yasm/*
+doxygen/*
 
 [options]
 oidn/*:shared=True
