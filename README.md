@@ -66,7 +66,7 @@ sources provides the following benefits:
 - Dependency source code can be patched if needed.
 
 LuxCoreDeps is exclusively intended to be run in continuous integration by
-Github Actions. The main execution script is `.github/workflows/deps.yml`.
+Github Actions.
 
 To trigger dependency build & publish, use **LuxCore Dependency Releaser** action,
 with `Run workflow` button:
@@ -89,7 +89,7 @@ _(For admin only - requires appropriate rights on repository)_
 Dependencies can be added or upgraded in LuxCoreDeps by upgrading the `conanfile.py`
 file, located in the repository root.
 
-Please refer to the Conan documentation for syntax of `conanfile.py` and instructions
+Please refer to Conan documentation for syntax of `conanfile.py` and instructions
 how to modify such a file.
 
 
@@ -108,7 +108,7 @@ LuxCoreDeps follows Semantic Versioning (https://semver.org).
 For Python wheels to be built properly, it is essential that dependencies be built
 by `CIBUILDWHEEL`, with the same environment (compiler version, manylinux container,
 etc.) as the one intended for the wheels.
-Please note that our implementation consists in building a fake wheel in LuxCoreDeps.
+Our implementation to fulfill this requirement consists in building a fake wheel in LuxCoreDeps.
 
 ### Local recipes
 Most of Conan recipes used by LuxCoreDeps are to be found in Conan central repository (Conan center).
