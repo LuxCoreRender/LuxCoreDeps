@@ -146,6 +146,7 @@ conan graph info \
   --requires=luxcoredeps/$LUXDEPS_VERSION@luxcore/luxcore \
   --requires=luxcoreconf/$LUXDEPS_VERSION@luxcore/luxcore \
   --format=json \
+  --remote=mycenter \
   --profile:all=$CONAN_PROFILE \
   > graph.json
 conan list --graph=graph.json --format=json --graph-binaries=Cache > list.json
