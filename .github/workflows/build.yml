@@ -275,7 +275,7 @@ jobs:
             # Install conan
             if [[ "$RUNNER_OS" == "Windows" ]]; then
               CONAN=conan.exe
-              PIPX_HOME=/d/a/LuxCoreDeps/LuxCoreDeps/pipx
+              PIPX_HOME=${{ env.WORKSPACE }}/pipx
             else
               CONAN=conan
             fi
@@ -284,8 +284,8 @@ jobs:
             pipx install --quiet conan
 
             # Clean cache and load archive
-            $CONAN remove -vquiet -c "*"  # Clean cache
-            $CONAN cache restore -vquiet ${{ github.workspace }}/conan-cache/conan-cache-save.tgz
+            $CONAN remove -c "*"
+            $CONAN cache restore ${{ env.WORKSPACE }}/conan-cache/conan-cache-save.tgz
 
             echo "**********************"
             echo "Conan archive content:"
