@@ -280,14 +280,14 @@ jobs:
               CONAN=conan
             fi
 
-            pipx ensurepath
+            pipx ensurepath --force
             pipx install --quiet conan
 
             # Clean cache and load archive
-            $CONAN remove -vquiet -c "*" > /dev/null  # Clean cache
-            $CONAN cache restore -vquiet ${{ github.workspace }}/conan-cache/conan-cache-save.tgz > /dev/null
+            $CONAN remove -vquiet -c "*"  # Clean cache
+            $CONAN cache restore -vquiet ${{ github.workspace }}/conan-cache/conan-cache-save.tgz
 
-            echo ""
+            echo "**********************"
             echo "Conan archive content:"
             $CONAN list -f compact
 
