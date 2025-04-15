@@ -273,13 +273,14 @@ jobs:
         shell: bash
         run: |
             # Install conan
-            PIPX_HOME=/d/a/LuxCoreDeps/LuxCoreDeps/pipx
-            pipx install --quiet conan
             if [[ "$RUNNER_OS" == "Windows" ]]; then
               CONAN=conan.exe
+              PIPX_HOME=/d/a/LuxCoreDeps/LuxCoreDeps/pipx
             else
               CONAN=conan
             fi
+            
+            pipx install --quiet conan
 
             # Clean cache and load archive
             $CONAN remove -vquiet -c "*" > /dev/null  # Clean cache
