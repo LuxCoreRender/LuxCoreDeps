@@ -279,7 +279,8 @@ jobs:
             else
               CONAN=conan
             fi
-            
+
+            pipx ensurepath
             pipx install --quiet conan
 
             # Clean cache and load archive
