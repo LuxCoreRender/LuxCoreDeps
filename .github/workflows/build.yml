@@ -256,6 +256,7 @@ jobs:
           CIBW_BEFORE_BUILD: bash ${{ env.WORKSPACE }}/install-conan.sh
 
           CIBW_REPAIR_WHEEL_COMMAND: ''
+
           CIBW_CONTAINER_ENGINE: >
             docker;
             create_args:
@@ -267,6 +268,25 @@ jobs:
             output-dir: wheelhouse
             config-file: "{package}/pyproject.toml"
 
+      - name: Check conan archive content
+        if: ${{ !env.ACT }}
+        shell: bash
+        run: |
+            # Install conan
+            pipx install --quiet conan
+            if [[ "$RUNNER_OS" == "Windows" ]]; then
+              CONAN=conan.exe
+            else
+              CONAN=conan
+            fi
+
+            # Clean cache and load archive
+            $CONAN remove -vquiet -c "*" > /dev/null  # Clean cache
+            $CONAN cache restore -vquiet ${{ github.workspace }}/conan-cache/conan-cache-save.tgz > /dev/null
+
+            echo ""
+            echo "Conan archive content:"
+            $CONAN list -f compact
 
       - name: Save dependency cache
         if: always()
