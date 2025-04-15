@@ -273,9 +273,9 @@ jobs:
         shell: bash
         run: |
             # Install conan
+            PIPX_HOME=/d/a/LuxCoreDeps/LuxCoreDeps/pipx
             pipx install --quiet conan
             if [[ "$RUNNER_OS" == "Windows" ]]; then
-              PIPX_HOME=/c/a/pipx
               CONAN=conan.exe
             else
               CONAN=conan
