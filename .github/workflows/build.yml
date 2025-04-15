@@ -276,8 +276,10 @@ jobs:
             if [[ "$RUNNER_OS" == "Windows" ]]; then
               CONAN=conan.exe
               PIPX_HOME=${{ env.WORKSPACE }}/pipx
+              CONANCACHE=${{ env.WORKSPACE }}/conan-cache
             else
               CONAN=conan
+              CONANCACHE=${{ github.workspace}}/conan-cache
             fi
 
             pipx ensurepath --force
@@ -285,7 +287,7 @@ jobs:
 
             # Clean cache and load archive
             $CONAN remove -c "*" > /dev/null
-            $CONAN cache restore ${{ env.WORKSPACE }}/conan-cache/conan-cache-save.tgz > /dev/null
+            $CONAN cache restore $CONANCACHE/conan-cache-save.tgz > /dev/null
 
             echo "**********************"
             echo "Conan archive content:"
