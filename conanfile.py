@@ -132,7 +132,9 @@ class LuxCoreDeps(ConanFile):
         self.requires(f"ninja/[*]", build=False, run=True, visible=True)
 
         # Doxygen (Luxcore build requirement)
-        self.requires(f"doxygen/[*]", build=False, run=True, visible=True)
+        self.requires(f"doxygen/1.13.2", build=False, run=True, visible=True)
+        self.requires(f"xapian-core/1.4.19", build=False, run=False, visible=True)
+        self.requires(f"libiconv/1.17", build=False, run=False, visible=True)
 
     def build_requirements(self):
         # LuxCoreDeps build requirements
