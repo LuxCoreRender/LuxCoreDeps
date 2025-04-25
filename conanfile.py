@@ -13,6 +13,7 @@ import os
 # (in alphabetic order)
 BLENDER_VERSION = "4.2.3"
 BOOST_VERSION = "1.84.0"
+DOXYGEN_VERSION = "1.13.2"
 EIGEN_VERSION = "3.4.0"
 EMBREE3_VERSION = "3.13.5"
 FMT_VERSION = "11.0.2"
@@ -22,21 +23,22 @@ IMGUI_VERSION = "1.91.8"
 IMGUIFILEDIALOG_VERSION = "0.6.7"
 JSON_VERSION = "3.11.3"
 LIBDEFLATE_VERSION = "1.22"
+LIBICONV_VERSION = "1.17"
 LLVM_OPENMP_VERSION = "17.0.6"
 MINIZIP_VERSION = "4.0.3"
 NINJA_VERSION = "1.12.1"
 NVRTC_VERSION = "12.8.61"
 OCIO_VERSION = "2.4.2"
-OIDN_VERSION = "2.3.1"
-OIIO_VERSION = "2.5.16.0"
-OPENEXR_VERSION = "3.3.3"
 OIIO_VERSION = "2.5.18.0"
+OIDN_VERSION = "2.3.1"
+OPENEXR_VERSION = "3.3.3"
 OPENSUBDIV_VERSION = "3.6.0"
 OPENVDB_VERSION = "11.0.0"
 PYBIND11_VERSION = "2.13.6"
 ROBINHOOD_VERSION = "3.11.5"
 SPDLOG_VERSION = "1.15.0"
 TBB_VERSION = "2021.12.0"
+XAPIAN_CORE_VERSION = "1.4.19"
 ZSTD_VERSION = "1.5.7"
 
 
@@ -119,7 +121,7 @@ class LuxCoreDeps(ConanFile):
 
         # LuxCore build requirements
         # As they are build requirements for LuxCore, they must be full
-        # requirements for LuxCoreDeps (otherwise it won't get saved in cache)
+        # requirements for LuxCoreDeps (otherwise they won't get saved in cache)
 
         # Bison/flex (Luxcore build requirement)
         if self.settings.os == "Windows":
@@ -129,12 +131,12 @@ class LuxCoreDeps(ConanFile):
             self.requires("flex/[*]", build=False, run=True, visible=True)
 
         # Ninja (Luxcore build requirement)
-        self.requires(f"ninja/[*]", build=False, run=True, visible=True)
+        self.requires("ninja/[*]", build=False, run=True, visible=True)
 
         # Doxygen (Luxcore build requirement)
-        self.requires(f"doxygen/1.13.2", build=False, run=True, visible=True)
-        self.requires(f"xapian-core/1.4.19", build=False, run=False, visible=True)
-        self.requires(f"libiconv/1.17", build=False, run=False, visible=True)
+        self.requires(f"doxygen/{DOXYGEN_VERSION}", build=False, run=True, visible=True)
+        self.requires(f"xapian-core/{XAPIAN_CORE_VERSION}", build=False, run=False, visible=True)
+        self.requires(f"libiconv/{LIBICONV_VERSION}", build=False, run=False, visible=True)
 
     def build_requirements(self):
         # LuxCoreDeps build requirements
