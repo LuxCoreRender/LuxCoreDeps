@@ -15,7 +15,6 @@ winflexbison/*:build_type=Release
 doxygen/*:build_type=Release
 
 [conf]
-tools.build:verbosity=verbose
 tools.system.package_manager:mode=install
 tools.deployer:symlinks=True
 tools.build:skip_test=True
