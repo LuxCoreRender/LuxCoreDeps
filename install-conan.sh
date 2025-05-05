@@ -150,5 +150,6 @@ conan graph info \
   --profile:all=$CONAN_PROFILE \
   > graph.json
 conan list --graph=graph.json --format=json --graph-binaries=Cache > list.json
-conan cache save -vverbose --file=$cache_dir/conan-cache-save.tgz --list=list.json
+conan cache save -vverbose --file=${cache_dir}/conan-cache-save.tgz --list=list.json
+ls $cache_dir
 echo "::endgroup::"
