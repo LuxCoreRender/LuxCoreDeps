@@ -8,6 +8,8 @@ import os
 
 required_conan_version = ">=1.54.0"
 
+# Gather here the various dependency versions, for convenience
+TBB_VERSION = "2022.0.0"
 
 class OpenSubdivConan(ConanFile):
     name = "opensubdiv"
@@ -89,7 +91,7 @@ class OpenSubdivConan(ConanFile):
             if Version(self.version) < "3.6.0":
                 self.requires("onetbb/2020.3.3", transitive_headers=True)
             else:
-                self.requires("onetbb/2021.10.0", transitive_headers=True)
+                self.requires("onetbb/2022.0.0", transitive_headers=True)
 
         # For Macos, we rely on llvm openmp
         if self.options.with_omp and self.settings.os == "Macos":

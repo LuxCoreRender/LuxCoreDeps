@@ -30,7 +30,6 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-13, macos-14]
     env:
-      VERSION: '2.10'
       BUILD_TYPE: Release
       # SANITIZE: true # uncomment to sanitize
       CXX_VERSION: 20
@@ -177,6 +176,7 @@ jobs:
               arch='armv8';
             }
             core.exportVariable('MACOSX_DEPLOYMENT_TARGET', target);
+            core.exportVariable('CMAKE_OSX_DEPLOYMENT_TARGET', target);
             core.exportVariable('PKG_ARCH', arch);
 
       #***********************************#

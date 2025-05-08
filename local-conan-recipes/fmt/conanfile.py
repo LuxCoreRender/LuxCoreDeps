@@ -22,7 +22,7 @@ class FmtConan(ConanFile):
     topics = ("format", "iostream", "printf")
     package_type = "library"
     settings = "os", "arch", "compiler", "build_type"
-    version = "11.0.2"
+    version = "11.2.0"
     options = {
         "header_only": [True, False],
         "shared": [True, False],
