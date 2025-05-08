@@ -196,10 +196,17 @@ jobs:
         shell: bash
         run: |
             brew install ispc
-            #brew install llvm
-            #export PATH="/usr/local/opt/llvm/bin:$PATH"
+            brew install llvm@20
+            LLVM_PREFIX=$(brew --prefix llvm@20)
+            export PATH="$LLVM_PREFIX/bin:$PATH"
+            export CC=clang
+            export CXX=clang++
+            export LD=ld.lld
+            export AR=llvm-ar
+            export RANLIB=llvm-ranlib
+            export CONAN_DISABLE_CHECK_COMPILER=1
 
-            bash ${{ env.WORKSPACE }}/install-conan.sh
+            source ${{ env.WORKSPACE }}/install-conan.sh
 
       - name: Build (Linux)
         if: runner.os == 'Linux'
