@@ -53,7 +53,7 @@ class LuxCoreDeps(ConanFile):
         f"openvdb/{OPENVDB_VERSION}",
         f"embree3/{EMBREE3_VERSION}",
         f"oidn/{OIDN_VERSION}@luxcore/luxcore",
-        f"opensubdiv/{OPENSUBDIV_VERSION}@luxcore/luxcore",
+        f"opensubdiv/{OPENSUBDIV_VERSION}",
         f"openimageio/{OIIO_VERSION}",
         f"imgui/{IMGUI_VERSION}",
         f"glfw/{GLFW_VERSION}",
@@ -120,11 +120,6 @@ class LuxCoreDeps(ConanFile):
             force=True,
             transitive_headers=True,
         )
-
-        # TODO
-        # # Macos OpenMP
-        # if self.settings.os == "Macos":
-            # self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}", force=True)
 
         # nvrtc
         if self.settings.os in ("Linux", "Windows"):

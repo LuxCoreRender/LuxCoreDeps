@@ -13,6 +13,7 @@ compiler.libcxx=libc++
 minizip-ng/*:with_zlib=True
 minizip-ng/*:with_libcomp=False
 openvdb/*:simd=AVX
+opensubdiv/*:with_metal=False
 
 [buildenv]
 CXX=clang++

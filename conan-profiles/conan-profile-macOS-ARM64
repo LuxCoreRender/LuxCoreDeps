@@ -2,7 +2,8 @@ include(conan-profile-common)
 
 [settings]
 os=Macos
-os.version=11.0
+# 14.2 is required by opensubdiv for metal
+os.version=14.2
 arch=armv8
 compiler=apple-clang
 compiler.version=15
