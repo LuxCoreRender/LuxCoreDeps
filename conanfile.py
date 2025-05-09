@@ -121,9 +121,10 @@ class LuxCoreDeps(ConanFile):
             transitive_headers=True,
         )
 
-        # Macos OpenMP
-        if self.settings.os == "Macos":
-            self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}", force=True)
+        # TODO
+        # # Macos OpenMP
+        # if self.settings.os == "Macos":
+            # self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}", force=True)
 
         # nvrtc
         if self.settings.os in ("Linux", "Windows"):

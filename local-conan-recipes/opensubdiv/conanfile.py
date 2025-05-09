@@ -93,9 +93,10 @@ class OpenSubdivConan(ConanFile):
             else:
                 self.requires("onetbb/2022.0.0", transitive_headers=True)
 
-        # For Macos, we rely on llvm openmp
-        if self.options.with_omp and self.settings.os == "Macos":
-            self.requires("llvm-openmp/[*]", transitive_headers=True, transitive_libs=True)
+        # TODO
+        # # For Macos, we rely on llvm openmp
+        # if self.options.with_omp and self.settings.os == "Macos":
+            # self.requires("llvm-openmp/[*]", transitive_headers=True, transitive_libs=True)
 
     def validate(self):
         if self.settings.compiler.get_safe("cppstd"):
