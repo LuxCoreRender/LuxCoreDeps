@@ -13,10 +13,6 @@ compiler.libcxx=libc++
 minizip-ng/*:with_zlib=True
 minizip-ng/*:with_libcomp=False
 openvdb/*:simd=AVX
-embree3/*:avx2=False
-embree3/*:avx512=False
-embree3/*:geometry_curve=False
-embree3/*:geometry_subdivision=False
 
 [buildenv]
 CXX=clang++
