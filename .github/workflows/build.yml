@@ -196,9 +196,6 @@ jobs:
         shell: bash
         run: |
             brew install ispc
-            #brew install llvm
-            #export PATH="/usr/local/opt/llvm/bin:$PATH"
-
             bash ${{ env.WORKSPACE }}/install-conan.sh
 
       - name: Build (Linux)
