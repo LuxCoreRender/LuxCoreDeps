@@ -90,11 +90,6 @@ class LuxCoreDeps(ConanFile):
             force=True,
         )
         self.requires(
-            f"fmt/{FMT_VERSION}@luxcore/luxcore",
-            force=True,
-            transitive_headers=True,
-        )
-        self.requires(
             f"imath/{IMATH_VERSION}",
             override=True,
         )

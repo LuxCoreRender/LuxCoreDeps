@@ -90,10 +90,6 @@ echo "::group::CIBW_BEFORE_BUILD: imguifiledialog"
 conan_local_install imguifiledialog
 echo "::endgroup::"
 
-echo "::group::CIBW_BEFORE_BUILD: fmt"
-conan_local_install fmt
-echo "::endgroup::"
-
 echo "::group::CIBW_BEFORE_BUILD: OIDN"
 conan_local_install oidn
 echo "::endgroup::"
