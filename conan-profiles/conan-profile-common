@@ -37,6 +37,7 @@ embree3/*:neon=True
 opensubdiv/*:with_tbb=True
 fmt/*:header_only=True
 spdlog/*:header_only=True
+spdlog/*:use_std_fmt=True
 nvrtc/*:shared=True
 
 openimageio/*:with_freetype=False
