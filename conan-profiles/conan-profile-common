@@ -37,10 +37,16 @@ embree3/*:neon=True
 opensubdiv/*:with_tbb=True
 fmt/*:header_only=True
 spdlog/*:header_only=True
-openimageio/*:with_ffmpeg=False
-openimageio/*:with_libheif=False
 nvrtc/*:shared=True
 
+openimageio/*:with_freetype=False
+openimageio/*:with_hdf5=False
+openimageio/*:with_ffmpeg=False
+openimageio/*:with_libheif=False
+openimageio/*:with_ptex=False
+openimageio/*:with_opencv=False
+openimageio/*:with_libwebp=True
+openimageio/*:with_tbb=True
 
 # boost/*:without_atomic=True
 boost/*:without_charconv=True
