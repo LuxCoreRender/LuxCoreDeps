@@ -11,11 +11,11 @@ from conan import ConanFile
 from conan.tools.scm import Git
 
 # Gather here the various dependency versions, for convenience
-TBB_VERSION = "2021.12.0"
+TBB_VERSION = "2022.0.0"
 
 class OidnConan(ConanFile):
     name = "oidn"
-    version = "2.3.1"
+    version = "2.3.3"
     user = "luxcore"
     channel = "luxcore"
     settings = "os", "arch", "compiler", "build_type"

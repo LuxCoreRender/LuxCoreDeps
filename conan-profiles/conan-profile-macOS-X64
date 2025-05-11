@@ -9,10 +9,16 @@ compiler.version=14.0
 compiler.cppstd={{ os.getenv("CXX_VERSION") }}
 compiler.libcxx=libc++
 
+spdlog/*:compiler=clang
+spdlog/*:compiler.version=20
+spdlog/*:compiler.cppstd={{ os.getenv("CXX_VERSION") }}
+spdlog/*:compiler.libcxx=libc++
+
 [options]
 minizip-ng/*:with_zlib=True
 minizip-ng/*:with_libcomp=False
 openvdb/*:simd=AVX
+opensubdiv/*:with_metal=False
 
 [buildenv]
 CXX=clang++

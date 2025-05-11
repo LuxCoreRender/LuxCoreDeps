@@ -10,9 +10,7 @@ compiler.runtime=dynamic
 doxygen/*:arch=x86_64
 doxygen/*:build_type=Release
 doxygen/*:compiler.cppstd=17
-doxygen/*:compiler.runtime=dynamic
 doxygen/*:compiler.runtime_type=Release
-doxygen/*:compiler.version=193
 xapian-core/*:compiler.cppstd=14
 
 [conf]

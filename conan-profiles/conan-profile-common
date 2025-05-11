@@ -15,7 +15,6 @@ winflexbison/*:build_type=Release
 doxygen/*:build_type=Release
 
 [conf]
-tools.build:verbosity=verbose
 tools.system.package_manager:mode=install
 tools.deployer:symlinks=True
 tools.build:skip_test=True
@@ -36,13 +35,18 @@ embree3/*:sse42=True
 embree3/*:avx=True
 embree3/*:neon=True
 opensubdiv/*:with_tbb=True
-opensubdiv/*:with_omp=True
-fmt/*:header_only=True
 spdlog/*:header_only=True
-openimageio/*:with_ffmpeg=False
-openimageio/*:with_libheif=False
+spdlog/*:use_std_fmt=True
 nvrtc/*:shared=True
 
+openimageio/*:with_freetype=False
+openimageio/*:with_hdf5=False
+openimageio/*:with_ffmpeg=False
+openimageio/*:with_libheif=False
+openimageio/*:with_ptex=False
+openimageio/*:with_opencv=False
+openimageio/*:with_libwebp=True
+openimageio/*:with_tbb=True
 
 # boost/*:without_atomic=True
 boost/*:without_charconv=True

@@ -90,14 +90,6 @@ echo "::group::CIBW_BEFORE_BUILD: imguifiledialog"
 conan_local_install imguifiledialog
 echo "::endgroup::"
 
-echo "::group::CIBW_BEFORE_BUILD: fmt"
-conan_local_install fmt
-echo "::endgroup::"
-
-echo "::group::CIBW_BEFORE_BUILD: opensubdiv"
-conan_local_install opensubdiv
-echo "::endgroup::"
-
 echo "::group::CIBW_BEFORE_BUILD: OIDN"
 conan_local_install oidn
 echo "::endgroup::"
@@ -150,5 +142,6 @@ conan graph info \
   --profile:all=$CONAN_PROFILE \
   > graph.json
 conan list --graph=graph.json --format=json --graph-binaries=Cache > list.json
-conan cache save -vverbose --file=$cache_dir/conan-cache-save.tgz --list=list.json
+conan cache save -vverbose --file=${cache_dir}/conan-cache-save.tgz --list=list.json
+ls $cache_dir
 echo "::endgroup::"

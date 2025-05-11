@@ -12,33 +12,33 @@ import os
 # Gather here the various dependency versions, for convenience
 # (in alphabetic order)
 BLENDER_VERSION = "4.2.3"
-BOOST_VERSION = "1.84.0"
+BOOST_VERSION = "1.87.0"
 DOXYGEN_VERSION = "1.13.2"
 EIGEN_VERSION = "3.4.0"
 EMBREE3_VERSION = "3.13.5"
-FMT_VERSION = "11.0.2"
+FMT_VERSION = "11.2.0"
 GLFW_VERSION = "3.4"
-IMATH_VERSION = "3.1.9"
+IMATH_VERSION = "3.1.12"
 IMGUI_VERSION = "1.91.8"
 IMGUIFILEDIALOG_VERSION = "0.6.7"
-JSON_VERSION = "3.11.3"
-LIBDEFLATE_VERSION = "1.22"
-LIBICONV_VERSION = "1.17"
+JSON_VERSION = "3.12.0"
+LIBDEFLATE_VERSION = "1.23"
+LIBICONV_VERSION = "1.18"
 LLVM_OPENMP_VERSION = "17.0.6"
-MINIZIP_VERSION = "4.0.3"
+MINIZIP_VERSION = "4.0.7"
 NINJA_VERSION = "1.12.1"
-NVRTC_VERSION = "12.8.61"
+NVRTC_VERSION = "12.9.41"
 OCIO_VERSION = "2.4.2"
 OIIO_VERSION = "2.5.18.0"
-OIDN_VERSION = "2.3.1"
+OIDN_VERSION = "2.3.3"
 OPENEXR_VERSION = "3.3.3"
 OPENSUBDIV_VERSION = "3.6.0"
 OPENVDB_VERSION = "11.0.0"
 PYBIND11_VERSION = "2.13.6"
 ROBINHOOD_VERSION = "3.11.5"
-SPDLOG_VERSION = "1.15.0"
-TBB_VERSION = "2021.12.0"
-XAPIAN_CORE_VERSION = "1.4.19"
+SPDLOG_VERSION = "1.15.1"
+TBB_VERSION = "2022.0.0"
+XAPIAN_CORE_VERSION = "1.4.24"
 ZSTD_VERSION = "1.5.7"
 
 
@@ -50,13 +50,10 @@ class LuxCoreDeps(ConanFile):
     channel = "luxcore"
 
     requires = [
-        f"minizip-ng/{MINIZIP_VERSION}",
-        f"boost/{BOOST_VERSION}",
         f"openvdb/{OPENVDB_VERSION}",
         f"embree3/{EMBREE3_VERSION}",
         f"oidn/{OIDN_VERSION}@luxcore/luxcore",
-        f"opensubdiv/{OPENSUBDIV_VERSION}@luxcore/luxcore",
-        f"imath/{IMATH_VERSION}",
+        f"opensubdiv/{OPENSUBDIV_VERSION}",
         f"openimageio/{OIIO_VERSION}",
         f"imgui/{IMGUI_VERSION}",
         f"glfw/{GLFW_VERSION}",
@@ -93,9 +90,12 @@ class LuxCoreDeps(ConanFile):
             force=True,
         )
         self.requires(
-            f"fmt/{FMT_VERSION}@luxcore/luxcore",
-            force=True,
-            transitive_headers=True,
+            f"imath/{IMATH_VERSION}",
+            override=True,
+        )
+        self.requires(
+            f"minizip-ng/{MINIZIP_VERSION}",
+            override=True,
         )
 
         # Header only deps - make them transitive
@@ -110,10 +110,11 @@ class LuxCoreDeps(ConanFile):
             f"blender-types/{BLENDER_VERSION}@luxcore/luxcore",
             transitive_headers=True,
         )
-
-        # Macos OpenMP
-        if self.settings.os == "Macos":
-            self.requires(f"llvm-openmp/{LLVM_OPENMP_VERSION}")
+        self.requires(
+            f"boost/{BOOST_VERSION}",
+            force=True,
+            transitive_headers=True,
+        )
 
         # nvrtc
         if self.settings.os in ("Linux", "Windows"):
@@ -135,8 +136,14 @@ class LuxCoreDeps(ConanFile):
 
         # Doxygen (Luxcore build requirement)
         self.requires(f"doxygen/{DOXYGEN_VERSION}", build=False, run=True, visible=True)
-        self.requires(f"xapian-core/{XAPIAN_CORE_VERSION}", build=False, run=False, visible=True)
-        self.requires(f"libiconv/{LIBICONV_VERSION}", build=False, run=False, visible=True)
+        self.requires(
+            f"xapian-core/{XAPIAN_CORE_VERSION}",
+            build=False,
+            run=False,
+            visible=True,
+            force=True,
+        )
+        self.requires(f"libiconv/{LIBICONV_VERSION}", build=False, run=False, visible=True, override=True)
 
     def build_requirements(self):
         # LuxCoreDeps build requirements
