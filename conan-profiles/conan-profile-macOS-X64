@@ -2,11 +2,10 @@ include(conan-profile-common)
 
 [settings]
 os=Macos
-# 13.0 is required by libomp
-os.version=13.0
+os.version=10.15
 arch=x86_64
 compiler=apple-clang
-compiler.version=15
+compiler.version=14.0
 compiler.cppstd={{ os.getenv("CXX_VERSION") }}
 compiler.libcxx=libc++
 
@@ -22,22 +21,9 @@ openvdb/*:simd=AVX
 opensubdiv/*:with_metal=False
 
 [buildenv]
-# https://www.gnu.org/software/make/manual/make.html#index-AR
-CXX=/usr/local/opt/llvm/bin/clang++
-CC=/usr/local/opt/llvm/bin/clang
-AR=/usr/local/opt/llvm/bin/llvm-ar
-RANLIB=/usr/local/opt/llvm/bin/llvm-ranlib
-LD=/usr/local/opt/llvm/bin/ld.lld
-OBJCOPY=/usr/local/opt/llvm/bin/llvm-objcopy
-OBJDUMP=/usr/local/opt/llvm/bin/llvm-objdump
-OTOOL=/usr/local/opt/llvm/bin/llvm-otool
-NM=/usr/local/opt/llvm/bin/llvm-nm
-LIBTOOL=/usr/local/opt/llvm/bin/llvm-libtool-darwin
-LIPO=/usr/local/opt/llvm/bin/llvm-lipo
-STRIP=/usr/local/opt/llvm/bin/llvm-strip
-
+CXX=clang++
+CC=clang
 
 [conf]
 &:tools.build:cxxflags+=["-ftree-vectorize", "-march=x86-64-v3", "-O3", "-mno-avx2"]
-&:tools.build:verbosity=verbose
 # NB: Github MacOS X64 runner does not support avx2 nor avx512

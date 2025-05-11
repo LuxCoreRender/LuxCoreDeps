@@ -168,11 +168,11 @@ jobs:
         with:
           script: |
             if ('${{ runner.arch }}' == 'X64') {
-              target = '13.0';
+              target = '10.15';
               arch='x86_64';
             }
             else {
-              target = '14.2';
+              target = '12.0';
               arch='armv8';
             }
             core.exportVariable('MACOSX_DEPLOYMENT_TARGET', target);
@@ -196,16 +196,7 @@ jobs:
         shell: bash
         run: |
             brew install ispc
-            brew install llvm
-            brew install libomp
-
-            T=$(brew --prefix llvm)
-            ln -s $T/bin/llvm-install-name-tool $T/bin/install_name_tool
-
-            PATH=$T/bin:$PATH
-            export PATH
-
-            source ${{ env.WORKSPACE }}/install-conan.sh
+            bash ${{ env.WORKSPACE }}/install-conan.sh
 
       - name: Build (Linux)
         if: runner.os == 'Linux'
@@ -406,10 +397,10 @@ jobs:
           path: conan-cache
           key: deps-${{ matrix.os }}-${{ github.run_id }}
 
-      # For debugging
-      - name: Setup tmate session (debug)
-        if: ${{ failure() }}
-        uses: mxschmitt/action-tmate@v3
+      ## For debugging
+      #- name: Setup tmate session (debug)
+        #if: ${{ failure() }}
+        #uses: mxschmitt/action-tmate@v3
 
       # Upload artifacts
       - uses: actions/upload-artifact@v4
