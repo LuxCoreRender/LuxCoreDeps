@@ -19,6 +19,9 @@ minizip-ng/*:with_libcomp=False
 [buildenv]
 CXX=clang++
 CC=clang
+AR=llvm-ar
+RANLIB=llvm-ranlib
+LD=ld.lld
 
 [conf]
 &:tools.build:cxxflags=["-O3"]
