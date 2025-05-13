@@ -97,6 +97,12 @@ class LuxCoreDeps(ConanFile):
             f"minizip-ng/{MINIZIP_VERSION}",
             override=True,
         )
+        # Fmt default version (10.x) is not compatible with llvm@20 (MacOS)
+        self.requires(
+            f"fmt/{FMT_VERSION}",
+            force=True,
+            transitive_headers=True,
+        )
 
         # Header only deps - make them transitive
         self.requires(
