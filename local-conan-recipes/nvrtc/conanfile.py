@@ -9,7 +9,7 @@ from conan.tools.cmake import cmake_layout, CMake, CMakeDeps, CMakeToolchain
 
 class nvrtcRecipe(ConanFile):
     name = "nvrtc"
-    version = "12.9.41"
+    version = "12.8.93"
     user = "luxcore"
     channel = "luxcore"
     package_type = "library"
