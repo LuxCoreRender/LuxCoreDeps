@@ -8,9 +8,12 @@ compiler.version=194
 compiler.cppstd={{ os.getenv("CXX_VERSION") }}
 compiler.runtime=dynamic
 doxygen/*:arch=x86_64
-doxygen/*:build_type=Release
+doxygen/*:compiler=msvc
 doxygen/*:compiler.cppstd=17
+doxygen/*:compiler.version=193
+doxygen/*:compiler.runtime=dynamic
 doxygen/*:compiler.runtime_type=Release
+doxygen/*:build_type=Release
 xapian-core/*:compiler.cppstd=14
 
 [conf]
@@ -27,3 +30,6 @@ xapian-core/*:tools.build:cflags=!
 [options]
 # MSVC does not support avx2 nor avx512
 openvdb/*:simd=AVX
+doxygen/*:enable_app=False
+doxygen/*:enable_parse=True
+doxygen/*:enable_search=True
