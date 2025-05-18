@@ -13,7 +13,6 @@ import os
 # (in alphabetic order)
 BLENDER_VERSION = "4.2.3"
 BOOST_VERSION = "1.87.0"
-DOXYGEN_VERSION = "1.13.2"
 EIGEN_VERSION = "3.4.0"
 EMBREE3_VERSION = "3.13.5"
 FMT_VERSION = "11.2.0"
@@ -141,7 +140,7 @@ class LuxCoreDeps(ConanFile):
         self.requires("ninja/[*]", build=False, run=True, visible=True)
 
         # Doxygen (Luxcore build requirement)
-        self.requires(f"doxygen/{DOXYGEN_VERSION}", build=False, run=True, visible=True)
+        self.requires(f"doxygen/[*]", build=False, run=True, visible=True)
         self.requires(
             f"xapian-core/{XAPIAN_CORE_VERSION}",
             build=False,
