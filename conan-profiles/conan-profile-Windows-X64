@@ -25,6 +25,9 @@ libiconv/*:tools.build:cxxflags=!
 libiconv/*:tools.build:cflags=!
 xapian-core/*:tools.build:cxxflags=!
 xapian-core/*:tools.build:cflags=!
+# Following deps are to be compiled separatly (tools): MSVC flags are not necessary
+doxygen/*:tools.build:cxxflags=!
+doxygen/*:tools.build:cflags=!
 
 [options]
 # MSVC does not support avx2 nor avx512
