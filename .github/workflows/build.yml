@@ -40,6 +40,7 @@ jobs:
       CONAN_LOG_LEVEL: ${{ vars.conan_log_level }}  # To be set by caller (act)
       LUXDEPS_VERSION: ${{ inputs.luxdeps-version }}
       REBUILD_ALL: ${{ inputs.rebuild-all }}
+      CACHE: ${{ inputs.rebuild-all && 'trashbin' || 'conan-cache' }}  # Cache for deps
 
     steps:
 
@@ -133,11 +134,10 @@ jobs:
             echo "CONANCACHE=${CONANCACHE}" >> $GITHUB_ENV
 
       - name: Retrieve cached dependencies (All)
-        if: env.REBUILD_ALL != true
         id: retrieve-cache-deps
         uses: actions/cache/restore@v4
         with:
-          path: conan-cache
+          path: ${{ env.CACHE }}
           key: deps-${{ matrix.os }}-${{ github.run_id }}
           restore-keys: deps-${{ matrix.os }}-
 
