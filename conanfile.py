@@ -140,15 +140,24 @@ class LuxCoreDeps(ConanFile):
         self.requires("ninja/[*]", build=False, run=True, visible=True)
 
         # Doxygen (Luxcore build requirement)
+        # Requires also doxygen's deps 'xapian' and 'libiconv', otherwise they
+        # are downloaded at install in other versions, and that makes Doxygen
+        # recompile
         self.requires(f"doxygen/[*]", build=False, run=True, visible=True)
-        # self.requires(
-            # f"xapian-core/{XAPIAN_CORE_VERSION}",
-            # build=False,
-            # run=False,
-            # visible=True,
-            # override=True,
-        # )
-        # self.requires(f"libiconv/{LIBICONV_VERSION}", build=False, run=False, visible=True, override=True)
+        self.requires(
+            f"xapian-core/{XAPIAN_CORE_VERSION}",
+            build=False,
+            run=False,
+            visible=True,
+            force=True,
+        )
+        self.requires(
+            f"libiconv/{LIBICONV_VERSION}",
+            build=False,
+            run=False,
+            visible=True,
+            force=True
+        )
 
     def build_requirements(self):
         # LuxCoreDeps build requirements
