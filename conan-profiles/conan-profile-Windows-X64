@@ -7,12 +7,12 @@ compiler=msvc
 compiler.version=194
 compiler.cppstd={{ os.getenv("CXX_VERSION") }}
 compiler.runtime=dynamic
-doxygen/*:arch=x86_64
-doxygen/*:compiler=msvc
-doxygen/*:compiler.cppstd=17
-doxygen/*:compiler.runtime=dynamic
-doxygen/*:compiler.runtime_type=Release
-doxygen/*:build_type=Release
+# doxygen/*:arch=x86_64
+# doxygen/*:compiler=msvc
+# doxygen/*:compiler.cppstd=17
+# doxygen/*:compiler.runtime=dynamic
+# doxygen/*:compiler.runtime_type=Release
+# doxygen/*:build_type=Release
 xapian-core/*:compiler.cppstd=14
 
 [conf]
@@ -26,12 +26,12 @@ libiconv/*:tools.build:cflags=!
 xapian-core/*:tools.build:cxxflags=!
 xapian-core/*:tools.build:cflags=!
 # Following deps are to be compiled separatly (tools): MSVC flags are not necessary
-doxygen/*:tools.build:cxxflags=!
-doxygen/*:tools.build:cflags=!
+# doxygen/*:tools.build:cxxflags=!
+# doxygen/*:tools.build:cflags=!
 
 [options]
 # MSVC does not support avx2 nor avx512
 openvdb/*:simd=AVX
-doxygen/*:enable_app=False
-doxygen/*:enable_parse=True
-doxygen/*:enable_search=True
+# doxygen/*:enable_app=False
+# doxygen/*:enable_parse=True
+# doxygen/*:enable_search=True
