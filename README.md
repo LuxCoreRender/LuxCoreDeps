@@ -108,7 +108,6 @@ LuxCoreDeps follows Semantic Versioning (https://semver.org).
 For Python wheels to be built properly, it is essential that dependencies be built
 by `CIBUILDWHEEL`, with the same environment (compiler version, manylinux container,
 etc.) as the one intended for the wheels.
-Our implementation to fulfill this requirement consists in building a fake wheel in LuxCoreDeps.
 
 ### Local recipes
 Most of Conan recipes used by LuxCoreDeps are to be found in Conan central repository (Conan center).
