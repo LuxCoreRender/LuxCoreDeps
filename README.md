@@ -23,10 +23,10 @@ Once populated, the cache is bundled (`conan cache save`) and published
 in a Github release.
 
 ### On consumer side (LuxCore)
-In LuxCore, the provided cache is downloaded from the release and
-restored locally (`conan cache restore`), thus making all the dependencies
+In LuxCore, the provided cache is downloaded from the LuxCoreDeps release
+and restored locally (`conan cache restore`), thus making all the dependencies
 available for LuxCore build.
-In LuxCore, cache download and restoration are wrapped in a convenient
+In LuxCore, the download and restoration of the cache are wrapped in a convenient
 `make deps` statement.
 
 ```mermaid
