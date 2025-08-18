@@ -2,8 +2,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+# This is the main script. It installs build tools, retrieve local recipes and
+# remote recipes, build everything and make the dependency cache.
+
 # Caveat!
-# LUXDEPS_VERSION, RUNNER_OS, RUNNER_ARCH must be set by caller
+# LUXDEPS_VERSION, RUNNER_OS, RUNNER_ARCH are expected to be set by caller beforehand
 #
 die() { rc=$?; (( $# )) && printf '::error::%s\n' "$*" >&2; exit $(( rc == 0 ? 1 : rc )); }
 test -n "$LUXDEPS_VERSION" || die "LUXDEPS_VERSION not set"
@@ -79,6 +82,24 @@ conan create $WORKSPACE/conan-profiles \
 conan config install-pkg -vvv luxcoreconf/$LUXDEPS_VERSION@luxcore/luxcore
 echo "::endgroup::"
 
+# Install build requirements (before local packages)
+echo "::group::CIBW_BEFORE_BUILD: Install tool requirements"
+# We allow to use precompiled binaries
+# For pkgconf and meson, we have to manually target the right version
+build_deps=(b2/[*] cmake/[*] m4/[*] pkgconf/2.1.0 meson/1.2.2 yasm/[*])
+if [[ $RUNNER_OS == "Windows" ]]; then
+  build_deps+=(msys2/[*])
+fi
+for d in "${build_deps[@]}"; do
+  conan install \
+    --tool-requires=${d} \
+    --profile:all=$CONAN_PROFILE \
+    --build=missing \
+    --remote=conancenter \
+    --build=b2/*
+done
+echo "::endgroup::"
+
 # Install local packages
 if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "Windows" ]]; then
   echo "::group::CIBW_BEFORE_BUILD: nvrtc"
@@ -104,21 +125,6 @@ else
   DEPLOY_PATH=$WORKSPACE
 fi
 
-echo "::group::CIBW_BEFORE_BUILD: Install tool requirements"
-# We allow to use precompiled binaries
-build_deps=(b2 cmake m4 meson pkgconf yasm)
-if [[ $RUNNER_OS == "Windows" ]]; then
-  build_deps+=(msys2)
-fi
-for d in "${build_deps[@]}"; do
-  conan install \
-    --tool-requires=${d}/[*] \
-    --profile:all=$CONAN_PROFILE \
-    --build=missing \
-    --remote=conancenter \
-    --build=b2/*
-done
-echo "::endgroup::"
 
 echo "::group::CIBW_BEFORE_BUILD: Create LuxCore Deps"
 cd $WORKSPACE

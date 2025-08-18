@@ -21,8 +21,6 @@ tools.build:skip_test=True
 
 [platform_tool_requires]
 cmake/*
-meson/*
-pkgconf/*
 yasm/*
 
 [options]
