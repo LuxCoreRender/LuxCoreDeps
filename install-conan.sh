@@ -125,6 +125,16 @@ else
   DEPLOY_PATH=$WORKSPACE
 fi
 
+echo "::group::CIBW_BEFORE_BUILD: Explain graph"
+cd $WORKSPACE
+# Create package (without using conancenter precompiled binaries)
+conan graph info $WORKSPACE \
+  --profile:all=$CONAN_PROFILE \
+  --version=$LUXDEPS_VERSION \
+  --remote=mycenter \
+  --build=missing \
+  --format=dot
+echo "::endgroup::"
 
 echo "::group::CIBW_BEFORE_BUILD: Create LuxCore Deps"
 cd $WORKSPACE
