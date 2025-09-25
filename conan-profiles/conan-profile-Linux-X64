@@ -17,7 +17,6 @@ embree3/*:sse42=True
 embree3/*:avx=True
 embree3/*:avx2=True
 embree3/*:avx512=False
-openimageio/*:with_libheif=False
 gtk/system:version=3
 
 

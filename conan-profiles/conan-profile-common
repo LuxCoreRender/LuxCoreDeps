@@ -35,6 +35,7 @@ opensubdiv/*:with_tbb=True
 spdlog/*:header_only=True
 spdlog/*:use_std_fmt=True
 nvrtc/*:shared=True
+libtiff/*:jpeg=libjpeg-turbo
 
 openimageio/*:with_freetype=False
 openimageio/*:with_hdf5=False
@@ -44,6 +45,7 @@ openimageio/*:with_ptex=False
 openimageio/*:with_opencv=False
 openimageio/*:with_libwebp=True
 openimageio/*:with_tbb=True
+openimageio/*:with_libjpeg=libjpeg-turbo
 
 # boost/*:without_atomic=True
 boost/*:without_charconv=True
