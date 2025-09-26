@@ -16,9 +16,10 @@ doxygen/*:compiler.cppstd=17
 xapian-core/*:compiler.cppstd=14
 
 [conf]
-tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX"]
-tools.build:cflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX"]
-embree3/*:tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2"]
+tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX2", "/FI{{ os.path.join(profile_dir, 'fix_size_t.h') | replace('\\', '/') }}"]
+tools.build:cflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX2"]
+tools.cmake.cmaketoolchain:user_toolchain+={{profile_dir}}/windows_var.cmake
+#embree3/*:tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2"]
 
 # Following deps are to be compiled with msys2/gcc: MSVC flags will not do
 libiconv/*:tools.build:cxxflags=!

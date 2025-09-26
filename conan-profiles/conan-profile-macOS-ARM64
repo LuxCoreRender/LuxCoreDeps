@@ -15,6 +15,7 @@ boost/*:without_stacktrace=True
 boost/*:without_locale=True
 minizip-ng/*:with_zlib=True
 minizip-ng/*:with_libcomp=False
+embree/*:shared=True
 
 [buildenv]
 CXX=clang++

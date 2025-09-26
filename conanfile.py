@@ -14,7 +14,7 @@ import os
 BLENDER_VERSION = "4.2.3"
 BOOST_VERSION = "1.87.0"
 EIGEN_VERSION = "3.4.0"
-EMBREE3_VERSION = "3.13.5"
+EMBREE_VERSION = "4.3.3"
 FMT_VERSION = "11.2.0"
 GLFW_VERSION = "3.4"
 IMATH_VERSION = "3.1.12"
@@ -50,7 +50,7 @@ class LuxCoreDeps(ConanFile):
 
     requires = [
         f"openvdb/{OPENVDB_VERSION}",
-        f"embree3/{EMBREE3_VERSION}",
+        f"embree/{EMBREE_VERSION}",
         f"oidn/{OIDN_VERSION}@luxcore/luxcore",
         f"opensubdiv/{OPENSUBDIV_VERSION}",
         f"openimageio/{OIIO_VERSION}",

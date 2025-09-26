@@ -19,6 +19,7 @@ minizip-ng/*:with_zlib=True
 minizip-ng/*:with_libcomp=False
 openvdb/*:simd=AVX
 opensubdiv/*:with_metal=False
+embree/*:shared=True
 
 [buildenv]
 CXX=clang++
