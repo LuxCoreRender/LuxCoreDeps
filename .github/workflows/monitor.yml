@@ -14,7 +14,7 @@ name: LuxCore Dependency Monitoring
 
 on:
   schedule:
-    - cron: "* * * * 5"
+    - cron: "0 0 * * 5"
 
 jobs:
   call-build-deps:
