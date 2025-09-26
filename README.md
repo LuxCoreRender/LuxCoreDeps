@@ -98,6 +98,7 @@ how to modify such a file.
 ### Where to start - LuxCoreDeps entry points
 The main entry point is `.github/workflows/build.yml`.
 Other interesting files may be:
+- `run-conan.sh`: the bash script that invokes Conan
 - `conanfile.py`: Conan script to build dependencies
 - `conan-profiles`: folder with Conan profiles
 
