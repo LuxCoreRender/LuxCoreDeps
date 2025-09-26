@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: 2025 Howetuft
+#
+#
+# SPDX-License-Identifier: Apache-2.0
+
+
+# Monitor buildability.
+#
+# This workflow periodically triggers a build of LuxCoreDeps to ensure it stays
+# buildable. The build is typically launched on a daily basis.
+
+
+name: LuxCore Dependency Monitoring
+
+on:
+  schedule:
+    - cron: "* * * * 5"
+
+jobs:
+  call-build-deps:
+    uses: ./.github/workflows/build.yml
+    with:
+      luxdeps-version: "Monitor"
