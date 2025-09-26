@@ -189,14 +189,14 @@ jobs:
         env:
           CONAN_HOME: ${{ github.workspace }}\.conan2
         run: |
-          bash ${{ env.WORKSPACE }}/install-conan.sh
+          bash ${{ env.WORKSPACE }}/run-conan.sh
 
       - name: Build (MacOS)
         if: runner.os == 'macOS'
         shell: bash
         run: |
             brew install ispc
-            bash ${{ env.WORKSPACE }}/install-conan.sh
+            bash ${{ env.WORKSPACE }}/run-conan.sh
 
       - name: Build (Linux)
         if: runner.os == 'Linux'
@@ -303,7 +303,7 @@ jobs:
             source /opt/intel/oneapi/ispc/latest/env/vars.sh
 
             # Build
-            source ${{ env.WORKSPACE }}/install-conan.sh
+            source ${{ env.WORKSPACE }}/run-conan.sh
 
             # Re-inspect ccache
             echo "ccache results:"

@@ -75,7 +75,7 @@ fi
 echo "::endgroup::"
 
 # Install profiles
-echo "::group::CIBW_BEFORE_BUILD: profiles"
+echo "::group::CIBW_BEFORE_BUILD: Install profiles"
 conan create $WORKSPACE/conan-profiles \
   --profile:all=$WORKSPACE/conan-profiles/$CONAN_PROFILE \
   --version=$LUXDEPS_VERSION
@@ -126,8 +126,8 @@ else
 fi
 
 echo "::group::CIBW_BEFORE_BUILD: Explain graph"
+# For debugging purpose...
 cd $WORKSPACE
-# Create package (without using conancenter precompiled binaries)
 conan graph info $WORKSPACE \
   --profile:all=$CONAN_PROFILE \
   --version=$LUXDEPS_VERSION \
