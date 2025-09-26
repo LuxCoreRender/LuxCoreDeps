@@ -18,7 +18,6 @@ doxygen/*:build_type=Release
 tools.system.package_manager:mode=install
 tools.deployer:symlinks=True
 tools.build:skip_test=True
-embree3/*:tools.cmake.cmaketoolchain:extra_variables={ 'CMAKE_POLICY_VERSION_MINIMUM':'3.5' }
 
 [platform_tool_requires]
 cmake/*
