@@ -12,21 +12,7 @@
 
 name: LuxCore Dependency Monitoring
 
-permissions:
-  actions: read
-  attestations: read
-  checks: read
-  deployments: read
-  discussions: read
-  issues: read
-  models: read
-  packages: read
-  pages: read
-  pull-requests: read
-  repository-projects: read
-  statuses: read
-  security-events: read
-  id-token: read
+permissions: read-all
 
 on:
   schedule:
@@ -36,4 +22,5 @@ jobs:
   call-build-deps:
     uses: ./.github/workflows/build.yml
     with:
-      luxdeps-version: "Monitor"
+      # This must be kept in lower case (incorporated to Conan package name)
+      luxdeps-version: "monitor"
