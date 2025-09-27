@@ -9,6 +9,8 @@
 
 name: LuxCore Dependency Checker
 
+permissions: read-all
+
 on:
   workflow_dispatch:
   push:
@@ -17,4 +19,5 @@ jobs:
   call-build-deps:
     uses: ./.github/workflows/build.yml
     with:
+      # This must be kept in lower case (incorporated to Conan package name)
       luxdeps-version: "check"
