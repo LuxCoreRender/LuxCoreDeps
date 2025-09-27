@@ -7,32 +7,22 @@ compiler=msvc
 compiler.version=194
 compiler.cppstd={{ os.getenv("CXX_VERSION") }}
 compiler.runtime=dynamic
-# doxygen/*:arch=x86_64
-# doxygen/*:compiler=msvc
 doxygen/*:compiler.cppstd=17
-# doxygen/*:compiler.runtime=dynamic
-# doxygen/*:compiler.runtime_type=Release
-# doxygen/*:build_type=Release
 xapian-core/*:compiler.cppstd=14
 
 [conf]
-tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX2", "/FI{{ os.path.join(profile_dir, 'fix_size_t.h') | replace('\\', '/') }}"]
+tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX2"]
 tools.build:cflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX2"]
-tools.cmake.cmaketoolchain:user_toolchain+={{profile_dir}}/windows_var.cmake
-#embree3/*:tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2"]
+embree/*:tools.cmake.cmaketoolchain:user_toolchain+={{profile_dir}}/windows_var.cmake
+embree/*:tools.build:cxxflags=["/DEBUG:NONE", "/O2" ]
+embree/*:tools.build:cflags=["/DEBUG:NONE", "/O2" ]
 
 # Following deps are to be compiled with msys2/gcc: MSVC flags will not do
 libiconv/*:tools.build:cxxflags=!
 libiconv/*:tools.build:cflags=!
 xapian-core/*:tools.build:cxxflags=!
 xapian-core/*:tools.build:cflags=!
-# Following deps are to be compiled separatly (tools): MSVC flags are not necessary
-# doxygen/*:tools.build:cxxflags=!
-# doxygen/*:tools.build:cflags=!
 
 [options]
-# MSVC does not support avx2 nor avx512
 openvdb/*:simd=AVX
-# doxygen/*:enable_app=False
-# doxygen/*:enable_parse=True
-# doxygen/*:enable_search=True
+embree/*:shared=True
