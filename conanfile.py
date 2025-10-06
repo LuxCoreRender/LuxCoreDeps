@@ -11,7 +11,6 @@ import os
 
 # Gather here the various dependency versions, for convenience
 # (in alphabetic order)
-BLENDER_VERSION = "4.2.3"
 BOOST_VERSION = "1.87.0"
 EIGEN_VERSION = "3.4.0"
 EMBREE_VERSION = "4.3.3"
@@ -111,10 +110,6 @@ class LuxCoreDeps(ConanFile):
         self.requires(f"nlohmann_json/{JSON_VERSION}", transitive_headers=True)
         self.requires(f"pybind11/{PYBIND11_VERSION}", transitive_headers=True)
         self.requires(f"spdlog/{SPDLOG_VERSION}", transitive_headers=True)
-        self.requires(
-            f"blender-types/{BLENDER_VERSION}@luxcore/luxcore",
-            transitive_headers=True,
-        )
         self.requires(
             f"boost/{BOOST_VERSION}",
             force=True,

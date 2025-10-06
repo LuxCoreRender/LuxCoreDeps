@@ -115,10 +115,6 @@ echo "::group::CIBW_BEFORE_BUILD: OIDN"
 conan_local_install oidn
 echo "::endgroup::"
 
-echo "::group::CIBW_BEFORE_BUILD: Blender types"
-conan_local_install blender-types
-echo "::endgroup::"
-
 if [[ $RUNNER_OS == "Windows" ]]; then
   DEPLOY_PATH=$(cygpath "C:\\Users\\runneradmin")
 else
