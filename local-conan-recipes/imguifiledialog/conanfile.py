@@ -28,7 +28,7 @@ class ImguiFileDialogConan(ConanFile):
         "fPIC": True,
         "use_std_filesystem": True,
     }
-    requires = "imgui/1.91.8"
+    requires = "imgui/1.92.4"
 
 
     def config_options(self):

@@ -54,6 +54,10 @@ echo "::endgroup::"
 # and which ones use precompiled binaries (remote=conancenter)
 echo "::group::CIBW_BEFORE_BUILD: local recipes index repository"
 git clone https://github.com/conan-io/conan-center-index
+cd conan-center-index
+git reset --hard 73bae27b468ae37f5bacd4991d1113aefcf23b2b
+git clean -df  # cleans any untracked files/folders
+cd ..
 conan remote add mycenter ./conan-center-index
 echo "::endgroup::"
 
