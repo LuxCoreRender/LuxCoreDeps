@@ -15,7 +15,6 @@ TBB_VERSION = "2022.2.0"
 
 class OidnConan(ConanFile):
     name = "oidn"
-    version = "2.3.3"
     user = "luxcore"
     channel = "luxcore"
     settings = "os", "arch", "compiler", "build_type"

@@ -17,7 +17,6 @@ class ImguiFileDialogConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     homepage = "https://github.com/aiekick/ImGuiFileDialog"
     license = "MIT"
-    version = "0.6.7"
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
