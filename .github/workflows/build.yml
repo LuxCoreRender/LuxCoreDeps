@@ -29,7 +29,7 @@ jobs:
       fail-fast: False
       matrix:
         os: [ubuntu-latest, windows-latest, macos-15-intel, macos-15]
-        #os: [macos-15-intel, macos-15]
+
     env:
       BUILD_TYPE: Release
       # SANITIZE: true # uncomment to sanitize
@@ -163,22 +163,6 @@ jobs:
         if: runner.os == 'Windows'
         run: git config --system core.longpaths true
 
-      - name: Set MacOS deployment target (MacOS)
-        if: runner.os == 'macOS'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            if ('${{ runner.arch }}' == 'X64') {
-              target = '10.15';
-              arch='x86_64';
-            }
-            else {
-              target = '12.0';
-              arch='armv8';
-            }
-            core.exportVariable('MACOSX_DEPLOYMENT_TARGET', target);
-            core.exportVariable('CMAKE_OSX_DEPLOYMENT_TARGET', target);
-            core.exportVariable('PKG_ARCH', arch);
 
       #***********************************#
       # Build steps (one per platform...) #
