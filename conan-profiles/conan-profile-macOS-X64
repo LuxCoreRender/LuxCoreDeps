@@ -2,17 +2,12 @@ include(conan-profile-common)
 
 [settings]
 os=Macos
-os.version=10.15
+os.version=14.2
 arch=x86_64
 compiler=apple-clang
-compiler.version=14.0
+compiler.version=17
 compiler.cppstd={{ os.getenv("CXX_VERSION") }}
 compiler.libcxx=libc++
-
-spdlog/*:compiler=clang
-spdlog/*:compiler.version=20
-spdlog/*:compiler.cppstd={{ os.getenv("CXX_VERSION") }}
-spdlog/*:compiler.libcxx=libc++
 
 [options]
 minizip-ng/*:with_zlib=True
@@ -22,9 +17,14 @@ opensubdiv/*:with_metal=False
 embree/*:shared=True
 
 [buildenv]
-CXX=clang++
-CC=clang
+PKG_ARCH=x86_64
+# 14.2 is required by opensubdiv for metal
+# See also macos_var.cmake
+MACOSX_DEPLOYMENT_TARGET=14.2
 
 [conf]
-&:tools.build:cxxflags+=["-ftree-vectorize", "-march=x86-64-v3", "-O3", "-mno-avx2"]
-# NB: Github MacOS X64 runner does not support avx2 nor avx512
+&:tools.build:cxxflags+=["-ftree-vectorize", "-march=x86-64-v3", "-O3"]
+tools.cmake.cmaketoolchain:user_toolchain+={{profile_dir}}/macos_var.cmake
+openvdb/*:tools.build:cxxflags+=["-Wno-error", "-Wno-missing-template-arg-list-after-template-kw"]
+
+# vim: ft=conf

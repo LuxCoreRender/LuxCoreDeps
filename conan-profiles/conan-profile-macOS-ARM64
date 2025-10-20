@@ -6,7 +6,7 @@ os=Macos
 os.version=14.2
 arch=armv8
 compiler=apple-clang
-compiler.version=15
+compiler.version=17
 compiler.cppstd={{ os.getenv("CXX_VERSION") }}
 compiler.libcxx=libc++
 
@@ -16,10 +16,17 @@ boost/*:without_locale=True
 minizip-ng/*:with_zlib=True
 minizip-ng/*:with_libcomp=False
 embree/*:shared=True
+opensubdiv/*:with_metal=True
 
 [buildenv]
-CXX=clang++
-CC=clang
+PKG_ARCH=armv8
+# 14.2 is required by opensubdiv for metal
+# See also macos_var.cmake
+MACOSX_DEPLOYMENT_TARGET=14.2
 
 [conf]
-&:tools.build:cxxflags=["-O3"]
+&:tools.build:cxxflags+=["-O3"]
+tools.cmake.cmaketoolchain:user_toolchain+={{profile_dir}}/macos_var.cmake
+openvdb/*:tools.build:cxxflags+=["-Wno-error", "-Wno-missing-template-arg-list-after-template-kw"]
+
+# vim: ft=conf

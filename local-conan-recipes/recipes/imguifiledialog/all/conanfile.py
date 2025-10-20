@@ -17,7 +17,6 @@ class ImguiFileDialogConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     homepage = "https://github.com/aiekick/ImGuiFileDialog"
     license = "MIT"
-    version = "0.6.7"
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
@@ -28,7 +27,7 @@ class ImguiFileDialogConan(ConanFile):
         "fPIC": True,
         "use_std_filesystem": True,
     }
-    requires = "imgui/1.91.8"
+    requires = "imgui/1.92.4"
 
 
     def config_options(self):

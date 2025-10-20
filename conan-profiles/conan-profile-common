@@ -41,6 +41,8 @@ openimageio/*:with_libwebp=True
 openimageio/*:with_tbb=True
 openimageio/*:with_libjpeg=libjpeg-turbo
 
+libultrahdr/*:with_jpeg=libjpeg-turbo
+
 # boost/*:without_atomic=True
 boost/*:without_charconv=True
 # boost/*:without_chrono=True
