@@ -139,20 +139,20 @@ class LuxCoreDeps(ConanFile):
         # are downloaded at install in other versions, and that makes Doxygen
         # recompile
         self.requires(f"doxygen/[*]", build=False, run=True, visible=True)
-        self.requires(
-            f"xapian-core/{XAPIAN_CORE_VERSION}",
-            build=False,
-            run=False,
-            visible=True,
-            force=True,
-        )
-        self.requires(
-            f"libiconv/{LIBICONV_VERSION}",
-            build=False,
-            run=False,
-            visible=True,
-            force=True
-        )
+        #self.requires(
+        #    f"xapian-core/{XAPIAN_CORE_VERSION}",
+        #    build=False,
+        #    run=False,
+        #    visible=True,
+        #    force=True,
+        #)
+        #self.requires(
+        #    f"libiconv/{LIBICONV_VERSION}",
+        #    build=False,
+        #    run=False,
+        #    visible=True,
+        #    force=True
+        #)
 
     def build_requirements(self):
         # LuxCoreDeps build requirements
