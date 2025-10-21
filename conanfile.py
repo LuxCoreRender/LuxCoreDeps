@@ -12,6 +12,7 @@ import os
 # Gather here the various dependency versions, for convenience
 # (in alphabetic order)
 BOOST_VERSION = "1.88.0"
+DOXYGEN_VERSION = "1.14.0"
 EIGEN_VERSION = "5.0.0"
 EMBREE_VERSION = "4.3.3"
 FMT_VERSION = "12.0.0"
@@ -22,7 +23,6 @@ IMGUIFILEDIALOG_VERSION = "0.6.7"
 JSON_VERSION = "3.12.0"
 LIBDEFLATE_VERSION = "1.23"
 LIBICONV_VERSION = "1.18"
-LLVM_OPENMP_VERSION = "17.0.6"
 MINIZIP_VERSION = "4.0.7"
 NINJA_VERSION = "1.13.1"
 NVRTC_VERSION = "12.8.93"
@@ -66,7 +66,7 @@ class LuxCoreDeps(ConanFile):
             override=True,
             libs=True,
             transitive_libs=True,
-        )  # For oidn
+        )
         self.requires(
             f"libdeflate/{LIBDEFLATE_VERSION}",
             force=True,
@@ -138,21 +138,21 @@ class LuxCoreDeps(ConanFile):
         # Requires also doxygen's deps 'xapian' and 'libiconv', otherwise they
         # are downloaded at install in other versions, and that makes Doxygen
         # recompile
-        self.requires(f"doxygen/[*]", build=False, run=True, visible=True)
-        #self.requires(
-        #    f"xapian-core/{XAPIAN_CORE_VERSION}",
-        #    build=False,
-        #    run=False,
-        #    visible=True,
-        #    force=True,
-        #)
-        #self.requires(
-        #    f"libiconv/{LIBICONV_VERSION}",
-        #    build=False,
-        #    run=False,
-        #    visible=True,
-        #    force=True
-        #)
+        self.requires(f"doxygen/{DOXYGEN_VERSION}", build=False, run=True, visible=True)
+        self.requires(
+            f"xapian-core/{XAPIAN_CORE_VERSION}",
+            build=False,
+            run=False,
+            visible=True,
+            force=True,
+        )
+        self.requires(
+            f"libiconv/{LIBICONV_VERSION}",
+            build=False,
+            run=False,
+            visible=True,
+            force=True
+        )
 
     def build_requirements(self):
         # LuxCoreDeps build requirements
