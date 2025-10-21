@@ -22,7 +22,6 @@ IMGUI_VERSION = "1.92.4"
 IMGUIFILEDIALOG_VERSION = "0.6.7"
 JSON_VERSION = "3.12.0"
 LIBDEFLATE_VERSION = "1.23"
-LIBICONV_VERSION = "1.18"
 MINIZIP_VERSION = "4.0.7"
 NINJA_VERSION = "1.13.1"
 NVRTC_VERSION = "12.8.93"
@@ -36,7 +35,6 @@ PYBIND11_VERSION = "3.0.1"
 ROBINHOOD_VERSION = "3.11.5"
 SPDLOG_VERSION = "1.16.0"
 TBB_VERSION = "2022.2.0"
-XAPIAN_CORE_VERSION = "1.4.24"
 ZSTD_VERSION = "1.5.7"
 
 
@@ -139,20 +137,6 @@ class LuxCoreDeps(ConanFile):
         # are downloaded at install in other versions, and that makes Doxygen
         # recompile
         self.requires(f"doxygen/{DOXYGEN_VERSION}", build=False, run=True, visible=True)
-        self.requires(
-            f"xapian-core/{XAPIAN_CORE_VERSION}",
-            build=False,
-            run=False,
-            visible=True,
-            force=True,
-        )
-        self.requires(
-            f"libiconv/{LIBICONV_VERSION}",
-            build=False,
-            run=False,
-            visible=True,
-            force=True
-        )
 
     def build_requirements(self):
         # LuxCoreDeps build requirements
