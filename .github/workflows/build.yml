@@ -163,6 +163,40 @@ jobs:
         if: runner.os == 'Windows'
         run: git config --system core.longpaths true
 
+      - name: Prepare MacOS
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+            # We make conan believe we use apple-clang (see profiles), but
+            # actually we use recent version of llvm, to get full compatibility
+            # with C++20 (in particular: joining threads)
+
+            # llvm
+            brew install llvm@20
+            LLVM_PREFIX=$(brew --prefix llvm@20)
+            echo "CC=clang" >> $GITHUB_ENV
+            echo "CXX=clang++" >> $GITHUB_ENV
+            echo "AR=llvm-ar" >> $GITHUB_ENV
+            echo "RANLIB=llvm-ranlib" >> $GITHUB_ENV
+
+            # lld
+            brew install lld@20
+            LLD_PREFIX=$(brew --prefix lld@20)
+
+            # Set paths
+            echo "PATH=${LLVM_PREFIX}/bin:${LLD_PREFIX}/bin:$PATH" >> $GITHUB_ENV
+            echo "DYLD_LIBRARY_PATH=${LLVM_PREFIX}/lib:${LLD_PREFIX}/lib:${DYLD_LIBRARY_PATH}" >> $GITHUB_ENV
+
+            # Set flags
+            # TODO -headerpad_max_install_names
+            echo "LDFLAGS=${LD_FLAGS} -fuse-ld=lld -headerpad_max_install_names -L${LLVM_PREFIX}/lib -L${LLD_PREFIX}/lib" >> $GITHUB_ENV
+            echo "CPPFLAGS=${CPPFLAGS} -I${LLVM_PREFIX}/include -I${LLD_PREFIX}/include" >> $GITHUB_ENV
+
+      - name: Check MacOS
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+            clang --version
 
       #***********************************#
       # Build steps (one per platform...) #
