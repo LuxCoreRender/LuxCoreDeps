@@ -26,7 +26,7 @@ MACOSX_DEPLOYMENT_TARGET=14.2
 
 [conf]
 &:tools.build:cxxflags+=["-O3"]
-tools.cmake.cmaketoolchain:user_toolchain+={{profile_dir}}/macos_var.cmake
+tools.cmake.cmaketoolchain:user_toolchain+={{profile_dir}}/macos-vars-ARM64.cmake
 openvdb/*:tools.build:cxxflags+=["-Wno-error", "-Wno-missing-template-arg-list-after-template-kw"]
 
 # vim: ft=conf

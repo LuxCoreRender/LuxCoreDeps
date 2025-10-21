@@ -13,7 +13,7 @@ xapian-core/*:compiler.cppstd=14
 [conf]
 tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX2"]
 tools.build:cflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX2"]
-embree/*:tools.cmake.cmaketoolchain:user_toolchain+={{profile_dir}}/windows_var.cmake
+embree/*:tools.cmake.cmaketoolchain:user_toolchain+={{profile_dir}}/windows-vars-X64.cmake
 embree/*:tools.build:cxxflags=["/DEBUG:NONE", "/O2" ]
 embree/*:tools.build:cflags=["/DEBUG:NONE", "/O2" ]
 openimageio/*:tools.build:cxxflags+=["/utf-8" ]
