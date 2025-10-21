@@ -49,7 +49,7 @@ cd ..
 conan remote add mycenter ./conan-center-index
 
 # 2. Add local recipe repository (as a remote)
-conan remote add mylocal ./local-conan-recipes
+conan remote add mylocal ./conan-local-recipes
 conan list -r mylocal
 echo "::endgroup::"
 
