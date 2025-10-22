@@ -24,7 +24,7 @@ jobs:
   build-deps:
     name: Build dependencies ${{ matrix.os }}
     permissions: read-all
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os == 'macos-15-arm64' && 'macos-15' || matrix.os }}
     strategy:
       fail-fast: False
       matrix:
