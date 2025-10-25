@@ -20,7 +20,6 @@ function debug() {
   conan install \
     --requires=$1 \
     --profile:all=$CONAN_PROFILE \
-    --version=$LUXDEPS_VERSION \
     --remote=mycenter \
     --remote=mylocal \
     --build=missing;
@@ -127,7 +126,7 @@ conan graph info $WORKSPACE \
 echo "::endgroup::"
 
 # (Debug) Install particular package, for debugging
-debug embree
+# debug embree/4.3.3
 
 
 # 7. Create luxcoredeps package and all dependencies

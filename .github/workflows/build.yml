@@ -177,13 +177,14 @@ jobs:
             # llvm 20
             brew install llvm@20
             LLVM_PREFIX=$(brew --prefix llvm@20)
-            echo "CC=clang" >> $GITHUB_ENV
-            echo "CXX=clang++" >> $GITHUB_ENV
-            echo "AR=llvm-ar" >> $GITHUB_ENV
-            echo "RANLIB=llvm-ranlib" >> $GITHUB_ENV
+            LLVM_BIN=$(brew --prefix llvm@20)/bin
+            echo "CC=${LLVM_BIN}/clang" >> $GITHUB_ENV
+            echo "CXX=${LLVM_BIN}/clang++" >> $GITHUB_ENV
+            echo "AR=${LLVM_BIN}/llvm-ar" >> $GITHUB_ENV
+            echo "RANLIB=${LLVM_BIN}/llvm-ranlib" >> $GITHUB_ENV
 
             # Set paths
-            echo "PATH=${LLVM_PREFIX}/bin:${LLD_PREFIX}/bin:$PATH" >> $GITHUB_ENV
+            echo "PATH=${LLVM_BIN}:${PATH}" >> $GITHUB_ENV
             echo "DYLD_LIBRARY_PATH=${LLVM_PREFIX}/lib:${DYLD_LIBRARY_PATH}" >> $GITHUB_ENV
 
             # Set flags
