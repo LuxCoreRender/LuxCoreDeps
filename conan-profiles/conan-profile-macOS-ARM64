@@ -23,11 +23,13 @@ PKG_ARCH=armv8
 # 14.2 is required by opensubdiv for metal
 # See also macos_var.cmake
 MACOSX_DEPLOYMENT_TARGET=14.2
+VERBOSE=1
 
 [conf]
-&:tools.build:cxxflags+=["-O3"]
+&:tools.build:cxxflags+=["-O3", "-Xclang", "-triple=arm8-apple-darwin-macho"]
 tools.cmake.cmaketoolchain:user_toolchain+={{profile_dir}}/macos-vars-ARM64.cmake
 openvdb/*:tools.build:cxxflags+=["-Wno-error", "-Wno-missing-template-arg-list-after-template-kw"]
-embree/*:tools.cmake.cmaketoolchain:extra_variables*={'CMAKE_VERBOSE_MAKEFILE': True}
+onetbb/*:tools.build:cxxflags+=["-rdynamic"]
+onetbb/*:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_CXX_VISIBILITY_PRESET": "default"}
 
 # vim: ft=conf
