@@ -11,32 +11,30 @@ import os
 
 # Gather here the various dependency versions, for convenience
 # (in alphabetic order)
-BOOST_VERSION = "1.87.0"
-EIGEN_VERSION = "3.4.0"
+BOOST_VERSION = "1.88.0"
+DOXYGEN_VERSION = "1.14.0"
+EIGEN_VERSION = "5.0.0"
 EMBREE_VERSION = "4.3.3"
-FMT_VERSION = "11.2.0"
+FMT_VERSION = "12.0.0"
 GLFW_VERSION = "3.4"
-IMATH_VERSION = "3.1.12"
-IMGUI_VERSION = "1.91.8"
+IMATH_VERSION = "3.2.1"
+IMGUI_VERSION = "1.92.4"
 IMGUIFILEDIALOG_VERSION = "0.6.7"
 JSON_VERSION = "3.12.0"
 LIBDEFLATE_VERSION = "1.23"
-LIBICONV_VERSION = "1.17"
-LLVM_OPENMP_VERSION = "17.0.6"
 MINIZIP_VERSION = "4.0.7"
-NINJA_VERSION = "1.12.1"
+NINJA_VERSION = "1.13.1"
 NVRTC_VERSION = "12.8.93"
-OCIO_VERSION = "2.4.2"
-OIIO_VERSION = "2.5.18.0"
+OCIO_VERSION = "2.5.0"
+OIIO_VERSION = "3.1.6.2"
 OIDN_VERSION = "2.3.3"
 OPENEXR_VERSION = "3.3.5"
 OPENSUBDIV_VERSION = "3.6.0"
 OPENVDB_VERSION = "11.0.0"
-PYBIND11_VERSION = "2.13.6"
+PYBIND11_VERSION = "3.0.1"
 ROBINHOOD_VERSION = "3.11.5"
-SPDLOG_VERSION = "1.15.3"
-TBB_VERSION = "2022.0.0"
-XAPIAN_CORE_VERSION = "1.4.19"
+SPDLOG_VERSION = "1.16.0"
+TBB_VERSION = "2022.2.0"
 ZSTD_VERSION = "1.5.7"
 
 
@@ -66,7 +64,7 @@ class LuxCoreDeps(ConanFile):
             override=True,
             libs=True,
             transitive_libs=True,
-        )  # For oidn
+        )
         self.requires(
             f"libdeflate/{LIBDEFLATE_VERSION}",
             force=True,
@@ -138,21 +136,7 @@ class LuxCoreDeps(ConanFile):
         # Requires also doxygen's deps 'xapian' and 'libiconv', otherwise they
         # are downloaded at install in other versions, and that makes Doxygen
         # recompile
-        self.requires(f"doxygen/[*]", build=False, run=True, visible=True)
-        self.requires(
-            f"xapian-core/{XAPIAN_CORE_VERSION}",
-            build=False,
-            run=False,
-            visible=True,
-            force=True,
-        )
-        self.requires(
-            f"libiconv/{LIBICONV_VERSION}",
-            build=False,
-            run=False,
-            visible=True,
-            force=True
-        )
+        self.requires(f"doxygen/{DOXYGEN_VERSION}", build=False, run=True, visible=True)
 
     def build_requirements(self):
         # LuxCoreDeps build requirements
