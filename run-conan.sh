@@ -15,6 +15,16 @@ test -n "$RUNNER_ARCH" || die "RUNNER_ARCH not set"
 
 CONAN_PROFILE=conan-profile-${RUNNER_OS}-${RUNNER_ARCH}
 
+# Debug utility (install a specific package)
+function debug() {
+  conan install \
+    --requires=$1 \
+    --profile:all=$CONAN_PROFILE \
+    --version=$LUXDEPS_VERSION \
+    --remote=mycenter \
+    --remote=mylocal \
+    --build=missing;
+}
 
 # Script starts here
 
@@ -115,6 +125,10 @@ conan graph info $WORKSPACE \
   --build=missing \
   --format=dot
 echo "::endgroup::"
+
+# (Debug) Install particular package, for debugging
+debug embree
+
 
 # 7. Create luxcoredeps package and all dependencies
 # (we do not specify conancenter as a remote, so it prevents conan from using
