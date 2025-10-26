@@ -26,10 +26,9 @@ MACOSX_DEPLOYMENT_TARGET=14.2
 VERBOSE=1
 
 [conf]
-&:tools.build:cxxflags+=["-O3", "-Xclang", "-triple=arm8-apple-darwin-macho"]
+&:tools.build:cxxflags+=["-O3"]
 tools.cmake.cmaketoolchain:user_toolchain+={{profile_dir}}/macos-vars-ARM64.cmake
+
 openvdb/*:tools.build:cxxflags+=["-Wno-error", "-Wno-missing-template-arg-list-after-template-kw"]
-onetbb/*:tools.build:cxxflags+=["-rdynamic"]
-onetbb/*:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_CXX_VISIBILITY_PRESET": "default"}
 
 # vim: ft=conf

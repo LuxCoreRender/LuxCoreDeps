@@ -126,10 +126,10 @@ conan graph info $WORKSPACE \
 echo "::endgroup::"
 
 # (Debug) Install particular package, for debugging
-echo "::group::CIBW_BEFORE_BUILD: Debug"
-debug "onetbb/2022.2.0"
-exit 1
-echo "::endgroup::"
+#echo "::group::CIBW_BEFORE_BUILD: Debug"
+#debug "onetbb/2022.2.0"
+#exit 1
+#echo "::endgroup::"
 
 
 # 7. Create luxcoredeps package and all dependencies
