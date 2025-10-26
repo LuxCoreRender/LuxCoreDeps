@@ -22,7 +22,7 @@ function debug() {
     --profile:all=$CONAN_PROFILE \
     --remote=mycenter \
     --remote=mylocal \
-    --build=missing;
+    --build="*"
 }
 
 # Script starts here
@@ -126,7 +126,10 @@ conan graph info $WORKSPACE \
 echo "::endgroup::"
 
 # (Debug) Install particular package, for debugging
-# debug embree/4.3.3
+#echo "::group::CIBW_BEFORE_BUILD: Debug"
+#debug "onetbb/2022.2.0"
+#exit 1
+#echo "::endgroup::"
 
 
 # 7. Create luxcoredeps package and all dependencies

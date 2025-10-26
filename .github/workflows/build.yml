@@ -166,36 +166,42 @@ jobs:
         if: runner.os == 'Windows'
         run: git config --system core.longpaths true
 
-      - name: Prepare MacOS
-        if: runner.os == 'macOS'
-        shell: bash
-        run: |
-            # We make conan believe we use apple-clang (see profiles), but
-            # actually we use recent version of llvm, to get full compatibility
-            # with C++20 (in particular: joining threads)
+      #- name: Prepare MacOS
+        #if: runner.os == 'macOS'
+        #shell: bash
+        #run: |
+            ## We make conan believe we use apple-clang (see profiles), but
+            ## actually we use recent version of llvm, to get full compatibility
+            ## with C++20 (in particular: joining threads)
+            ## https://railsware.com/blog/creation-and-using-clang-plugin-with-xcode/
 
-            # llvm 20
-            brew install llvm@20
-            LLVM_PREFIX=$(brew --prefix llvm@20)
-            LLVM_BIN=$(brew --prefix llvm@20)/bin
-            echo "CC=${LLVM_BIN}/clang" >> $GITHUB_ENV
-            echo "CXX=${LLVM_BIN}/clang++" >> $GITHUB_ENV
-            echo "AR=${LLVM_BIN}/llvm-ar" >> $GITHUB_ENV
-            echo "RANLIB=${LLVM_BIN}/llvm-ranlib" >> $GITHUB_ENV
+            ## llvm 20
+            #brew install llvm@20
+            #LLVM_PREFIX=$(brew --prefix llvm@20)
+            #LLVM_BIN=$(brew --prefix llvm@20)/bin
+            #echo "CC=${LLVM_BIN}/clang" >> $GITHUB_ENV
+            #echo "CXX=${LLVM_BIN}/clang++" >> $GITHUB_ENV
+            #echo "AR=${LLVM_BIN}/llvm-ar" >> $GITHUB_ENV
+            #echo "RANLIB=${LLVM_BIN}/llvm-ranlib" >> $GITHUB_ENV
+            #echo "LIBTOOL=${LLVM_BIN}/llvm-libtool" >> $GITHUB_ENV
 
-            # Set paths
-            echo "PATH=${LLVM_BIN}:${PATH}" >> $GITHUB_ENV
-            echo "DYLD_LIBRARY_PATH=${LLVM_PREFIX}/lib:${DYLD_LIBRARY_PATH}" >> $GITHUB_ENV
+            #cp -r $LLVM_PREFIX/Toolchains /Library/Developer/Toolchains
+            #sudo xcode-select -s /Library/Developer/CommandLineTools/
 
-            # Set flags
-            echo "LDFLAGS=${LD_FLAGS} -headerpad_max_install_names -L${LLVM_PREFIX}/lib" >> $GITHUB_ENV
-            echo "CPPFLAGS=${CPPFLAGS} -I${LLVM_PREFIX}/include" >> $GITHUB_ENV
+            ## Set paths
+            #echo "PATH=${LLVM_BIN}:${PATH}" >> $GITHUB_ENV
+            #echo "DYLD_LIBRARY_PATH=${LLVM_PREFIX}/lib:${DYLD_LIBRARY_PATH}" >> $GITHUB_ENV
+
+            ## Set flags
+            #echo "LDFLAGS=${LD_FLAGS} -L${LLVM_PREFIX}/lib" >> $GITHUB_ENV
+            #echo "CPPFLAGS=${CPPFLAGS} -I${LLVM_PREFIX}/include" >> $GITHUB_ENV
 
       - name: Check MacOS
         if: runner.os == 'macOS'
         shell: bash
         run: |
             clang --version
+            clang -print-targets
 
       #***********************************#
       # Build steps (one per platform...) #
@@ -419,7 +425,7 @@ jobs:
           path: conan-cache
           key: deps-${{ matrix.os }}-${{ github.run_id }}
 
-      ## For debugging
+      # For debugging
       #- name: Setup tmate session (debug)
         #if: ${{ failure() }}
         #uses: mxschmitt/action-tmate@v3
