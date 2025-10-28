@@ -29,12 +29,14 @@ OCIO_VERSION = "2.5.0"
 OIIO_VERSION = "3.1.6.2"
 OIDN_VERSION = "2.3.3"
 OPENEXR_VERSION = "3.3.5"
+OPENJPH_VERSION = "0.24.2"
 OPENSUBDIV_VERSION = "3.6.0"
 OPENVDB_VERSION = "11.0.0"
 PYBIND11_VERSION = "3.0.1"
 ROBINHOOD_VERSION = "3.11.5"
 SPDLOG_VERSION = "1.16.0"
 TBB_VERSION = "2022.2.0"
+TIFF_VERSION = "4.7.1"
 ZSTD_VERSION = "1.5.7"
 
 
@@ -50,6 +52,7 @@ class LuxCoreDeps(ConanFile):
         f"embree/{EMBREE_VERSION}",
         f"oidn/{OIDN_VERSION}@luxcore/luxcore",
         f"opensubdiv/{OPENSUBDIV_VERSION}",
+        f"openjph/{OPENJPH_VERSION}",
         f"openimageio/{OIIO_VERSION}",
         f"imgui/{IMGUI_VERSION}",
         f"glfw/{GLFW_VERSION}",
@@ -76,6 +79,10 @@ class LuxCoreDeps(ConanFile):
             override=True,
             libs=True,
             transitive_libs=True,
+        )
+        self.requires(
+            f"libtiff/{TIFF_VERSION}",
+            override=True,
         )
         self.requires(
             f"opencolorio/{OCIO_VERSION}",
