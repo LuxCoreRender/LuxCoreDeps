@@ -29,6 +29,7 @@ OCIO_VERSION = "2.5.0"
 OIIO_VERSION = "3.1.6.2"
 OIDN_VERSION = "2.3.3"
 OPENEXR_VERSION = "3.3.5"
+OPENJPH_VERSION = "0.24.3"
 OPENSUBDIV_VERSION = "3.6.0"
 OPENVDB_VERSION = "11.0.0"
 PYBIND11_VERSION = "3.0.1"
@@ -50,6 +51,7 @@ class LuxCoreDeps(ConanFile):
         f"embree/{EMBREE_VERSION}",
         f"oidn/{OIDN_VERSION}@luxcore/luxcore",
         f"opensubdiv/{OPENSUBDIV_VERSION}",
+        f"openjph/{OPENJPH_VERSION}",
         f"openimageio/{OIIO_VERSION}",
         f"imgui/{IMGUI_VERSION}",
         f"glfw/{GLFW_VERSION}",
