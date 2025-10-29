@@ -36,6 +36,7 @@ PYBIND11_VERSION = "3.0.1"
 ROBINHOOD_VERSION = "3.11.5"
 SPDLOG_VERSION = "1.16.0"
 TBB_VERSION = "2022.2.0"
+TIFF_VERSION = "4.7.1"
 ZSTD_VERSION = "1.5.7"
 
 
@@ -78,6 +79,10 @@ class LuxCoreDeps(ConanFile):
             override=True,
             libs=True,
             transitive_libs=True,
+        )
+        self.requires(
+            f"libtiff/{TIFF_VERSION}",
+            override=True,
         )
         self.requires(
             f"opencolorio/{OCIO_VERSION}",
