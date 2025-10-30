@@ -160,5 +160,6 @@ conan graph info \
   > graph.json
 conan list --graph=graph.json --format=json --graph-binaries=Cache > list.json
 conan cache save -vverbose --file=${cache_dir}/conan-cache-save.tgz --list=list.json
-ls $cache_dir
+# Save build info
+python utils/get-build-info.py > ${cache_dir}/build-info.json
 echo "::endgroup::"
