@@ -10,14 +10,6 @@ compiler.libcxx=libstdc++11
 
 [options]
 openvdb/*:simd=AVX
-embree3/*:shared=False
-embree3/*:with_tbb=False
-embree3/*:sse2=True
-embree3/*:sse42=True
-embree3/*:avx=True
-embree3/*:avx2=True
-embree3/*:avx512=False
-openimageio/*:with_libheif=False
 gtk/system:version=3
 
 

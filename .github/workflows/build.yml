@@ -24,14 +24,16 @@ jobs:
   build-deps:
     name: Build dependencies ${{ matrix.os }}
     permissions: read-all
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os == 'macos-15-arm64' && 'macos-15' || matrix.os }}
     strategy:
       fail-fast: False
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
+        # macos-15 has to be renamed into macos-15-arm64, otherwise, it will
+        # generate a name collision in the cache restoration keys with
+        # macos-15-intel.
+        os: [ubuntu-latest, windows-latest, macos-15-intel, macos-15-arm64]
+
     env:
-      #VERSION: '2.10'
-      # Reminder: report all variables here to CIBW_ENVIRONMENT_PASS_LINUX
       BUILD_TYPE: Release
       # SANITIZE: true # uncomment to sanitize
       CXX_VERSION: 20
@@ -42,9 +44,13 @@ jobs:
       CONAN_LOG_LEVEL: ${{ vars.conan_log_level }}  # To be set by caller (act)
       LUXDEPS_VERSION: ${{ inputs.luxdeps-version }}
       REBUILD_ALL: ${{ inputs.rebuild-all }}
-
+      CACHE: ${{ inputs.rebuild-all && 'trashbin' || 'conan-cache' }}  # Cache for deps
 
     steps:
+
+      #***********************************#
+      #        Common init steps          #
+      #***********************************#
 
       - name: Check LUXDEPS_VERSION
         uses: nick-fields/assert-action@v2
@@ -52,11 +58,6 @@ jobs:
           expected: ''
           actual: ${{ env.LUXDEPS_VERSION }}
           comparison: notEqual
-
-      - name: Configure git for long paths (Windows)
-        shell: bash
-        if: runner.os == 'Windows'
-        run: git config --system core.longpaths true
 
       - name: Checkout main repository (LuxCoreDeps)
         uses: actions/checkout@v4
@@ -72,11 +73,6 @@ jobs:
           esac
           echo "WORKSPACE=${_workspace}" >> "$GITHUB_ENV"
 
-      - name: Update apt cache
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update -y
-
       - name: Set Conan preset
         uses: actions/github-script@v7
         with:
@@ -85,6 +81,15 @@ jobs:
               'CONAN_PRESET',
               String.raw`conan-${{ env.BUILD_TYPE }}`.toLowerCase()
             )
+
+      #***********************************#
+      #             ccache                #
+      #***********************************#
+
+      - name: Update apt (for ccache)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: sudo apt-get update -y
 
       - name: Configure ccache
         uses: actions/github-script@v7
@@ -106,7 +111,7 @@ jobs:
                 core.exportVariable(key, value);
             }
 
-      - name: Install ccache (All)
+      - name: Install ccache and retrieve cached files (All)
         # Use full length commit SHA, otherwise CodeQL complains...
         uses: hendrikmuhs/ccache-action@a1209f81afb8c005c13b4296c32e363431bffea5  # 1.2.17
         with:
@@ -116,6 +121,33 @@ jobs:
           restore-keys: ${{ matrix.os }}-
           max-size: 5G
           verbose: 1
+
+      #***********************************#
+      #       Cached dependencies         #
+      #***********************************#
+
+      - name: Prepare cache dependency folder (all)
+        shell: bash
+        run: |
+            if [[ "$RUNNER_OS" == "Windows" ]]; then
+              CONANCACHE=${{ env.WORKSPACE }}/conan-cache
+            else
+              CONANCACHE=${{ github.workspace}}/conan-cache
+            fi
+            mkdir -p $CONANCACHE
+            echo "CONANCACHE=${CONANCACHE}" >> $GITHUB_ENV
+
+      - name: Retrieve cached dependencies (All)
+        id: retrieve-cache-deps
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.CACHE }}
+          key: deps-${{ matrix.os }}-${{ github.run_id }}
+          restore-keys: deps-${{ matrix.os }}-
+
+      #***********************************#
+      #           Build tools             #
+      #***********************************#
 
       - name: Install ISPC (Windows/MacOS)
         # Use full length commit SHA, otherwise CodeQL complains...
@@ -129,91 +161,107 @@ jobs:
         # Use full length commit SHA, otherwise CodeQL complains...
         uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756  # 1.13.0
 
-      - name: Prepare Linux shortcuts (Linux)
-        if: runner.os == 'Linux'
+      - name: Configure git for long paths (Windows)
+        shell: bash
+        if: runner.os == 'Windows'
+        run: git config --system core.longpaths true
+
+      - name: Check MacOS
+        if: runner.os == 'macOS'
         shell: bash
         run: |
-          _V=${{ env.GCC_VERSION }}
-          _T=/opt/rh/gcc-toolset-${_V}/root
+            clang --version
+            clang -print-targets
 
-          # Reminder: every env variable declared here must be listed
-          # in CIBW_ENVIRONMENT_PASS_LINUX
-          echo "TOOLSET_ROOT=${_T}" >> $GITHUB_ENV
-          echo "CXX=${_T}/usr/bin/g++" >> $GITHUB_ENV
-          echo "CC=${_T}/usr/bin/gcc" >> $GITHUB_ENV
-          echo "AR=${_T}/usr/bin/ar" >> $GITHUB_ENV
-          echo "ASM=${_T}/usr/bin/gcc" >> $GITHUB_ENV
-          echo "RANLIB=${_T}/usr/bin/ranlib" >> $GITHUB_ENV
+      #***********************************#
+      # Build steps (one per platform...) #
+      #***********************************#
 
-          echo "ASAN_PATH=${_T}/usr/lib/gcc/x86_64-redhat-linux/${_V}/libasan.so" >> $GITHUB_ENV
-
-      - name: Set MacOS deployment target (MacOS)
-        if: runner.os == 'macOS'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            if ('${{ runner.arch }}' == 'X64') {
-              target = '10.15';
-              arch='x86_64';
-            }
-            else {
-              target = '12.0';
-              arch='armv8';
-            }
-            core.exportVariable('MACOSX_DEPLOYMENT_TARGET', target);
-            core.exportVariable('PKG_ARCH', arch);
-
-      - name: Retrieve cached dependencies (All)
-        if: env.REBUILD_ALL != true
-        id: retrieve-cache-deps
-        uses: actions/cache/restore@v4
-        with:
-          path: conan-cache
-          key: deps-${{ matrix.os }}-${{ github.run_id }}
-          restore-keys: deps-${{ matrix.os }}-
-
-      # Build deps - we rely on cibuildwheel to get the fine settings for build
-      # To do so, we build a dummy wheel
-      #
-      - name: Build deps
-        # Use full length commit SHA, otherwise CodeQL complains...
-        uses: pypa/cibuildwheel@ee63bf16da6cddfb925f542f2c7b59ad50e93969  # v2.22.0
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
         env:
-          CIBW_ALLOW_EMPTY: True
-          CIBW_BUILD_FRONTEND: build
-          CIBW_BUILD_VERBOSITY: 1
-          CIBW_BUILD: cp39-*
-          CIBW_SKIP: "*musllinux*"
-          CIBW_ARCHS: auto64
-          CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux_${{ env.GLIBC_VERSION }}_x86_64
-          # Nota: we need CMAKE_POLICY_VERSION_MINIMUM, but keep it as low as
-          # possible
-          CIBW_ENVIRONMENT: >
-            SKBUILD_CMAKE_ARGS='-G Ninja;--log-level=VERBOSE'
-            SKBUILD_CMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
-            VERBOSE=1
-            CMAKE_POLICY_VERSION_MINIMUM=3.5
-          CIBW_ENVIRONMENT_PASS_LINUX: |
-            ASM
-            CC
-            CXX
-            BUILD_TYPE
-            GCC_VERSION
-            SANITIZE
-            ASAN_PATH
-            WORKSPACE
-            CMAKE_CXX_COMPILER_LAUNCHER
-            CMAKE_C_COMPILER_LAUNCHER
-            CXX_VERSION
-            RUNNER_OS
-            RUNNER_ARCH
-            CONAN_LOG_LEVEL
-            LUXDEPS_VERSION
-          CIBW_BEFORE_ALL_LINUX: |
+          CONAN_HOME: ${{ github.workspace }}\.conan2
+        run: |
+          bash ${{ env.WORKSPACE }}/run-conan.sh
+
+      - name: Build (MacOS)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+            brew install ispc
+            bash ${{ env.WORKSPACE }}/run-conan.sh
+
+      - name: Build (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        # Build for Linux is containerized in manylinux_2_28_x86_64
+        env:
+          MANYLINUX_IMAGE: manylinux_2_28_x86_64
+          CONTAINER_NAME: manylinux  # Name of the container to create (arbitrary)
+          LINUX_CONANCACHE: /conan-cache
+          LINUX_CCACHE_DIR: /project/.ccache
+          # CONTAINER_COMMAND contains the code to be executed in container:
+          CONTAINER_COMMAND: |
+            # Set environment variables (use jinja)
+            export BUILD_TYPE=${{ env.BUILD_TYPE }}
+            export GCC_VERSION=${{ env.GCC_VERSION }}
+            export ASAN_PATH=${{ env.ASAN_PATH }}
+            export WORKSPACE=${{ env.WORKSPACE }}
+            export CXX_VERSION=${{ env.CXX_VERSION }}
+            export RUNNER_OS=${{ runner.os }}
+            export RUNNER_ARCH=${{ runner.arch }}
+            export CONAN_LOG_LEVEL=${{ env.CONAN_LOG_LEVEL }}
+            export LUXDEPS_VERSION=${{ env.LUXDEPS_VERSION }}
+            export CMAKE_POLICY_VERSION_MINIMUM=3.5
+
+            # Set Python
+            manylinux-interpreters ensure cp313-cp313
+            PATH=/opt/python/cp313-cp313/bin:$PATH
+            which python
+
+            # Install conan
+            python -m pip install conan
+
+            # Set toolset
+            _T=/opt/rh/gcc-toolset-${{ env.GCC_VERSION }}/root
+            export CC=${_T}/usr/bin/gcc
+            export CXX=${_T}/usr/bin/g++
+            export CMAKE_C_COMPILER_LAUNCHER=ccache
+            export CMAKE_CXX_COMPILER_LAUNCHER=ccache
+            export VERBOSE=1
+
+            # Install conda (for gh)
+            dnf install -y wget
+            mkdir -p miniconda3
+            wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+              -O miniconda3/miniconda.sh
+            bash miniconda3/miniconda.sh -b -u -p miniconda3
+            rm miniconda3/miniconda.sh
+            source miniconda3/bin/activate
+            conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+            conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+            conda tos accept --override-channels --channel https://conda.anaconda.org/conda-forge
+
+            conda init --all
+
+            # Install gh
+            conda install conda-forge::gh --channel conda-forge -y
+            echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
+
+            # Install ccache
+            conda install conda-forge::ccache -y
+            export CCACHE_CONFIGPATH=/project/ccache.conf
+            ccache -o cache_dir=/project/.ccache
+            ccache -o depend_mode=false
+            echo "ccache configuration:"
+            ccache -p
+
+            # Install ccache and IPC-Cmd
             dnf install -y epel-release
             dnf install -y almalinux-release-devel
             dnf install -y ccache
-            dnf install -y perl-IPC-Cmd perl-Digest-SHA
+            dnf install -y perl-IPC-Cmd perl-Digest-SHA perl-Time-Piece
 
             if [[ ${{ env.GLIBC_VERSION }} != 2_28 ]]; then
               dnf install -y perl-FindBin perl-lib
@@ -248,25 +296,70 @@ jobs:
             dnf install -y intel-oneapi-ispc
             source /opt/intel/oneapi/ispc/latest/env/vars.sh
 
-          CIBW_BEFORE_ALL_MACOS: |
-            brew install ispc
-            brew install llvm
-            export PATH="/usr/local/opt/llvm/bin:$PATH"
+            # Build
+            source ${{ env.WORKSPACE }}/run-conan.sh
 
-          CIBW_BEFORE_BUILD: bash ${{ env.WORKSPACE }}/install-conan.sh
+            # Re-inspect ccache
+            echo "ccache results:"
+            ccache -sv
 
-          CIBW_REPAIR_WHEEL_COMMAND: ''
+        # run contains the code to be executed on host side
+        run: |
+          # Local variables
+          CONTAINER_CONANCACHE=${{ env.CONTAINER_NAME }}:${{ env.LINUX_CONANCACHE }}
+          CONTAINER_CCACHE_DIR=${{ env.CONTAINER_NAME }}:${{ env.LINUX_CCACHE_DIR }}
 
-          CIBW_CONTAINER_ENGINE: >
-            docker;
-            create_args:
-              --mount type=bind,source=${{ github.workspace }}/conan-cache,target=/conan-cache
-              --mount type=bind,source=${{ env.CCACHE_DIR }},target=/root/.ccache
+          # Clean (remove container if it exists)
+          CONTAINER_LIST=$(docker container ps -a)
+          if [[ ${CONTAINER_LIST} == *${CONTAINER_NAME}* ]]; then
+            echo "Removing existing container '$CONTAINER_NAME'"
+            docker rm --force $CONTAINER_NAME
+          fi
 
-        with:
-            package-dir: .
-            output-dir: wheelhouse
-            config-file: "{package}/pyproject.toml"
+          # Start
+          echo ""
+          echo "******** LAUCHING MANYLINUX CONTAINER ********"
+          echo ""
+          docker create \
+            -t \
+            --name $CONTAINER_NAME \
+            quay.io/pypa/${{ env.MANYLINUX_IMAGE }}
+          docker start $CONTAINER_NAME
+          docker exec $CONTAINER_NAME env
+
+          # Copy source tree
+          docker exec $CONTAINER_NAME sh -c "echo Copying source tree"
+          docker cp ${{ github.workspace }} $CONTAINER_NAME:/project
+
+          # Copy cached deps
+          echo "Copying deps: $CONANCACHE --> $CONTAINER_CONANCACHE"
+          docker cp $CONANCACHE/. $CONTAINER_CONANCACHE
+
+          # Copy ccache
+          echo "Copying ccache: $CCACHE_DIR --> $CONTAINER_CCACHE_DIR"
+          docker cp $CCACHE_DIR/. $CONTAINER_CCACHE_DIR
+
+          # Execute command in container
+          docker exec \
+            --workdir=/project \
+            $CONTAINER_NAME \
+            sh -c '${{ env.CONTAINER_COMMAND }}'
+
+          # Get artifact back
+          echo "Getting artifact back to host: $CONTAINER_CONANCACHE/. --> $CONANCACHE"
+          docker cp $CONTAINER_CONANCACHE/. $CONANCACHE
+
+          # Copy ccache back
+          echo "Copying ccache: $CONTAINER_CCACHE_DIR --> $CCACHE_DIR"
+          docker cp $CONTAINER_CCACHE_DIR/. $CCACHE_DIR
+
+          # Stop container
+          echo "Stopping container"
+          docker stop $CONTAINER_NAME
+
+      #***********************************#
+      #             Post-build            #
+      #***********************************#
 
       - name: Check conan archive content
         if: ${{ !env.ACT }}
@@ -276,10 +369,8 @@ jobs:
             if [[ "$RUNNER_OS" == "Windows" ]]; then
               CONAN=conan.exe
               PIPX_HOME=${{ env.WORKSPACE }}/pipx
-              CONANCACHE=${{ env.WORKSPACE }}/conan-cache
             else
               CONAN=conan
-              CONANCACHE=${{ github.workspace}}/conan-cache
             fi
 
             pipx ensurepath --force
@@ -287,11 +378,14 @@ jobs:
 
             # Clean cache and load archive
             $CONAN remove -c "*" > /dev/null
-            $CONAN cache restore $CONANCACHE/conan-cache-save.tgz > /dev/null
-
-            echo "**********************"
-            echo "Conan archive content:"
-            $CONAN list --format=compact
+            if [[ -f ${{ env.CONANCACHE }}/conan-cache-save.tgz ]]; then
+              $CONAN cache restore ${{ env.CONANCACHE }}/conan-cache-save.tgz > /dev/null
+              echo "**********************"
+              echo "Conan archive content:"
+              $CONAN list --format=compact
+            else
+              echo "No archive content retrieved from cache"
+            fi
 
       - name: Save dependency cache
         if: always()
@@ -301,7 +395,7 @@ jobs:
           path: conan-cache
           key: deps-${{ matrix.os }}-${{ github.run_id }}
 
-      ## For debugging
+      # For debugging
       #- name: Setup tmate session (debug)
         #if: ${{ failure() }}
         #uses: mxschmitt/action-tmate@v3
@@ -319,4 +413,3 @@ jobs:
           echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
           echo 'Artifact URL is ${{ steps.artifact-upload-step.outputs.artifact-url }}'
           echo 'Artifact SHA-256 is ${{ steps.artifact-upload-step.outputs.artifact-digest }}'
-

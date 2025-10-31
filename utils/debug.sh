@@ -21,7 +21,8 @@ act workflow_call \
   --job build-deps \
   -s GITHUB_TOKEN="$(gh auth token)" \
   --matrix os:ubuntu-latest \
-  --artifact-server-path /tmp/pyluxcore \
+  --artifact-server-path /tmp/luxcoredeps/artifact \
+  --cache-server-path /tmp/luxcoredeps/cache \
   --rm \
   | tee /tmp/pyluxcore.log
   #&& unzip -o ${zipfolder}/cibw-wheels-ubuntu-latest-13.zip -d ${zipfolder}

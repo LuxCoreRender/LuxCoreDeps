@@ -9,7 +9,6 @@ from conan.tools.cmake import cmake_layout, CMake, CMakeDeps, CMakeToolchain
 
 class nvrtcRecipe(ConanFile):
     name = "nvrtc"
-    version = "12.8.61"
     user = "luxcore"
     channel = "luxcore"
     package_type = "library"
@@ -28,19 +27,13 @@ class nvrtcRecipe(ConanFile):
             raise ConanInvalidConfiguration("MacOS not supported")
 
     def build(self):
-        _os = str(self.settings.os)
-        quirks = {
-            "Linux": ("linux-x86_64", "tar.xz"),
-            "Windows": ("windows-x86_64", "zip"),
-        }
-
-        platform, extension = quirks[_os]
-
-        url = (
-            "https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvrtc/"
-            f"{platform}/cuda_nvrtc-{platform}-{self.version}-archive.{extension}"
+        arch = "x86_64"
+        get(
+            self,
+            **self.conan_data["sources"][self.version][str(self.settings.os)][arch],
+            destination=self.build_folder,
+            strip_root=True
         )
-        get(self, url, destination=self.build_folder, strip_root=True)
 
     def generate(self):
         tc = CMakeToolchain(self)

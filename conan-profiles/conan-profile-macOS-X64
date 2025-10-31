@@ -2,10 +2,10 @@ include(conan-profile-common)
 
 [settings]
 os=Macos
-os.version=10.15
+os.version=11.0
 arch=x86_64
 compiler=apple-clang
-compiler.version=14.0
+compiler.version=17
 compiler.cppstd={{ os.getenv("CXX_VERSION") }}
 compiler.libcxx=libc++
 
@@ -13,11 +13,17 @@ compiler.libcxx=libc++
 minizip-ng/*:with_zlib=True
 minizip-ng/*:with_libcomp=False
 openvdb/*:simd=AVX
+opensubdiv/*:with_metal=False
+embree/*:shared=True
 
 [buildenv]
-CXX=clang++
-CC=clang
+PKG_ARCH=x86_64
+# See also macos_var.cmake
+MACOSX_DEPLOYMENT_TARGET=11.0
 
 [conf]
-&:tools.build:cxxflags+=["-ftree-vectorize", "-march=x86-64-v3", "-O3", "-mno-avx2"]
-# NB: Github MacOS X64 runner does not support avx2 nor avx512
+&:tools.build:cxxflags+=["-ftree-vectorize", "-march=x86-64-v3", "-O3"]
+tools.cmake.cmaketoolchain:user_toolchain+={{profile_dir}}/macos-vars-X64.cmake
+openvdb/*:tools.build:cxxflags+=["-Wno-error", "-Wno-missing-template-arg-list-after-template-kw"]
+
+# vim: ft=conf

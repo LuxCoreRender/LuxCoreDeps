@@ -22,7 +22,7 @@ class Conf(ConanFile):
         print(self.recipe_folder)
         print(os.listdir(self.recipe_folder))
         copy(self,
-             "conan-profile-*",
+             "*",
              src=self.recipe_folder,
              dst=self.export_sources_folder
         )
@@ -30,7 +30,7 @@ class Conf(ConanFile):
 
     def package(self):
         copy(self,
-             "conan-profile-*",
+             "*",
              src=self.export_sources_folder,
              dst=os.path.join(self.package_folder, "profiles")
         )

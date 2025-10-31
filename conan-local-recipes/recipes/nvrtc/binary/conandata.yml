@@ -1,0 +1,19 @@
+sources:
+  "12.8.93":
+    Linux:
+      x86_64:
+        url: "https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvrtc/linux-x86_64/cuda_nvrtc-linux-x86_64-12.8.93-archive.tar.xz"
+        sha256: "992f5e4d95cb499f41e442245efa877dbd60c711451afe680a26700d61eb3843"
+    Windows:
+      x86_64:
+        url: "https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvrtc/windows-x86_64/cuda_nvrtc-windows-x86_64-12.8.93-archive.zip"
+        sha256: "a63302a077f0248a743a1a7caa7dbd80d0fac56c6cfa9c41fa05fac9b7e5eda5"
+  "13.0.88":
+    Linux:
+      x86_64:
+        url: "https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvrtc/linux-x86_64/cuda_nvrtc-linux-x86_64-13.0.88-archive.tar.xz"
+        sha256: "00038aac08e1dba6f1933237dbfb217ac6452ae24fab970edcac808f103ca64b"
+    Windows:
+      x86_64:
+        url: "https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvrtc/windows-x86_64/cuda_nvrtc-windows-x86_64-13.0.88-archive.zip"
+        sha256: "8c50a52467826167e0dbe99936140c52d62272bfc5849fe2d6587d050c8c5d29"

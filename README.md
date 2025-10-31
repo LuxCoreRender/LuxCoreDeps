@@ -23,10 +23,10 @@ Once populated, the cache is bundled (`conan cache save`) and published
 in a Github release.
 
 ### On consumer side (LuxCore)
-In LuxCore, the provided cache is downloaded from the release and
-restored locally (`conan cache restore`), thus making all the dependencies
+In LuxCore, the provided cache is downloaded from the LuxCoreDeps release
+and restored locally (`conan cache restore`), thus making all the dependencies
 available for LuxCore build.
-In LuxCore, cache download and restoration are wrapped in a convenient
+In LuxCore, the download and restoration of the cache are wrapped in a convenient
 `make deps` statement.
 
 ```mermaid
@@ -98,6 +98,7 @@ how to modify such a file.
 ### Where to start - LuxCoreDeps entry points
 The main entry point is `.github/workflows/build.yml`.
 Other interesting files may be:
+- `run-conan.sh`: the bash script that invokes Conan
 - `conanfile.py`: Conan script to build dependencies
 - `conan-profiles`: folder with Conan profiles
 
@@ -107,7 +108,8 @@ LuxCoreDeps follows Semantic Versioning (https://semver.org).
 ### Compilation environment
 For Python wheels to be built properly, it is essential that dependencies be built
 by `CIBUILDWHEEL`, with the same environment (compiler version, manylinux container,
-etc.) as the one intended for the wheels.
+etc.) as the one intended for the wheels. This is especially true for Linux build, which
+must occur in a manylinux container. See https://cibuildwheel.pypa.io/en/stable/ for more details.
 
 ### Local recipes
 Most of Conan recipes used by LuxCoreDeps are to be found in Conan central repository (Conan center).
