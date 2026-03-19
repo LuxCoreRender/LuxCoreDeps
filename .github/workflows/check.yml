@@ -21,3 +21,4 @@ jobs:
     with:
       # This must be kept in lower case (incorporated to Conan package name)
       luxdeps-version: "check"
+      rebuild-all: true
