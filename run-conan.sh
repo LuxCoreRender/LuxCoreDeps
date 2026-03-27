@@ -71,6 +71,16 @@ if [ ! -d "conan-center-index" ]; then
   cd conan-center-index
   git reset --hard ${CONAN_COMMIT}
   git clean -df  # cleans any untracked files/folders
+
+  # Workaround for temporary unavailability of giflib in conan index (2026-03-22)
+  # TODO Remove when patch has been accepted
+  #git remote add "upstream" git@github.com:conan-io/conan-center-index.git
+  #git fetch upstream pull/29758/head:giflib
+  #git cherry-pick 0e95d1b1e8380d72df48c7c48efe14f39239826a
+  git config --global user.name "LuxCoreDeps"
+  git config --global user.email "luxcoredeps@luxcore.com"
+  curl -L https://github.com/conan-io/conan-center-index/pull/29758.patch | git am
+
   cd ..
 fi
 conan remote add mycenter ./conan-center-index --force
