@@ -36,7 +36,7 @@ jobs:
         # macos-15 has to be renamed into macos-15-arm64, otherwise, it will
         # generate a name collision in the cache restoration keys with
         # macos-15-intel.
-        os: [ubuntu-latest, windows-latest, macos-15-intel, macos-15-arm64]
+        os: [ubuntu-latest, windows-latest, macos-15-intel, macos-15-arm64, windows-11-arm]
 
     env:
       BUILD_TYPE: ${{ inputs.build-type || 'Release' }}
@@ -166,6 +166,8 @@ jobs:
         if: runner.os == 'Windows'
         # Use full length commit SHA, otherwise CodeQL complains...
         uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756  # 1.13.0
+        with:
+          arch: ${{ runner.arch == 'ARM64' && 'arm64' || 'x64' }}
 
       - name: Configure git for long paths (Windows)
         shell: bash
