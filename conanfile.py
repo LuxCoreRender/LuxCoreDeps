@@ -22,6 +22,7 @@ IMGUI_VERSION = "1.92.5"
 IMGUIFILEDIALOG_VERSION = "0.6.7"
 LIBDEFLATE_VERSION = "1.25"
 LIBTIFF_VERSION = "4.7.1"
+LLVM_OPENMP_VERSION = "20.1.6"
 MINIZIP_VERSION = "4.0.7"
 NINJA_VERSION = "1.13.2"
 NLOHMANN_JSON_VERSION = "3.12.0"
@@ -132,6 +133,13 @@ class LuxCoreDeps(ConanFile):
         # LuxCore build requirements
         # As they are build requirements for LuxCore, they must be full
         # requirements for LuxCoreDeps (otherwise they won't get saved in cache)
+
+        if self.settings.os == "Macos":
+            self.requires(
+                f"llvm-openmp/{LLVM_OPENMP_VERSION}",
+                force=True,
+            )
+
 
         # Bison/flex (Luxcore build requirement)
         if self.settings.os == "Windows":
