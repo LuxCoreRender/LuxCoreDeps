@@ -21,7 +21,7 @@ on:
         default: False
       build-type:
         description: 'Build type'
-        required: true
+        required: False
         type: string
         default: 'Release'
 
