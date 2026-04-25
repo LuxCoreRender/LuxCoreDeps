@@ -15,10 +15,15 @@ on:
         required: true
         type: string
       rebuild-all:
-        description: "Rebuild all"
+        description: 'Rebuild all'
         required: False
         type: boolean
         default: False
+      build-type:
+        description: 'Build type'
+        required: true
+        type: string
+        default: 'Release'
 
 jobs:
   build-deps:
@@ -34,7 +39,8 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-15-intel, macos-15-arm64]
 
     env:
-      BUILD_TYPE: Release
+      BUILD_TYPE: ${{ inputs.build-type || 'Release' }}
+      DEPS_BUILD_TYPE: ${{ inputs.build-type || 'Release' }}
       # SANITIZE: true # uncomment to sanitize
       CXX_VERSION: 20
       GCC_VERSION: 14
@@ -205,6 +211,7 @@ jobs:
           CONTAINER_COMMAND: |
             # Set environment variables (use jinja)
             export BUILD_TYPE=${{ env.BUILD_TYPE }}
+            export DEPS_BUILD_TYPE=${{ env.DEPS_BUILD_TYPE }}
             export GCC_VERSION=${{ env.GCC_VERSION }}
             export ASAN_PATH=${{ env.ASAN_PATH }}
             export WORKSPACE=${{ env.WORKSPACE }}
