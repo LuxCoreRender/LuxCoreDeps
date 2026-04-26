@@ -21,7 +21,7 @@ CONAN_PROFILE=conan-profile-${RUNNER_OS}-${RUNNER_ARCH}
 # gradually happen and finally break the build.
 # To the contrary, you may need to upgrade this commit when you want to upgrade
 # a given dependency.
-CONAN_COMMIT=d60a35f00bf85fd1abf2df0877878f54404e3df0
+CONAN_COMMIT=500fc1507de61f99c2fc3e2711a2636e9a949feb
 
 # Debug utility (install a specific package)
 function debug() {
@@ -77,9 +77,9 @@ if [ ! -d "conan-center-index" ]; then
   #git remote add "upstream" git@github.com:conan-io/conan-center-index.git
   #git fetch upstream pull/29758/head:giflib
   #git cherry-pick 0e95d1b1e8380d72df48c7c48efe14f39239826a
-  git config --global user.name "LuxCoreDeps"
-  git config --global user.email "luxcoredeps@luxcore.com"
-  curl -L https://github.com/conan-io/conan-center-index/pull/29758.patch | git am
+  #git config --global user.name "LuxCoreDeps"
+  #git config --global user.email "luxcoredeps@luxcore.com"
+  #curl -L https://github.com/conan-io/conan-center-index/pull/29758.patch | git am
 
   cd ..
 fi
