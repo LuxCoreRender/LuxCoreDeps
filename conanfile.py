@@ -163,6 +163,8 @@ class LuxCoreDeps(ConanFile):
         self.tool_requires("meson/[*]")
         self.tool_requires("pkgconf/[*]")
         self.tool_requires("yasm/[*]")
+        self.tool_requires("m4/[*]")
+        self.tool_requires("b2/[*]")
 
     def generate(self):
         tc = CMakeToolchain(self)
