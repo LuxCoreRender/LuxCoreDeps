@@ -33,7 +33,7 @@ function debug() {
     --build="*"
 }
 
-# Script starts here
+# THIS SCRIPT STARTS HERE
 
 # 0. Initialize: set globals and install conan and ninja
 set -exo pipefail
