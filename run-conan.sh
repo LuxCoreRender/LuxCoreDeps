@@ -176,7 +176,11 @@ echo "::endgroup::"
 
 # 8. Save result
 echo "::group::Saving dependencies in ${cache_dir}"
-conan cache clean "*"  # Clean non essential files
+if [[ -n "$CI" ]]; then
+  # Clean non essential files, but only for CI, as we consider that non-CI
+  # builds are debugging builds and should be provided maximal data
+  conan cache clean "*"
+fi
 conan remove -c -vverbose "*/*#!latest"  # Keep only latest version of each package
 # Save only dependencies of current target (otherwise cache gets bloated)
 conan graph info \
