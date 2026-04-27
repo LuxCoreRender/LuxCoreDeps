@@ -120,7 +120,9 @@ echo "::group::CIBW_BEFORE_BUILD: Install tool requirements"
 # We specify conancenter as a remote, thus allowing to use precompiled
 # binaries.
 # For pkgconf and meson, we have to manually target the right version
-build_deps=(b2/[*] cmake/[*] m4/[*] pkgconf/2.1.0 meson/1.2.2 yasm/[*])
+# b2 is required to be built from source (therefore not in the below list, for
+# libc compatibility
+build_deps=(cmake/[*] m4/[*] pkgconf/2.1.0 meson/1.2.2 yasm/[*])
 if [[ $RUNNER_OS == "Windows" ]]; then
   build_deps+=(msys2/[*])
 fi
