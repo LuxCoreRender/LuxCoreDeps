@@ -30,6 +30,7 @@ yasm/*
 [options]
 oidn/*:shared=True
 opensubdiv/*:with_tbb=True
+opensubdiv/*:with_opengl=False
 spdlog/*:header_only=True
 spdlog/*:use_std_fmt=True
 nvrtc/*:shared=True
