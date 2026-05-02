@@ -29,7 +29,7 @@ tools.build:cflags+=["-fsanitize=address", "-fno-omit-frame-pointer"]
 tools.build:cxxflags+=["-fsanitize=address", "-fno-omit-frame-pointer"]
 
 tools.build:sharedlinkflags=["-fsanitize=address"]
-tools.cmake.cmaketoolchain:extra_variables={ 'COMPILER_RT_BUILD_SHARED_ASAN':'ON' }
+tools.cmake.cmaketoolchain:extra_variables={ 'COMPILER_RT_BUILD_SHARED_ASAN':'ON', 'CMAKE_BUILD_PARALLEL_LEVEL':'' }
 openvdb/*:tools.cmake.cmaketoolchain:extra_variables={ 'COMPILER_RT_BUILD_SHARED_ASAN':'ON', 'USE_CCACHE':'OFF' }
 
 {% else -%}

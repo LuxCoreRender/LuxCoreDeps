@@ -21,7 +21,7 @@ CONAN_PROFILE=conan-profile-${RUNNER_OS}-${RUNNER_ARCH}
 # gradually happen and finally break the build.
 # To the contrary, you may need to upgrade this commit when you want to upgrade
 # a given dependency.
-CONAN_COMMIT=d60a35f00bf85fd1abf2df0877878f54404e3df0
+CONAN_COMMIT=500fc1507de61f99c2fc3e2711a2636e9a949feb
 
 # Debug utility (install a specific package)
 function debug() {
@@ -33,7 +33,7 @@ function debug() {
     --build="*"
 }
 
-# Script starts here
+# THIS SCRIPT STARTS HERE
 
 # 0. Initialize: set globals and install conan and ninja
 set -exo pipefail
@@ -77,9 +77,9 @@ if [ ! -d "conan-center-index" ]; then
   #git remote add "upstream" git@github.com:conan-io/conan-center-index.git
   #git fetch upstream pull/29758/head:giflib
   #git cherry-pick 0e95d1b1e8380d72df48c7c48efe14f39239826a
-  git config --global user.name "LuxCoreDeps"
-  git config --global user.email "luxcoredeps@luxcore.com"
-  curl -L https://github.com/conan-io/conan-center-index/pull/29758.patch | git am
+  #git config --global user.name "LuxCoreDeps"
+  #git config --global user.email "luxcoredeps@luxcore.com"
+  #curl -L https://github.com/conan-io/conan-center-index/pull/29758.patch | git am
 
   cd ..
 fi
@@ -120,7 +120,9 @@ echo "::group::CIBW_BEFORE_BUILD: Install tool requirements"
 # We specify conancenter as a remote, thus allowing to use precompiled
 # binaries.
 # For pkgconf and meson, we have to manually target the right version
-build_deps=(b2/[*] cmake/[*] m4/[*] pkgconf/2.1.0 meson/1.2.2 yasm/[*])
+# b2 is required to be built from source (therefore not in the below list, for
+# libc compatibility
+build_deps=(cmake/[*] m4/[*] pkgconf/2.1.0 meson/1.2.2 yasm/[*])
 if [[ $RUNNER_OS == "Windows" ]]; then
   build_deps+=(msys2/[*])
 fi
@@ -129,8 +131,7 @@ for d in "${build_deps[@]}"; do
     --tool-requires=${d} \
     --profile:all=$CONAN_PROFILE \
     --build=missing \
-    --remote=conancenter \
-    --build=b2/*
+    --remote=conancenter
 done
 echo "::endgroup::"
 
@@ -175,7 +176,11 @@ echo "::endgroup::"
 
 # 8. Save result
 echo "::group::Saving dependencies in ${cache_dir}"
-conan cache clean "*"  # Clean non essential files
+if [[ -n "$CI" ]]; then
+  # Clean non essential files, but only for CI, as we consider that non-CI
+  # builds are debugging builds and should be provided maximal data
+  conan cache clean "*"
+fi
 conan remove -c -vverbose "*/*#!latest"  # Keep only latest version of each package
 # Save only dependencies of current target (otherwise cache gets bloated)
 conan graph info \

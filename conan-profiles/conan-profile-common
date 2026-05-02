@@ -3,7 +3,6 @@ build_type={{ os.getenv("DEPS_BUILD_TYPE", "Release") }}
 
 # For tools, we'll always use release version
 # (directly downloaded from cache)
-b2/*:build_type=Release
 cmake/*:build_type=Release
 meson/*:build_type=Release
 pkgconf/*:build_type=Release
@@ -13,6 +12,8 @@ bison/*:build_type=Release
 flex/*:build_type=Release
 winflexbison/*:build_type=Release
 doxygen/*:build_type=Release
+m4/*:build_type=Release
+b2/*:build_type=Release
 
 [conf]
 tools.system.package_manager:mode=install
@@ -29,6 +30,7 @@ yasm/*
 [options]
 oidn/*:shared=True
 opensubdiv/*:with_tbb=True
+opensubdiv/*:with_opengl=False
 spdlog/*:header_only=True
 spdlog/*:use_std_fmt=True
 nvrtc/*:shared=True
