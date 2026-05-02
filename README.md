@@ -63,6 +63,8 @@ sources provides the following benefits:
 - The options of each dependency can be selected precisely.
 - The build options (SSE, AVX, compiler optimizations...) can also be selected
   in fine detail.
+- Dependency source code can be debugged if needed, as deps can be compiled
+  with debug information if needed (yes, dependencies sometimes contain bugs...)
 - Dependency source code can be patched if needed.
 
 LuxCoreDeps is exclusively intended to be run in continuous integration by
