@@ -68,7 +68,8 @@ sources provides the following benefits:
 - Dependency source code can be patched if needed.
 
 LuxCoreDeps is exclusively intended to be run in continuous integration by
-Github Actions.
+Github Actions. Other builds may exist, in local machines, but they should be
+restricted to debugging.
 
 To trigger dependency build & publish, use **LuxCore Dependency Releaser** action,
 with `Run workflow` button:
@@ -121,7 +122,12 @@ However, a few ones did not exist on-the-shelf and were created as local recipes
 Dependency build can be debugged locally using `nektos/act`
 (https://github.com/nektos/act).
 
-`utils/debug.sh` contains a working example of `act`invokation under Linux.
+`utils/CI-local-build.sh` contains a working example of `act`invokation under Linux.
+
+### More information
+Some more information is available in LuxCore wiki:
+- https://wiki.luxcorerender.org/Building_LuxCoreRender
+- https://wiki.luxcorerender.org/Building_LuxCoreRender_-_FAQ
 
 ## License
 This code is released under Apache 2.0 license.
