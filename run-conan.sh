@@ -90,20 +90,22 @@ conan remote add mylocal ./conan-local-recipes --force
 conan list -r mylocal
 echo "::endgroup::"
 
-# 2.5 Build local packages
-echo "::group::CIBW_BEFORE_BUILD: Build local packages"
-cd $WORKSPACE/conan-local-recipes/recipes/embree/all
-echo "Current directory: $(pwd)"
-echo "Checking for prebuilt/lib/embree4.lib"
-ls -la prebuilt/lib/
-if [ -f "prebuilt/lib/embree4.lib" ]; then
-  echo "File found, creating package"
-  conan create . --profile:all=$WORKSPACE/conan-profiles/$CONAN_PROFILE --version=4.4.0
-else
-  echo "::warning::Prebuilt Embree not found, skipping local package creation"
+# 2.5 Only create local embree package on ARM64
+if [ "$RUNNER_ARCH" == "ARM64" ]; then
+  echo "::group::CIBW_BEFORE_BUILD: Build local packages"
+  cd $WORKSPACE/conan-local-recipes/recipes/embree/all
+  echo "Current directory: $(pwd)"
+  echo "Checking for prebuilt/lib/embree4.lib"
+  ls -la prebuilt/lib/
+  if [ -f "prebuilt/lib/embree4.lib" ]; then
+    echo "File found, creating package"
+    conan create . --profile:all=$WORKSPACE/conan-profiles/$CONAN_PROFILE --version=4.4.0
+  else
+    echo "::warning::Prebuilt Embree not found, skipping local package creation"
+  fi
+  cd $WORKSPACE
+  echo "::endgroup::"
 fi
-cd $WORKSPACE
-echo "::endgroup::"
 
 if [[ "$RUNNER_OS" == "Linux" ]]; then
   # ispc
