@@ -87,6 +87,10 @@ conan remote add mycenter ./conan-center-index --force
 
 # 2. Add local recipe repository (as a remote)
 conan remote add mylocal ./conan-local-recipes --force
+# Remove embree from mylocal remote on non-ARM64
+if [ "$RUNNER_ARCH" != "ARM64" ]; then
+  conan remove "embree*" -r mylocal --confirm
+fi
 conan list -r mylocal
 echo "::endgroup::"
 
