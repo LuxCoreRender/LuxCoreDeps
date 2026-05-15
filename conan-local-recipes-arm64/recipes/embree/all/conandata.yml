@@ -1,0 +1,8 @@
+# sources:
+#   "4.4.1":
+#     url: "https://github.com/RenderKit/embree/archive/refs/tags/v4.4.1.tar.gz"
+#     sha256: "actual_sha256_here"
+
+sources:
+  "4.4.0":
+    url: "https://github.com/embree/embree/archive/refs/heads/master.tar.gz"
