@@ -36,7 +36,7 @@ jobs:
         # macos-15 has to be renamed into macos-15-arm64, otherwise, it will
         # generate a name collision in the cache restoration keys with
         # macos-15-intel.
-        os: [ubuntu-latest, windows-latest, macos-15-intel, macos-15-arm64, windows-11-arm]
+        os: [ubuntu-latest, windows-2022, macos-15-intel, macos-15-arm64, windows-11-arm]
 
     env:
       BUILD_TYPE: ${{ inputs.build-type || 'Release' }}
@@ -169,7 +169,7 @@ jobs:
         with:
           arch: ${{ runner.arch == 'ARM64' && 'arm64' || 'x64' }}
 
-      - name: Find clang-cl and detect runtime version (Windows ARM64)
+      - name: Find clang-cl (Windows ARM64)
         if: runner.os == 'Windows' && runner.arch == 'ARM64'
         shell: pwsh
         run: |
@@ -179,25 +179,26 @@ jobs:
             -property installationPath
           if (-not $vsPath) { Write-Error "VS with Clang not found"; exit 1 }
 
-          # Find clang-cl for ARM64
           $clangCl = "$vsPath\VC\Tools\Llvm\ARM64\bin\clang-cl.exe"
           if (-not (Test-Path $clangCl)) { Write-Error "clang-cl not found at: $clangCl"; exit 1 }
-          Write-Output "Found clang-cl at: $clangCl"
-          echo "CLANG_CL_ARM64=$clangCl" >> $env:GITHUB_ENV
 
-          # Add clang-cl directory to PATH so bare "clang-cl" resolves
           $clangDir = Split-Path $clangCl
           echo "$clangDir" >> $env:GITHUB_PATH
 
-          # Detect MSVC toolset version for runtime_version setting
           $toolsPath = "$vsPath\VC\Tools\MSVC"
           $toolsetVersion = (Get-ChildItem $toolsPath | Sort-Object Name -Descending | Select-Object -First 1).Name
-          # toolsetVersion looks like "14.44.35207"
-          $major = $toolsetVersion.Split('.')[0]   # 14
-          $minor = $toolsetVersion.Split('.')[1]   # 44
-          $runtimeVersion = "v$major$([int]($minor/10))"  # v144
-          Write-Output "Detected runtime version: $runtimeVersion"
+          $major = $toolsetVersion.Split('.')[0]        
+          $minor = $toolsetVersion.Split('.')[1]        
+          $runtimeVersion = "v$major$([int]($minor/10))"  
           echo "MSVC_RUNTIME_VERSION=$runtimeVersion" >> $env:GITHUB_ENV
+
+      - name: Install custom compatibility.py (Windows ARM64)
+        if: runner.os == 'Windows' && runner.arch == 'ARM64'
+        shell: pwsh
+        run: |
+          $compatDir = "${{ github.workspace }}\.conan2\extensions\plugins\compatibility"
+          New-Item -ItemType Directory -Force -Path $compatDir
+          Copy-Item ".\conan-profiles\compatibility.py" "$compatDir\compatibility.py"
 
       - name: Configure git for long paths (Windows)
         shell: bash

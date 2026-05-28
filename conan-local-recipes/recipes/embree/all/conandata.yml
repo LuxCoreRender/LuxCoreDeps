@@ -1,0 +1,10 @@
+sources:
+  "4.4.1":
+    url: "https://github.com/RenderKit/embree/archive/refs/tags/v4.4.1.tar.gz"
+    sha256: "dcf338cc61b636c871ccf370e673bfd380c5ecb71ce49ad50f28e1d4ec9995dc"
+
+patches:
+  "4.4.1":
+    - patch_file: "patches/4.4.1-0001-fix-arm-clang.patch"
+      patch_description: "Fix ARM/Clang detection in CMakeLists"
+      patch_type: "conan"
