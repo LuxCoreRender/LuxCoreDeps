@@ -21,7 +21,7 @@ CONAN_PROFILE=conan-profile-${RUNNER_OS}-${RUNNER_ARCH}
 # gradually happen and finally break the build.
 # To the contrary, you may need to upgrade this commit when you want to upgrade
 # a given dependency.
-CONAN_COMMIT=500fc1507de61f99c2fc3e2711a2636e9a949feb
+CONAN_COMMIT=0a1fdeff8b9a04050d572e7c1626c7af2610bc9c
 
 # Debug utility (install a specific package)
 function debug() {
