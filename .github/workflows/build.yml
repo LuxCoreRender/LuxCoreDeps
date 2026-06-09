@@ -44,7 +44,7 @@ jobs:
       # SANITIZE: true # uncomment to sanitize
       CXX_VERSION: 20
       GCC_VERSION: 14
-      GLIBC_VERSION: 2_28
+      GLIBC_VERSION: 2_34
       GH_TOKEN: ${{ github.token }}
       BOOST_INSTALL_LAYOUT: system
       CONAN_LOG_LEVEL: ${{ vars.conan_log_level }}  # To be set by caller (act)
@@ -236,7 +236,7 @@ jobs:
         shell: bash
         # Build for Linux is containerized in manylinux_2_28_x86_64
         env:
-          MANYLINUX_IMAGE: manylinux_2_28_x86_64
+          MANYLINUX_IMAGE: manylinux_2_34_x86_64
           CONTAINER_NAME: manylinux  # Name of the container to create (arbitrary)
           LINUX_CONANCACHE: /conan-cache
           LINUX_CCACHE_DIR: /project/.ccache
