@@ -169,7 +169,7 @@ jobs:
         with:
           arch: ${{ runner.arch == 'ARM64' && 'arm64' || 'x64' }}
 
-      - name: Find clang-cl (Windows ARM64)
+      - name: Calculate MSVC Runtime for Conan (Windows ARM64)
         if: runner.os == 'Windows' && runner.arch == 'ARM64'
         shell: pwsh
         run: |
@@ -177,13 +177,7 @@ jobs:
             -latest `
             -requires Microsoft.VisualStudio.Component.VC.Llvm.Clang `
             -property installationPath
-          if (-not $vsPath) { Write-Error "VS with Clang not found"; exit 1 }
-
-          $clangCl = "$vsPath\VC\Tools\Llvm\ARM64\bin\clang-cl.exe"
-          if (-not (Test-Path $clangCl)) { Write-Error "clang-cl not found at: $clangCl"; exit 1 }
-
-          $clangDir = Split-Path $clangCl
-          echo "$clangDir" >> $env:GITHUB_PATH
+          if (-not $vsPath) { Write-Error "VS with Clang component not found"; exit 1 }
 
           $toolsPath = "$vsPath\VC\Tools\MSVC"
           $toolsetVersion = (Get-ChildItem $toolsPath | Sort-Object Name -Descending | Select-Object -First 1).Name

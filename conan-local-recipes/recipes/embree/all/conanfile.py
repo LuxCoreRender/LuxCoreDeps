@@ -3,7 +3,7 @@ from conan.errors import ConanInvalidConfiguration
 from conan.tools.build import check_min_cppstd
 from conan.tools.apple import is_apple_os
 from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps, cmake_layout
-from conan.tools.files import copy, get, rm, rmdir, apply_conandata_patches, export_conandata_patches
+from conan.tools.files import copy, get, rm, rmdir, replace_in_file
 from conan.tools.microsoft import is_msvc, is_msvc_static_runtime
 from conan.tools.scm import Version
 import os
@@ -36,9 +36,6 @@ class EmbreeConan(ConanFile):
     @property
     def _has_neon(self):
         return "arm" in self.settings.arch
-
-    def export_sources(self):
-        export_conandata_patches(self)
 
     def layout(self):
         cmake_layout(self, src_folder="src")
@@ -88,7 +85,6 @@ class EmbreeConan(ConanFile):
         deps.generate()
 
     def build(self):
-        apply_conandata_patches(self) 
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
