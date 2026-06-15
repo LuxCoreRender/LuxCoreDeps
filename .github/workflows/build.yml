@@ -279,6 +279,7 @@ jobs:
             ccache --show-config
 
             # Install git-lfs
+            dnf install -y sudo
             curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | sudo bash
             dnf install -y git-lfs
 
