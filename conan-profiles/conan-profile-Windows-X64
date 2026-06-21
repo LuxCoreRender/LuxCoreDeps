@@ -7,8 +7,6 @@ compiler=msvc
 compiler.version=194
 compiler.cppstd={{ os.getenv("CXX_VERSION") }}
 compiler.runtime=dynamic
-doxygen/*:compiler.cppstd=17
-xapian-core/*:compiler.cppstd=14
 
 [conf]
 tools.build:cxxflags=["/openmp", "/MP", "/DEBUG:NONE", "/O2", "/arch:AVX2"]
@@ -21,8 +19,6 @@ openimageio/*:tools.build:cxxflags+=["/utf-8" ]
 # Following deps are to be compiled with msys2/gcc: MSVC flags will not do
 libiconv/*:tools.build:cxxflags=!
 libiconv/*:tools.build:cflags=!
-xapian-core/*:tools.build:cxxflags=!
-xapian-core/*:tools.build:cflags=!
 
 [options]
 openvdb/*:simd=AVX
