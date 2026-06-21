@@ -11,7 +11,6 @@ ninja/*:build_type=Release
 bison/*:build_type=Release
 flex/*:build_type=Release
 winflexbison/*:build_type=Release
-doxygen/*:build_type=Release
 m4/*:build_type=Release
 b2/*:build_type=Release
 
