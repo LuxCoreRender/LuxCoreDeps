@@ -12,7 +12,6 @@ import os
 # Gather here the various dependency versions, for convenience
 # (in alphabetic order)
 BOOST_VERSION = "1.88.0"
-DOXYGEN_VERSION = "1.17.0"
 EIGEN_VERSION = "5.0.1"
 EMBREE_VERSION = "4.4.1"
 FMT_VERSION = "12.1.0"
@@ -150,12 +149,6 @@ class LuxCoreDeps(ConanFile):
 
         # Ninja (Luxcore build requirement)
         self.requires("ninja/[*]", build=False, run=True, visible=True)
-
-        # Doxygen (Luxcore build requirement)
-        # Requires also doxygen's deps 'xapian' and 'libiconv', otherwise they
-        # are downloaded at install in other versions, and that makes Doxygen
-        # recompile
-        self.requires(f"doxygen/{DOXYGEN_VERSION}", build=False, run=True, visible=True)
 
     def build_requirements(self):
         # LuxCoreDeps build requirements

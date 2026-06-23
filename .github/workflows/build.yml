@@ -267,6 +267,7 @@ jobs:
             export VERBOSE=1
 
             # Install conda (for gh)
+            export CONDA_NO_LOCK=1
             dnf install -y wget
             mkdir -p miniconda3
             wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
@@ -305,6 +306,7 @@ jobs:
             ccache --show-config
 
             # Install git-lfs
+            dnf install -y sudo
             curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | sudo bash
             dnf install -y git-lfs
 
