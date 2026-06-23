@@ -22,7 +22,7 @@ CLANG_PROFILE_ARM64=$WORKSPACE/conan-profiles/conan-profile-Windows-ARM64-clang
 # gradually happen and finally break the build.
 # To the contrary, you may need to upgrade this commit when you want to upgrade
 # a given dependency.
-CONAN_COMMIT=0a1fdeff8b9a04050d572e7c1626c7af2610bc9c
+CONAN_COMMIT=f250d14b56f404f676ad6340f2749c8e02d890a5
 
 # Debug utility (install a specific package)
 function debug() {
@@ -172,14 +172,12 @@ if [[ "$RUNNER_OS" == "Windows" && "$RUNNER_ARCH" == "ARM64" ]]; then
   EMBREE_PROFILE=$CLANG_PROFILE_ARM64
 fi
 
-cd $WORKSPACE/conan-local-recipes/recipes/embree/all
-conan create . \
+conan create conan-center-index/recipes/embree/all \
   --profile:all=$EMBREE_PROFILE \
   --version=4.4.1 \
   --build=embree* \
   --build=missing \
   --remote=conancenter
-cd $WORKSPACE
 
 conan create $WORKSPACE \
   --profile:all=$CONAN_PROFILE \
