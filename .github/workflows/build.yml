@@ -44,7 +44,7 @@ jobs:
       # SANITIZE: true # uncomment to sanitize
       CXX_VERSION: 20
       GCC_VERSION: 14
-      GLIBC_VERSION: 2_34
+      GLIBC_VERSION: 2_28
       GH_TOKEN: ${{ github.token }}
       BOOST_INSTALL_LAYOUT: system
       CONAN_LOG_LEVEL: ${{ vars.conan_log_level }}  # To be set by caller (act)
@@ -171,20 +171,23 @@ jobs:
 
       - name: Calculate MSVC Runtime for Conan (Windows ARM64)
         if: runner.os == 'Windows' && runner.arch == 'ARM64'
-        shell: pwsh
+        shell: bash
         run: |
-          $vsPath = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" `
-            -latest `
-            -requires Microsoft.VisualStudio.Component.VC.Llvm.Clang `
-            -property installationPath
-          if (-not $vsPath) { Write-Error "VS with Clang component not found"; exit 1 }
-
-          $toolsPath = "$vsPath\VC\Tools\MSVC"
-          $toolsetVersion = (Get-ChildItem $toolsPath | Sort-Object Name -Descending | Select-Object -First 1).Name
-          $major = $toolsetVersion.Split('.')[0]        
-          $minor = $toolsetVersion.Split('.')[1]        
-          $runtimeVersion = "v$major$([int]($minor/10))"  
-          echo "MSVC_RUNTIME_VERSION=$runtimeVersion" >> $env:GITHUB_ENV
+          VSWHERE="/c/Program Files (x86)/Microsoft Visual Studio/Installer/vswhere.exe"
+          vsPath=$("$VSWHERE" \
+            -latest \
+            -requires Microsoft.VisualStudio.Component.VC.Llvm.Clang \
+            -property installationPath)
+          if [ -z "$vsPath" ]; then
+            echo "VS with Clang component not found"
+            exit 1
+          fi
+          toolsPath="$vsPath/VC/Tools/MSVC"
+          toolsetVersion=$(ls "$toolsPath" | sort -Vr | head -n 1)
+          major=$(echo "$toolsetVersion" | cut -d. -f1)
+          minor=$(echo "$toolsetVersion" | cut -d. -f2)
+          runtimeVersion="v${major}$((minor / 10))"
+          echo "MSVC_RUNTIME_VERSION=$runtimeVersion" >> "$GITHUB_ENV"
 
       - name: Install custom compatibility.py (Windows ARM64)
         if: runner.os == 'Windows' && runner.arch == 'ARM64'
@@ -230,7 +233,7 @@ jobs:
         shell: bash
         # Build for Linux is containerized in manylinux_2_28_x86_64
         env:
-          MANYLINUX_IMAGE: manylinux_2_34_x86_64
+          MANYLINUX_IMAGE: manylinux_2_28_x86_64
           CONTAINER_NAME: manylinux  # Name of the container to create (arbitrary)
           LINUX_CONANCACHE: /conan-cache
           LINUX_CCACHE_DIR: /project/.ccache

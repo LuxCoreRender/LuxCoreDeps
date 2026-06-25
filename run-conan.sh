@@ -176,15 +176,13 @@ conan create conan-center-index/recipes/embree/all \
   --profile:all=$EMBREE_PROFILE \
   --version=4.4.1 \
   --build=embree* \
-  --build=missing \
-  --remote=conancenter
+  --build=missing 
 
 conan create $WORKSPACE \
   --profile:all=$CONAN_PROFILE \
   --version=$LUXDEPS_VERSION \
   --remote=mycenter \
   --remote=mylocal \
-  --remote=conancenter \
   --build=missing \
   --build=!embree*
 echo "::endgroup::"
