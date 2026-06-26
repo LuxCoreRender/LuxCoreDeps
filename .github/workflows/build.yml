@@ -36,7 +36,7 @@ jobs:
         # macos-15 has to be renamed into macos-15-arm64, otherwise, it will
         # generate a name collision in the cache restoration keys with
         # macos-15-intel.
-        os: [ubuntu-latest, windows-2022, macos-15-intel, macos-15-arm64]
+        os: [ubuntu-latest, windows-2022, macos-15-intel, macos-15-arm64, windows-11-arm]
 
     env:
       BUILD_TYPE: ${{ inputs.build-type || 'Release' }}
@@ -166,6 +166,36 @@ jobs:
         if: runner.os == 'Windows'
         # Use full length commit SHA, otherwise CodeQL complains...
         uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756  # 1.13.0
+        with:
+          arch: ${{ runner.arch == 'ARM64' && 'arm64' || 'x64' }}
+
+      - name: Calculate MSVC Runtime for Conan (Windows ARM64)
+        if: runner.os == 'Windows' && runner.arch == 'ARM64'
+        shell: bash
+        run: |
+          VSWHERE="/c/Program Files (x86)/Microsoft Visual Studio/Installer/vswhere.exe"
+          vsPath=$("$VSWHERE" \
+            -latest \
+            -requires Microsoft.VisualStudio.Component.VC.Llvm.Clang \
+            -property installationPath)
+          if [ -z "$vsPath" ]; then
+            echo "VS with Clang component not found"
+            exit 1
+          fi
+          toolsPath="$vsPath/VC/Tools/MSVC"
+          toolsetVersion=$(ls "$toolsPath" | sort -Vr | head -n 1)
+          major=$(echo "$toolsetVersion" | cut -d. -f1)
+          minor=$(echo "$toolsetVersion" | cut -d. -f2)
+          runtimeVersion="v${major}$((minor / 10))"
+          echo "MSVC_RUNTIME_VERSION=$runtimeVersion" >> "$GITHUB_ENV"
+
+      - name: Install custom compatibility.py (Windows ARM64)
+        if: runner.os == 'Windows' && runner.arch == 'ARM64'
+        shell: pwsh
+        run: |
+          $compatDir = "${{ github.workspace }}\.conan2\extensions\plugins\compatibility"
+          New-Item -ItemType Directory -Force -Path $compatDir
+          Copy-Item ".\conan-profiles\compatibility.py" "$compatDir\compatibility.py"
 
       - name: Configure git for long paths (Windows)
         shell: bash
