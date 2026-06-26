@@ -1,0 +1,22 @@
+include(conan-profile-common)
+
+[settings]
+os=Windows
+arch=armv8
+compiler=clang
+compiler.version=19
+compiler.cppstd={{ os.getenv("CXX_VERSION") }}
+compiler.runtime=dynamic
+compiler.runtime_type=Release
+compiler.runtime_version={{ os.getenv("MSVC_RUNTIME_VERSION", "v143") }}
+
+[conf]
+tools.build:compiler_executables={"c": "clang-cl", "cpp": "clang-cl"}
+tools.cmake.cmaketoolchain:generator=Ninja
+embree/*:tools.cmake.cmaketoolchain:user_toolchain+={{os.getenv("LUX_PROFILE_DIR", profile_dir)}}/windows-vars-ARM64.cmake
+
+[options]
+embree/*:shared=True
+onetbb/*:tbbproxy=False
+
+# vim: ft=conf
