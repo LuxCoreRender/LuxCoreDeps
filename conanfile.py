@@ -37,6 +37,7 @@ OPENVDB_VERSION = "12.1.1"
 PYBIND11_VERSION = "3.0.1"
 ROBIN_HOOD_HASHING_VERSION = "3.11.5"
 SPDLOG_VERSION = "1.17.0"
+TSL_ROBIN_MAP_VERSION = "1.4.0"
 ZSTD_VERSION = "1.5.7"
 
 
@@ -111,6 +112,11 @@ class LuxCoreDeps(ConanFile):
         self.requires(
             f"robin-hood-hashing/{ROBIN_HOOD_HASHING_VERSION}",
             transitive_headers=True
+        )
+        self.requires(
+            f"tsl-robin-map/{TSL_ROBIN_MAP_VERSION}",
+            transitive_headers=True,
+            force=True,
         )
         self.requires(f"eigen/{EIGEN_VERSION}", transitive_headers=True)
         self.requires(
