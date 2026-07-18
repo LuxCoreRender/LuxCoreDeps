@@ -33,6 +33,7 @@ class OidnConan(ConanFile):
         "with_filter_rt": [True, False],
         "with_filter_rtlightmap": [True, False],
         "with_apps": [True, False],
+        "api_namespace": ["ANY"],
     }
     default_options = {
         "shared": True,
@@ -47,6 +48,7 @@ class OidnConan(ConanFile):
         "with_filter_rt": True,
         "with_filter_rtlightmap": True,
         "with_apps": True,
+        "api_namespace": None
     }
 
     def requirements(self):
@@ -86,6 +88,8 @@ class OidnConan(ConanFile):
         tc.variables["OIDN_FILTER_RT"] = self.options.with_filter_rt
         tc.variables["OIDN_FILTER_RTLIGHTMAP"] = self.options.with_filter_rtlightmap
         tc.variables["OIDN_APPS"] = self.options.with_apps
+        if self.options.api_namespace:
+            tc.cache_variables["OIDN_API_NAMESPACE"] = self.options.api_namespace
         if self.settings.os == "Linux":
             tc.cache_variables["CMAKE_SKIP_RPATH"] = True
             tc.cache_variables["CMAKE_INSTALL_RPATH"] = "\\\\\${ORIGIN}/."

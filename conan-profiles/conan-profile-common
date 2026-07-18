@@ -28,6 +28,7 @@ yasm/*
 
 [options]
 oidn/*:shared=True
+oidn/*:api_namespace=lux
 opensubdiv/*:with_tbb=True
 opensubdiv/*:with_opengl=False
 spdlog/*:header_only=True
