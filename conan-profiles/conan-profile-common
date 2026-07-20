@@ -28,13 +28,18 @@ yasm/*
 
 [options]
 oidn/*:shared=True
+# The purpose of the following 2 options is to ensure that
+# calls to oidn will effectively be caught by the libs provided by
+# LuxCore
 oidn/*:api_namespace=lux
+oidn/*:library_name=LuxOpenImageDenoise
 opensubdiv/*:with_tbb=True
 opensubdiv/*:with_opengl=False
 spdlog/*:header_only=True
 spdlog/*:use_std_fmt=True
 nvrtc/*:shared=True
 libtiff/*:jpeg=libjpeg-turbo
+
 # For onetbb:
 hwloc/*:shared=True
 
