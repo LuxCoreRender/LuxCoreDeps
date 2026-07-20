@@ -41,6 +41,7 @@ nvrtc/*:shared=True
 libtiff/*:jpeg=libjpeg-turbo
 
 # For onetbb:
+onetbb/*:tbbbind=False
 hwloc/*:shared=True
 
 openimageio/*:with_freetype=False
