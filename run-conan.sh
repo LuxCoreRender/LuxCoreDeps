@@ -22,7 +22,7 @@ CLANG_PROFILE_ARM64=$WORKSPACE/conan-profiles/conan-profile-Windows-ARM64-clang
 # gradually happen and finally break the build.
 # To the contrary, you may need to upgrade this commit when you want to upgrade
 # a given dependency.
-CONAN_COMMIT=f250d14b56f404f676ad6340f2749c8e02d890a5
+CONAN_COMMIT=3dbd3db9d9f9247ba13b170f8b8ed726d3b25301
 
 # Debug utility (install a specific package)
 function debug() {
