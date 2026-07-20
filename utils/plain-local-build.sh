@@ -15,7 +15,7 @@ export GCC_VERSION=14   # Note: even for gcc > 14
 export WORKSPACE=.
 export CXX_VERSION=20
 export CMAKE_POLICY_VERSION_MINIMUM=3.25
-export DEPS_BUILD_TYPE=Debug  # Or Release/RelWithDebInfo/MinSizeRel, as needed
+export DEPS_BUILD_TYPE=Release  # Release/Debug/RelWithDebInfo/MinSizeRel, as needed
 export cache_dir
 
 # Run conan
