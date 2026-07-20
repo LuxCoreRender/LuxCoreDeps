@@ -39,5 +39,6 @@ openvdb/*:tools.cmake.cmaketoolchain:extra_variables={ 'USE_CCACHE':'OFF' }
 {% endif %}
 
 onetbb/*:tools.cmake.cmaketoolchain:extra_variables={ 'CMAKE_VERBOSE_MAKEFILE': 'ON' }
+libultrahdr/*:tools.build:cxxflags+=["-include cstdint"]
 
 # vim: ft=conf
