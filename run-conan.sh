@@ -90,13 +90,6 @@ conan remote add mycenter ./conan-center-index --force
 conan remote add mylocal ./conan-local-recipes --force
 conan list -r mylocal
 
-if [[ "$RUNNER_OS" == "Linux" ]]; then
-  # ispc
-  echo "::group::CIBW_BEFORE_BUILD: ispc"
-  source /opt/intel/oneapi/setvars.sh
-  echo "::endgroup::"
-fi
-
 # 3. Restore conan cache (add -vverbose to debug)
 echo "::group::CIBW_BEFORE_BUILD: restore conan cache"
 cachefile=$cache_dir/conan-cache-save.tgz
