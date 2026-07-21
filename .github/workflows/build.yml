@@ -160,7 +160,7 @@ jobs:
         if: runner.os == 'macOS' || runner.os == 'Windows'
         uses: ispc/install-ispc-action@e3887e6f22350b0f2263e3dbe6f1fc3eff331050  # HEAD in main
         with:
-          version: 1.25.3
+          version: 1.31.0
 
       - name: Prepare msvc (Windows)
         if: runner.os == 'Windows'
@@ -320,21 +320,8 @@ jobs:
               dnf install -y gcc-toolset-14-libasan-devel;
             fi
 
-            # Install ispc
-            # https://www.intel.com/content/www/us/en/docs/oneapi/installation-guide-linux/2023-0/yum-dnf-zypper.html
-            tee > /tmp/oneAPI.repo << EOF
-            [oneAPI]
-            name=Intel® oneAPI repository
-            baseurl=https://yum.repos.intel.com/oneapi
-            enabled=1
-            gpgcheck=1
-            repo_gpgcheck=1
-            gpgkey=https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
-            EOF
-            mv /tmp/oneAPI.repo /etc/yum.repos.d
-
-            dnf install -y intel-oneapi-ispc
-            source /opt/intel/oneapi/ispc/latest/env/vars.sh
+            ## Install ispc
+            conda install conda-forge::ispc
 
             # Build
             source ${{ env.WORKSPACE }}/run-conan.sh

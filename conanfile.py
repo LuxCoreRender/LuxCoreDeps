@@ -28,15 +28,16 @@ NLOHMANN_JSON_VERSION = "3.12.0"
 NVRTC_VERSION = "12.8.93"
 OCIO_VERSION = "2.5.2"
 OIIO_VERSION = "3.1.14.0"
-OIDN_VERSION = "2.3.3"
-ONETBB_VERSION = "2022.3.0"
-OPENEXR_VERSION = "3.4.12"
-OPENJPH_VERSION = "0.27.0"
+OIDN_VERSION = "2.5.0"
+ONETBB_VERSION = "2023.0.0"  # Reminder: do the same in oidn
+OPENEXR_VERSION = "3.4.13"
+OPENJPH_VERSION = "0.30.1"
 OPENSUBDIV_VERSION = "3.7.0"
 OPENVDB_VERSION = "12.1.1"
 PYBIND11_VERSION = "3.0.1"
 ROBIN_HOOD_HASHING_VERSION = "3.11.5"
 SPDLOG_VERSION = "1.17.0"
+TSL_ROBIN_MAP_VERSION = "1.4.0"
 ZSTD_VERSION = "1.5.7"
 
 
@@ -111,6 +112,11 @@ class LuxCoreDeps(ConanFile):
         self.requires(
             f"robin-hood-hashing/{ROBIN_HOOD_HASHING_VERSION}",
             transitive_headers=True
+        )
+        self.requires(
+            f"tsl-robin-map/{TSL_ROBIN_MAP_VERSION}",
+            transitive_headers=True,
+            force=True,
         )
         self.requires(f"eigen/{EIGEN_VERSION}", transitive_headers=True)
         self.requires(
