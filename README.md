@@ -6,7 +6,7 @@
 version 2.10.**
 
 LuxCoreDeps is based on Conan dependency manager (https://conan.io/). It builds dependency
-sets for the following 4 platforms:
+sets for the following 5 platforms:
 - Linux
 - Windows x86_64
 - Windows ARM64
