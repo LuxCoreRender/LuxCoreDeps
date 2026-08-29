@@ -170,7 +170,7 @@ if [[ "$RUNNER_OS" == "Windows" && "$RUNNER_ARCH" == "ARM64" ]]; then
     --profile:all=$EMBREE_PROFILE \
     --version=4.4.1 \
     --build=embree* \
-    --build=missing 
+    --build=missing
 
   conan create $WORKSPACE \
     --profile:all=$CONAN_PROFILE \
